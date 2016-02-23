@@ -1,0 +1,934 @@
+//***********************************************
+//  転職・転生・クエストスキル習得NPC
+//  2011.04  はじめてのAuriga - kiy
+//***********************************************
+
+prontera.gat,152,187,6	script	職業管理員	113,{
+
+	// 関数の宣言
+	function CheckJobChange;		//転職条件のチェック
+	function CheckTransmigration;	//転生条件のチェック
+	function SetJobId;				//現在の職から、転職可能なジョブをセット
+	function GetJobName;			//職業IDから職業名を取得
+	function GetQuestSkill;			//クエストスキルを取得
+	function CheckExtensionJob;		//拡張職であるかのチェック
+
+	// 定数のセット
+	set @trans_base,		99;			//転生に必要なBaseLv
+	set @trans_job,			50;			//転生に必要なJobLv
+	set @trans_zeny,		1285000;	//転生に必要なZeny
+	set @trans_weight,		10000;		//転生時の重量制限
+	set @trans_bonus_st,	100;		//転生時のステータスポイントボーナス
+	set @trans_bonus_sk,	0;			//転生時のスキルポイントボーナス
+	set @trans_max,			1;			//転生回数の最大値
+//	set '@status_max,		32767;		//ステータスポイントの最大値
+	set @trans_extend,		0;			//拡張職の転生の可否(0:不可,1:可能)
+	set @trans_baby,		0;			//養子の転生の可否(0:不可,1:可能)
+	set @check_skill,		0;			//スキル関連のチェックの有無(0:無し,1:有り)
+
+	// 会話スタート
+	cutin "kafra_05",2;
+	mes "[グラリス]";
+	mes "こんにちは。";
+	mes "私は転職・転生・クエストスキルの";
+	mes "習得を扱っております。";
+	mes "本日はどのようなご用でしょうか？";
+	next;
+
+    // [sagisame] 転職関係を解放するときは、case 文のコメントアウトも消してくだしあ。
+    // switch(select("転職","転生","クエストスキル習得","やめる")) {
+    switch(select("--","--","クエストスキル習得","やめる")) {
+
+//---------------◆◇◆転職◆◇◆---------------//
+	case 1:
+    /*
+		// 転職条件のチェック(スパノビ以外)
+		CheckJobChange '@result;
+		if('@result == 1) {
+			// 転職不可
+			close2;
+			cutin "kafra_04",255;
+			end;
+		}
+
+		// 転職可能な職業IDのセット
+		SetJobId;
+		if(@job_id[0] == 0) {
+			mes "[転職カプラ]";
+			mes "残念ながら、あなたに";
+			mes "ご案内できる職業がありません。";
+			mes "またお越しください。";
+			close2;
+			cutin "kafra_04",255;
+			end;
+		}
+		mes "[転職カプラ]";
+		mes "あなたにご案内できる職業は";
+		mes "次の通りです。";
+		mes "どの職業に転職されますか？";
+		next;
+
+		// 職業名セット
+		set '@job_name$,"";
+		set '@max,getarraysize(@job_id);
+		for(set '@cnt,0; '@cnt < '@max; set '@cnt,'@cnt + 1) {
+			GetJobName '@get_name$,@job_id['@cnt],Upper; // ジョブIDからジョブ名を取得
+			set '@job_name$['@cnt],'@get_name$;
+		}
+		set '@job_name$['@max],"やめる";
+
+		set @menu,select(printarray('@job_name$));
+		if(@job_id[@menu - 1] == 0) {
+			mes "[転職カプラ]";
+			mes "またご利用ください。";
+			close2;
+			cutin "kafra_04",255;
+			end;
+		}
+		set '@select_job,@job_id[@menu - 1];
+
+		if('@select_job == Job_SuperNovice && BaseLevel < 45) {
+			mes "[転職カプラ]";
+			mes "スーパーノービスに転職するには";
+			mes "Baseレベルが45以上必要です。";
+			mes "Baseレベルを上げてから";
+			mes "またお越しください。";
+			close2;
+			cutin "kafra_04",255;
+			end;
+		}
+
+		mes "[転職カプラ]";
+		mes "^FF0000" +'@job_name$[@menu - 1]+ "^000000に";
+		mes "転職されますか？";
+		next;
+		if(select("はい","いいえ") == 2) {
+			mes "[転職カプラ]";
+			mes "またご利用ください。";
+			close2;
+			cutin "kafra_04",255;
+			end;
+		}
+
+		if(getskilllv(143)==1) skill 143,0,0; // 死んだ振りを覚えていたら忘れる
+		unequip;
+		jobchange '@select_job;
+		if(Upper == UPPER_HIGH)
+			GetQuestSkill 0;	// 転生職はクエストスキル(１次職)取得
+		mes "[転職カプラ]";
+		mes "転職おめでとうございます！";
+		mes "貴方のご活躍に期待しています。";
+		close2;
+		cutin "kafra_04",255;
+		end;
+    */
+
+//---------------◆◇◆転生◆◇◆---------------//
+	case 2:
+    /*
+		// 転生条件のチェック
+		CheckTransmigration '@result;
+		if ('@result == 1) {
+			// 転生不可
+			close2;
+			cutin "kafra_04",255;
+			end;
+		}
+
+		mes "[グラリス]";
+		if(@trans_zeny > 0) {
+			mes "^0000FF必要Zenyは転生費用として、";
+			mes "消費されますので注意してください。^000000";
+		}
+		mes "転生を行いますか？";
+		next;
+		if(select("転生する","やめる")==2) {
+			emotion 33;
+			mes "[グラリス]";
+			mes "またのご利用を、お待ちしております。";
+			close2;
+			cutin "kafra_05",255;
+			end;
+		}
+
+		// 転生処理
+		set Zeny,Zeny-@trans_zeny;	// 転生費用を差し引く
+		set OLD_CLASS,Job;	// OLD_CLASSのセット(Jobなので注意)
+		
+		unequip;	// 装備解除
+		resetstatus;	// ステータスリセット
+		resetskill;	// スキルリセット
+		jobchange Job_Novice,UPPER_HIGH;	// ノービスへジョブチェンジ(JobLvリセット)
+		set BaseLevel,1;	// BaseLvリセット
+		GetQuestSkill 0;	// クエストスキル(ノビ)の取得
+		setoption 0x0000;	// 状態異常のリセット
+
+		set UPPER_cnt,UPPER_cnt+1;	// 転生回数の加算
+		set StatusPoint,@trans_bonus_st * UPPER_cnt;	// ステータスポイントの設定(ボーナスポイント×転生回数)
+		set SkillPoint,@trans_bonus_sk * UPPER_cnt;	// スキルポイントの設定
+
+		announce strcharinfo(0)+ "さんが転生を行いました！",0x13-3;	// アナウンス(青:○○状態になりましたと同じ色)
+		
+		emotion 46;
+		mes "[グラリス]";
+		mes "転生完了しました。";
+		mes "またのご利用を、お待ちしております。";
+		close2;
+		cutin "kafra_05",255;
+		end;
+    */
+
+//---------------◆◇◆クエストスキル取得◆◇◆---------------//
+	case 3:
+		GetQuestSkill 1;
+		emotion 5;
+		mes "[グラリス]";
+		mes "クエストスキルを取得できました。";
+		mes "またのご利用を、お待ちしております。";
+		close2;
+		cutin "kafra_05",255;
+		end;
+
+//---------------◆◇◆やめる◆◇◆---------------//
+	case 4:
+		mes "[グラリス]";
+		mes "またのご利用を、お待ちしております。";
+		close2;
+		cutin "kafra_05",255;
+		end;
+	}
+
+
+//----------------------------------------------------------------------
+// CheckJobChange(<return>)
+// 転職条件のチェック(スパノビ以外)
+// return(0:OK,1:NG)
+//----------------------------------------------------------------------
+function	CheckJobChange	{
+
+	set getarg(0),0;
+
+	switch(Job) {
+		case Job_Novice:
+			if(JobLevel < 10) {
+				mes "[転職カプラ]";
+				mes "一次職に転職するには";
+				mes "Jobレベルが10必要です。";
+				mes "Jobレベルを上げてから";
+				mes "またお越しください。";
+				set getarg(0),1;
+			}
+			else if(@check_skill && getskilllv(1) < 9) {
+				mes "[転職カプラ]";
+				mes "基本スキルが足りません。";
+				mes "基本スキルレベルを上げてから";
+				mes "またお越しください。";
+				set getarg(0),1;
+			}
+			break;
+
+		case Job_Swordman:
+		case Job_Magician:
+		case Job_Archer:
+		case Job_Acolyte:
+		case Job_Merchant:
+		case Job_Thief:
+			if(JobLevel < 40) {
+				mes "[転職カプラ]";
+				mes "二次職に転職するには";
+				mes "Jobレベルが40以上必要です。";
+				mes "Jobレベルを上げてから";
+				mes "またお越しください。";
+				set getarg(0),1;
+			}
+			else if(@check_skill && SkillPoint) {
+				mes "[転職カプラ]";
+				mes "スキルポイントが残っています。";
+				mes "全て消費してから";
+				mes "またお越しください。";
+				set getarg(0),1;
+			}
+			break;
+
+		case Job_Knight:
+		case Job_Priest:
+		case Job_Wizard:
+		case Job_Blacksmith:
+		case Job_Hunter:
+		case Job_Assassin:
+		case Job_Crusader:
+		case Job_Monk:
+		case Job_Sage:
+		case Job_Rogue:
+		case Job_Alchemist:
+		case Job_Bard:
+		case Job_Dancer:
+			switch(Upper) {
+				case UPPER_NORMAL:
+					mes "[転職カプラ]";
+					mes "転生していない二次職からは、";
+					mes "これ以上転職できません。";
+					mes "転生されてからまたお越しください。";
+					set getarg(0),1;
+					break;
+				case UPPER_BABY:
+					mes "[転職カプラ]";
+					mes "残念ながら、あなたに";
+					mes "ご案内できる職業がありません。";
+					mes "またお越しください。";
+					set getarg(0),1;
+					break;
+				case UPPER_HIGH:
+					if(BaseLevel < 90) {
+						mes "[転職カプラ]";
+						mes "三次職に転職するには";
+						mes "Baseレベルが90以上必要です。";
+						mes "Baseレベルを上げてから";
+						mes "またお越しください。";
+						set getarg(0),1;
+					}
+					else if(@check_skill && SkillPoint) {
+						mes "[転職カプラ]";
+						mes "スキルポイントが残っています。";
+						mes "全て消費してから";
+						mes "またお越しください。";
+						set getarg(0),1;
+					}
+					break;
+			}
+			break;
+
+		case Job_SuperNovice:
+		case Job_Gunslinger:
+		case Job_Ninja:
+		case Job_Gyangsy:
+		case Job_StarGladiator:
+		case Job_SoulLinker:
+		case Job_DeathKnight:
+		case Job_DarkCollector:
+			mes "[転職カプラ]";
+			mes "拡張職はこれ以上";
+			mes "転職することができません。";
+			mes "またお越しください。";
+			set getarg(0),1;
+			break;
+
+		case Job_RuneKnight:
+		case Job_Warlock:
+		case Job_Ranger:
+		case Job_ArchBishop:
+		case Job_Mechanic:
+		case Job_Guillotine:
+		case Job_RoyalGuard:
+		case Job_Sorcerer:
+		case Job_Minstrel:
+		case Job_Wanderer:
+		case Job_Shura:
+		case Job_Genetic:
+		case Job_ShadowChaser:
+			mes "[転職カプラ]";
+			mes "三次職はこれ以上";
+			mes "転職することができません。";
+			mes "またお越しください。";
+			set getarg(0),1;
+			break;
+	}
+	return;
+}
+
+//----------------------------------------------------------------------
+// CheckTransmigration(<return>)
+// 転生条件のチェック
+// return(0:OK,1:NG)
+//----------------------------------------------------------------------
+function	CheckTransmigration	{
+
+	set getarg(0),0;
+
+	// 【チェック①】
+	if(Upper == UPPER_BABY && @trans_baby != 1) {
+		mes "[グラリス]";
+		mes "養子からは転生できません。";
+		set getarg(0),1;
+	} else if(Job <= Job_Thief || Job == Job_Taekwon) {
+		mes "[グラリス]";
+		mes "一次職からは転生できません。";
+		set getarg(0),1;
+	} else if(CheckExtensionJob(Job) == 1 && @trans_extend != 1) {
+		mes "[グラリス]";
+		mes "拡張職は転生できません。";
+		set getarg(0),1;
+	} else if(UPPER_cnt == @trans_max) {
+		mes "[グラリス]";
+		mes "あなたは限界まで転生を";
+		mes "行いましたので、";
+		mes "これ以上転生することはできません。";
+		mes "^0000FF【最大転生回数 ： " +(UPPER_cnt)+ "回】^000000";
+		set getarg(0),1;
+	}
+
+	if(getarg(0) == 1)
+		return;
+
+	mes "[グラリス]";
+	if(@trans_max > 1)
+		mes "あなたが" +(UPPER_cnt+1)+ "回目の転生を行うためには";
+	else
+		mes "あなたが転生を行うためには";
+	mes "次の条件を満たす必要があります。";
+	next;
+
+	mes "[グラリス]";
+	mes "BaseLv ^0000FF" +@trans_base+ "^000000 以上";
+	mes "JobLv ^0000FF" +@trans_job+ "^000000 以上";
+	if(@trans_zeny > 0)
+		mes "所持金が ^0000FF" +@trans_zeny+ "^000000 Zeny以上";
+	if(@trans_weight == 0)
+		mes " 重量が 0 の状態で、なおかつ";
+	else if(@trans_weight > 0)
+		mes "重量が ^0000FF" +@trans_weight/10+ "^000000 以下の状態で、なおかつ";
+	mes "カート・ペコペコ・ファルコン";
+	mes "を利用していないこと";
+	next;
+
+	// 【チェック②】
+	if(BaseLevel < @trans_base || JobLevel < @trans_job) {
+		mes "[グラリス]";
+		mes "転生条件に達していません。";
+		if(@trans_max == 1)
+			mes "転生を行うためには";
+		else
+			mes (UPPER_cnt+1)+"回目の転生を行うためには";
+		mes "BaseLv ^0000FF" +@trans_base+ "^000000 以上";
+		mes "JobLv ^0000FF" +@trans_job+ "^000000 以上";
+		mes "である必要があります。";
+		set getarg(0),1;
+	} else if(@trans_zeny > 0 && Zeny < @trans_zeny) {
+		mes "[グラリス]";
+		mes "転生条件に達していません。";
+		if(@trans_max == 1)
+			mes "転生を行うためには";
+		else
+			mes (UPPER_cnt+1)+"回目の転生を行うためには";
+		mes "^0000FF" +@trans_zeny+ "^000000 Zenyが必要です。";
+		set getarg(0),1;
+	} else if(@trans_weight == 0 && Weight > 0) {
+		mes "[グラリス]";
+		mes "重量を0にしてからいらしてください。";
+		set getarg(0),1;
+	} else if(@trans_weight > 0 && Weight > @trans_weight) {
+		mes "[グラリス]";
+		mes "重量を ^0000FF" +@trans_weight/10+ "^000000 以下に減らしてから";
+		mes "いらしてください。";
+		set getarg(0),1;
+	} else if(checkcart() || checkfalcon() || checkriding()) {
+		mes "[グラリス]";
+		mes "カート、ファルコン、ペコペコと";
+		mes "お別れしてからいらしてください。";
+		set getarg(0),1;
+	} else if(gethomuninfo(5)) { //ホムンクルスを連れている
+		mes "[グラリス]";
+		mes "ホムンクルスとお別れしてから";
+		mes "いらしてください。";
+		set getarg(0),1;
+	} else if('@skill_check == 1 && SkillPoint > 0) {
+		mes "[グラリス]";
+		mes "スキルポイントを使い切ってから";
+		mes "いらしてください。";
+		set getarg(0),1;
+	}
+	return;
+}
+
+//----------------------------------------------------------------------
+// SetJobId
+// 現在の職から、転職可能なジョブをセット
+//----------------------------------------------------------------------
+function	SetJobId	{
+
+	// 初期化
+	if(getarraysize(@job_id)>0) {
+		deletearray @job_id,getarraysize(@job_id);
+	}
+	set @job_id,0;
+	
+	switch(Job) {
+		case Job_Novice:
+			if(Upper == UPPER_HIGH) {
+				switch(OLD_CLASS) {		//前職から１次職を特定する
+					case Job_Knight:
+					case Job_Crusader:
+						set @job_id,Job_Swordman;
+						break;
+					case Job_Wizard:
+					case Job_Sage:
+						set @job_id,Job_Magician;
+						break;
+					case Job_Hunter:
+					case Job_Bard:
+					case Job_Dancer:
+						set @job_id,Job_Archer;
+						break;
+					case Job_Priest:
+					case Job_Monk:
+						set @job_id,Job_Acolyte;
+						break;
+					case Job_Blacksmith:
+					case Job_Alchemist:
+						set @job_id,Job_Merchant;
+						break;
+					case Job_Assassin:
+					case Job_Rogue:
+						set @job_id,Job_Thief;
+						break;
+				}
+			}
+			else {
+				setarray @job_id,Job_Swordman,Job_Magician,Job_Archer,
+							Job_Acolyte,Job_Merchant,Job_Thief,Job_SuperNovice;
+				if(Upper == UPPER_NORMAL) {
+					setarray @job_id[getarraysize(@job_id)],Job_Taekwon,
+							Job_Gunslinger,Job_Ninja,Job_Gyangsy;
+				}
+			}
+			break;
+		case Job_Swordman:
+			if(Upper == UPPER_HIGH) {
+				set @job_id,OLD_CLASS;
+			}
+			else {
+				setarray @job_id,Job_Knight,Job_Crusader;
+			}
+			break;
+		case Job_Magician:
+			if(Upper == UPPER_HIGH) {
+				set @job_id,OLD_CLASS;
+			}
+			else {
+				setarray @job_id,Job_Wizard,Job_Sage;
+			}
+			break;
+		case Job_Archer:
+			if(Upper == UPPER_HIGH) {
+				set @job_id,OLD_CLASS;
+			}
+			else if(Sex) {
+				setarray @job_id,Job_Hunter,Job_Bard;
+			}
+			else {
+				setarray @job_id,Job_Hunter,Job_Dancer;
+			}
+			break;
+		case Job_Acolyte:
+			if(Upper == UPPER_HIGH) {
+				set @job_id,OLD_CLASS;
+			}
+			else {
+				setarray @job_id,Job_Priest,Job_Monk;
+			}
+			break;
+		case Job_Merchant:
+			if(Upper == UPPER_HIGH) {
+				set @job_id,OLD_CLASS;
+			}
+			else {
+				setarray @job_id,Job_Blacksmith,Job_Alchemist;
+			}
+			break;
+		case Job_Thief:
+			if(Upper == UPPER_HIGH) {
+				set @job_id,OLD_CLASS;
+			}
+			else {
+				setarray @job_id,Job_Assassin,Job_Rogue;
+			}
+			break;
+		case Job_Taekwon:
+			setarray @job_id,Job_StarGladiator,Job_SoulLinker;
+			break;
+		case Job_Gyangsy:
+			setarray @job_id,Job_DeathKnight,Job_DarkCollector;
+			break;
+		case Job_Knight:
+			set @job_id,Job_RuneKnight;
+			break;
+		case Job_Priest:
+			set @job_id,Job_ArchBishop;
+			break;
+		case Job_Wizard:
+			set @job_id,Job_Warlock;
+			break;
+		case Job_Blacksmith:
+			set @job_id,Job_Mechanic;
+			break;
+		case Job_Hunter:
+			set @job_id,Job_Ranger;
+			break;
+		case Job_Assassin:
+			set @job_id,Job_Guillotine;
+			break;
+		case Job_Crusader:
+			set @job_id,Job_RoyalGuard;
+			break;
+		case Job_Monk:
+			set @job_id,Job_Shura;
+			break;
+		case Job_Sage:
+			set @job_id,Job_Sorcerer;
+			break;
+		case Job_Rogue:
+			set @job_id,Job_ShadowChaser;
+			break;
+		case Job_Alchemist:
+			set @job_id,Job_Genetic;
+			break;
+		case Job_Bard:
+			set @job_id,Job_Minstrel;
+			break;
+		case Job_Dancer:
+			set @job_id,Job_Wanderer;
+			break;
+	}
+	return;
+}
+
+//----------------------------------------------------------------------
+// GetJobName(<VAL>,<Job>,<Upper>)
+// Job,Upperから、対応する職業名を取得し、VALにセット
+//----------------------------------------------------------------------
+function	GetJobName	{
+	switch(getarg(1)) {
+		case Job_Novice:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ハイノービス";
+			else set getarg(0),"ノービス";
+			break;
+		case Job_Swordman:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ハイソードマン";
+			else set getarg(0),"ソードマン";
+			break;
+		case Job_Magician:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ハイマジシャン";
+			else set getarg(0),"マジシャン";
+			break;
+		case Job_Archer:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ハイアーチャー";
+			else set getarg(0),"アーチャー";
+			break;
+		case Job_Acolyte:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ハイアコライト";
+			else set getarg(0),"アコライト";
+			break;
+		case Job_Merchant:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ハイマーチャント";
+			else set getarg(0),"マーチャント";
+			break;
+		case Job_Thief:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ハイシーフ";
+			else set getarg(0),"シーフ";
+			break;
+		case Job_Knight:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ロードナイト";
+			else set getarg(0),"ナイト";
+			break;
+		case Job_Priest:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ハイプリースト";
+			else set getarg(0),"プリースト";
+			break;
+		case Job_Wizard:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ハイウィザード";
+			else set getarg(0),"ウィザード";
+			break;
+		case Job_Blacksmith:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ホワイトスミス";
+			else set getarg(0),"ブラックスミス";
+			break;
+		case Job_Hunter:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"スナイパー";
+			else set getarg(0),"ハンター";
+			break;
+		case Job_Assassin:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"アサシンクロス";
+			else set getarg(0),"アサシン";
+			break;
+		case Job_Crusader:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"パラディン";
+			else set getarg(0),"クルセイダー";
+			break;
+		case Job_Monk:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"チャンピオン";
+			else set getarg(0),"モンク";
+			break;
+		case Job_Sage:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"プロフェッサー";
+			else set getarg(0),"セージ";
+			break;
+		case Job_Rogue:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"チェイサー";
+			else set getarg(0),"ローグ";
+			break;
+		case Job_Alchemist:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"クリエイター";
+			else set getarg(0),"アルケミスト";
+			break;
+		case Job_Bard:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"クラウン";
+			else set getarg(0),"バード";
+			break;
+		case Job_Dancer:
+			if(getarg(2) == UPPER_HIGH) set getarg(0),"ジプシー";
+			else set getarg(0),"ダンサー";
+			break;
+		case Job_SuperNovice:
+			set getarg(0),"スーパーノービス";
+			break;
+		case Job_TaeKwon:
+			set getarg(0),"テコンキッド";
+			break;
+		case Job_StarGladiator:
+			set getarg(0),"拳聖";
+			break;
+		case Job_SoulLinker:
+			set getarg(0),"ソウルリンカー";
+			break;
+		case Job_Gunslinger:
+			set getarg(0),"ガンスリンガー";
+			break;
+		case Job_Ninja:
+			set getarg(0),"忍者";
+			break;
+		case Job_Gyangsy:
+			if(Sex) set getarg(0),"ボンゴン";
+			else set getarg(0),"ムナック";
+			break;
+		case Job_DeathKnight:
+			set getarg(0),"デスナイト";
+			break;
+		case Job_DarkCollector:
+			set getarg(0),"ダークコレクター";
+			break;
+		case Job_RuneKnight:
+			set getarg(0),"ルーンナイト";
+			break;
+		case Job_Warlock:
+			set getarg(0),"ウォーロック";
+			break;
+		case Job_Ranger:
+			set getarg(0),"レンジャー";
+			break;
+		case Job_ArchBishop:
+			set getarg(0),"アークビショップ";
+			break;
+		case Job_Mechanic:
+			set getarg(0),"メカニック";
+			break;
+		case Job_Guillotine:
+			set getarg(0),"ギロチンクロス";
+			break;
+		case Job_RoyalGuard:
+			set getarg(0),"ロイヤルガード";
+			break;
+		case Job_Sorcerer:
+			set getarg(0),"ソーサラー";
+			break;
+		case Job_Minstrel:
+			set getarg(0),"ミンストレル";
+			break;
+		case Job_Wanderer:
+			set getarg(0),"ワンダラー";
+			break;
+		case Job_Shura:
+			set getarg(0),"修羅";
+			break;
+		case Job_Genetic:
+			set getarg(0),"ジェネティック";
+			break;
+		case Job_ShadowChaser:
+			set getarg(0),"シャドウチェイサー";
+			break;
+	}
+	return;
+}
+
+
+//----------------------------------------------------------------------
+// GetQuestSkill(<Call_Flag>)
+// クエストスキルを取得
+// ハイノービスから転職時は１次職用を取得
+// ２次職用 はメニューからクエストスキル取得を選んだ場合のみ取得
+//----------------------------------------------------------------------
+function	GetQuestSkill	{
+	// 共通スキル
+	if(getskilllv(142)==0) skill 142,1,0;	//応急手当
+
+	// 一次職スキル
+	switch(Job){
+		case Job_Novice:
+			if(getskilllv(143)==0) skill 143,1,0;	//死んだふり
+			break;
+		case Job_Swordman:
+		case Job_Knight:
+		case Job_Crusader:
+		case Job_RuneKnight:
+		case Job_RoyalGuard:
+			if(getskilllv(144)==0) skill 144,1,0;	//移動時HP回復
+			if(getskilllv(145)==0) skill 145,1,0;	//急所攻撃
+			if(getskilllv(146)==0) skill 146,1,0;	//オートバーサーク
+			break;
+		case Job_Magician:
+		case Job_Wizard:
+		case Job_Sage:
+		case Job_Warlock:
+		case Job_Sorcerer:
+			if(getskilllv(157)==0) skill 157,1,0;	//エナジーコート
+			break;
+		case Job_Archer:
+		case Job_Hunter:
+		case Job_Bard:
+		case Job_Dancer:
+		case Job_Ranger:
+		case Job_Minstrel:
+		case Job_Wanderer:
+			if(getskilllv(147)==0) skill 147,1,0;	//矢作成
+			if(getskilllv(148)==0) skill 148,1,0;	//チャージアロー
+			break;
+		case Job_Acolyte:
+		case Job_Priest:
+		case Job_Monk:
+		case Job_ArchBishop:
+		case Job_Shura:
+			if(getskilllv(156)==0) skill 156,1,0;	//ホーリーライト
+			break;
+		case Job_Merchant:
+		case Job_Blacksmith:
+		case Job_Alchemist:
+		case Job_Mechanic:
+		case Job_Genetic:
+			if(getskilllv(153)==0) skill 153,1,0;	//カートレボリューション
+			if(getskilllv(154)==0) skill 154,1,0;	//チェンジカート
+			if(getskilllv(155)==0) skill 155,1,0;	//ラウドボイス
+			break;
+		case Job_Thief:
+		case Job_Assassin:
+		case Job_Rogue:
+		case Job_Guillotine:
+		case Job_ShadowChaser:
+			if(getskilllv(149)==0) skill 149,1,0;	//砂まき
+			if(getskilllv(150)==0) skill 150,1,0;	//バックステップ
+			if(getskilllv(151)==0) skill 151,1,0;	//石拾い
+			if(getskilllv(152)==0) skill 152,1,0;	//石投げ
+			break;
+	}
+
+	// メニューから選択した時のみ二次職スキルを習得
+	if(getarg(0) == 0)
+		return;
+
+	// 二次職スキル
+	switch(Job){
+		case Job_Knight:
+		case Job_RuneKnight:
+			if(getskilllv(1001)==0) skill 1001,1,0;	//チャージアタック
+			break;
+		case Job_Priest:
+		case Job_ArchBishop:
+			if(getskilllv(1014)==0) skill 1014,1,0;	//レデムプティオ
+			break;
+		case Job_Wizard:
+		case Job_Warlock:
+			if(getskilllv(1006)==0) skill 1006,1,0;	//サイトブラスター
+			break;
+		case Job_Blacksmith:
+		case Job_Mechanic:
+			if(getskilllv(1012)==0) skill 1012,1,0;	//フェイクゼニー
+			if(getskilllv(1013)==0) skill 1013,1,0;	//グリード
+			break;
+		case Job_Hunter:
+		case Job_Ranger:
+			if(getskilllv(1009)==0) skill 1009,1,0;	//ファンタズミックアロー
+			break;
+		case Job_Assassin:
+		case Job_Guillotine:
+			if(getskilllv(1003)==0) skill 1003,1,0;	//ソニックアクセラレーション
+			if(getskilllv(1004)==0) skill 1004,1,0;	//ベナムナイフ
+			break;
+		case Job_Crusader:
+		case Job_RoyalGuard:
+			if(getskilllv(1002)==0) skill 1002,1,0;	//シュリンク
+			break;
+		case Job_Monk:
+		case Job_Shura:
+			if(getskilllv(1015)==0) skill 1015,1,0;	//気功転移
+			if(getskilllv(1016)==0) skill 1016,1,0;	//寸勁
+			break;
+		case Job_Sage:
+		case Job_Sorcerer:
+			if(getskilllv(1007)==0) skill 1007,1,0;	//クリエイトコンバーター
+			if(getskilllv(1008)==0 && getskilllv(1017)==0 
+			&& getskilllv(1018)==0 && getskilllv(1019)==0) {
+				mes "[グラリス]";
+				mes "取得するエレメンタルチェンジスキルを";
+				mes "選んでください。";
+				mes "^FF0000このスキルは一つだけ取得可能です";
+				mes "取得するスキルをよく吟味してください^000000";
+				next;
+				switch(select("^0000FFウォーターエレメンタルチェンジ^000000",
+					"^963200アースエレメンタルチェンジ^000000",
+					"^FF0000ファイアーエレメンタルチェンジ^000000",
+					"^00BE00ウィンドエレメンタルチェンジ^000000",
+					"もう少し考えたい")) {
+				case 1: skill 1008,1,0; break;	//ウォーターエレメンタルチェンジ
+				case 2: skill 1017,1,0; break;	//アースエレメンタルチェンジ
+				case 3: skill 1018,1,0; break;	//ファイアーエレメンタルチェンジ
+				case 4: skill 1019,1,0; break;	//ウィンドエレメンタルチェンジ
+				case 5: break;
+				}
+			}
+			break;
+		case Job_Rogue:
+		case Job_ShadowChaser:
+			if(getskilllv(1005)==0) skill 1005,1,0;	//クローズコンファイン
+			break;
+		case Job_Alchemist:
+		case Job_Genetic:
+			if(getskilllv(238)==0) skill 238,1,0;	//生命倫理
+			break;
+		case Job_Bard:
+		case Job_Minstrel:
+			if(getskilllv(1010)==0) skill 1010,1,0;	//パンボイス
+			break;
+		case Job_Dancer:
+		case Job_Wanderer:
+			if(getskilllv(1011)==0) skill 1011,1,0;	//魅惑のウィンク
+			break;
+	}
+	return;
+}
+
+
+//----------------------------------------------------------------------
+// CheckExtensionJob(<Job>)
+// Jobが拡張職業のJobIDかをチェック
+// return(1:拡張職,0:拡張職以外)
+//----------------------------------------------------------------------
+function	CheckExtensionJob	{
+
+	set '@value,0;
+	switch(getarg(0)) {
+		case Job_SuperNovice:
+		case Job_TaeKwon:
+		case Job_Gunslinger:
+		case Job_Ninja:
+		case Job_Gyangsy:
+		case Job_StarGladiator:
+		case Job_SoulLinker:
+		case Job_DeathKnight:
+		case Job_DarkCollector:
+			set '@value,1;
+			break;
+	}
+	return '@value;
+}
+
+
+}
+

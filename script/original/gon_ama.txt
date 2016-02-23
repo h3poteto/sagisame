@@ -1,0 +1,53 @@
+prontera.gat,152,193,4	script	街移動	115,{
+	cutin "kafra_03",2;
+	mes "[街移動カプラ]";
+	mes "コンロンとアマツに送ってあげますよ。";
+	next;
+	switch(select("コンロンに行く","アマツに行く")){
+	case 1:
+		warp "gonryun.gat",160,118; end;
+	case 2:
+		warp "amatsu.gat",112,145; end;
+	}
+	mes "[街移動カプラ]";
+	mes "またね。";
+	close2;
+	cutin "kafra_03",255;
+	end;
+}
+
+amatsu.gat,102,146,4	script	街移動	115,{
+	cutin "kafra_03",2;
+	mes "[街移動カプラ]";
+	mes "コンロンとアマツに送ってあげますよ。";
+	next;
+	switch(select("コンロンに行く","プロンテラに行く")){
+	case 1:
+		warp "gonryun.gat",160,118; end;
+	case 2:
+		warp "prontera.gat",156,192; end;
+	}
+	mes "[街移動カプラ]";
+	mes "またね。";
+	close2;
+	cutin "kafra_03",255;
+	end;
+}
+
+gonryun.gat,156,122,4	script	街移動	115,{
+	cutin "kafra_03",2;
+	mes "[街移動カプラ]";
+	mes "コンロンとアマツに送ってあげますよ。";
+	next;
+	switch(select("プロンテラに行く","アマツに行く")){
+	case 1:
+		warp "prontera.gat",156,192; end;
+	case 2:
+		warp "amatsu.gat",112,145; end;
+	}
+	mes "[街移動カプラ]";
+	mes "またね。";
+	close2;
+	cutin "kafra_03",255;
+	end;
+}

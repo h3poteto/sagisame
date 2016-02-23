@@ -1,0 +1,17 @@
+*~
+\#*\#
+*.o
+char-server
+login-server
+map-server
+src/char/GNUmakefile
+src/common/GNUmakefile
+src/common/zlib/GNUmakefile
+src/converter/GNUmakefile
+src/login/GNUmakefile
+src/map/GNUmakefile
+conf/map_auriga.conf
+conf/char_auriga.conf
+log/*
+save/*
+*.pid

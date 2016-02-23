@@ -1,0 +1,108 @@
+//***********************************************
+//  転送NPC
+//  2011.04  はじめてのAuriga - kiy
+//***********************************************
+
+prontera.gat,163,194,4	script	転送サービス#1	112,{
+
+	// CSVファイルの指定
+	set 'db_area$,"script/original/teleporter/db_area.txt";
+	set 'db_map$,"script/original/teleporter/db_map.txt";
+
+	// 履歴の設定
+	set 'his_size,5;	//履歴件数
+	set '@history[0],#history0;	//履歴内容はマップID
+	set '@history[1],#history1;	//履歴件数分セットする
+	set '@history[2],#history2;
+	set '@history[3],#history3;
+	set '@history[4],#history4;
+
+	// エリアファイルを読み込む
+	for(set '@i,0; '@i < csvgetrows('db_area$); set '@i,'@i+1){
+		set 'area$[0]['@i],csvread('db_area$, '@i, 0);	//エリアID
+		set 'area$[1]['@i],csvread('db_area$, '@i, 1);	//エリア名
+	}
+
+	cutin "kafra_06",2;
+	mes "[だぶりゅ]";
+	mes "こんにちは。";
+	mes "転送サービスしてます。";
+	mes "行きたい場所を選んでね。";
+	next;
+
+	set @menu,select(printarray('area$[1][0])) - 1;
+	set '@map_cnt,0;
+
+	//エリアを選択した時、対象エリアのマップを格納する
+	if(@menu != 0){
+		//選択したエリアID
+		set '@area_id$,'area$[0][@menu];
+
+		//全てのマップをチェックする
+		for(set '@i,0; '@i < csvgetrows('db_map$); set '@i,'@i+1){
+			//選択したエリアIDと一致する、マップIDとマップ名を格納する
+			if(	csvread('db_map$,'@i,1) == '@area_id$){
+				setarray '@map$[0]['@map_cnt],csvread('db_map$,'@i,0);	//マップID
+				setarray '@map$[1]['@map_cnt],csvread('db_map$,'@i,2);	//マップ名
+				set '@map_cnt,'@map_cnt+1;	//該当したマップ数をカウント
+			}
+		}
+	}
+
+	//履歴を選択した時、履歴のマップを格納する
+	else{
+		//後ろから順にチェック(最新の履歴順)
+		for(set '@i,getarraysize('@history)-1; 0 <= '@i; set '@i,'@i-1){
+			//マップIDを格納
+			setarray '@map$[0]['@map_cnt],'@history['@i];
+			//CSVファイルからマップIDで検索し、マップ名を格納
+			set '@row,csvfind('db_map$,0,'@history['@i]);
+			setarray '@map$[1]['@map_cnt],csvread('db_map$,'@row,2);
+			set '@map_cnt,'@map_cnt+1;	//該当したマップ数をカウント
+		}
+	}
+	set @menu,0;
+
+	//	マップの選択
+	set @menu,select(printarray('@map$[1][0])) - 1; //選択肢の数指定は不要のため削除
+
+	// 履歴件数が設定数より多くなった時、オーバーした部分を削除
+	if( 'his_size < getarraysize('@history) ){
+		deletearray '@history['his_size],getarraysize('@history)-'his_size;
+	}
+
+	// 選択したマップが履歴内にある場合は、履歴を削除
+	for( set '@i,getarraysize('@history)-1; 0 <= '@i; set '@i,'@i-1 ){
+		//選択したマップID
+		set '@map_id,'@map$[0][@menu];
+		if('@history['@i] == '@map_id){
+			deletearray '@history['@i],1;
+			set '@i,'@i-1;
+		}
+	}
+
+	// 履歴件数がMAX(設定数と同じ)の時、一番古い履歴を削除
+	if( 'his_size == getarraysize('@history) ){
+		deletearray '@history[0],1;
+	}
+
+	// 選択したマップを履歴に追加
+	setarray '@history[getarraysize('@history)],'@map$[0][@menu];
+
+	//永続的変数に登録
+	set #history0,'@history[0];
+	set #history1,'@history[1];
+	set #history2,'@history[2];
+	set #history3,'@history[3];
+	set #history4,'@history[4];
+
+	//選択したマップの行を検索し、ワープ情報を元にワープする
+	set '@row,csvfind('db_map$,0,'@map$[0][@menu]);
+	warp csvread('db_map$,'@row,3),csvread('db_map$,'@row,4),csvread('db_map$,'@row,5);
+
+	set @menu,0;
+	close2;
+	cutin "kafra_06",255;
+	end;
+}
+

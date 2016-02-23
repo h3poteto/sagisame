@@ -1,0 +1,73 @@
+prontera.gat,157,195,5	script	鷺雨ヒールサービス	67,2,2,{
+	percentheal 100,100;
+	gmcommand "@misceffect 83";
+	gmcommand "skill 34";
+	gmcommand "@repair";
+	sc_end SC_Poison;
+	sc_end SC_DPoison;
+	sc_end SC_Silence;
+	sc_end SC_Blind;
+	sc_end SC_Confusion;
+	sc_end SC_Curse;
+	sc_end SC_Hallucination;
+	sc_end SC_RaceUndead;
+	sc_start SC_BLESSING,240000,10;
+	sc_start SC_INCREASEAGI,240000,10;
+	
+	end;
+}
+
+geffen.gat,127,66,4	script	鷺雨ヒールサービス	67,3,3,{
+	
+	percentheal 100,100;
+	gmcommand "@misceffect 83";
+	gmcommand "skill 34";
+	gmcommand "@repair";
+	sc_end SC_Poison;
+	sc_end SC_DPoison;
+	sc_end SC_Silence;
+	sc_end SC_Blind;
+	sc_end SC_Confusion;
+	sc_end SC_Curse;
+	sc_end SC_Hallucination;
+	sc_end SC_RaceUndead;
+	sc_start SC_INCREASEAGI,180000,1;
+	sc_start SC_BLESSING,180000,1;
+	end;
+}
+nekomimi.gat,98,217,4	script	鷺雨ヒールサービス	67,3,3,{
+	
+	percentheal 100,100;
+	gmcommand "@misceffect 83";
+	gmcommand "@repair";
+	sc_end SC_Poison;
+	sc_end SC_DPoison;
+	sc_end SC_Silence;
+	sc_end SC_Blind;
+	sc_end SC_Confusion;
+	sc_end SC_Curse;
+	sc_end SC_Hallucination;
+	sc_end SC_RaceUndead;
+	sc_start SC_INCREASEAGI,180000,1;
+	sc_start SC_BLESSING,180000,1;
+	end;
+}
+
+
+comodo.gat,293,236,4	script	鷺雨ヒールサービス	67,3,3,{
+	
+	percentheal 100,100;
+	gmcommand "@misceffect 83";
+	gmcommand "@repair";
+	sc_end SC_Poison;
+	sc_end SC_DPoison;
+	sc_end SC_Silence;
+	sc_end SC_Blind;
+	sc_end SC_Confusion;
+	sc_end SC_Curse;
+	sc_end SC_Hallucination;
+	sc_end SC_RaceUndead;
+	sc_start SC_INCREASEAGI,180000,1;
+	sc_start SC_BLESSING,180000,1;
+	end;
+}

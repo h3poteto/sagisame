@@ -1,0 +1,56 @@
+// Card removal NPC by TyrNemesis^ 日本語訳：胡蝶蘭
+prontera.gat,162,183,4	script	賢い老女	78,{
+	mes "[賢い老女]";
+	mes "いい天気だね、若いの。";
+	mes "ところで、アタシは武具に装着している";
+	mes "カードを取り外す力を持っているけど、";
+	mes "力を貸そうかね？";
+	next;
+	switch(select("お願いします","いくらかかるんですか？","必要ないです")) {
+	case 3:
+		break;
+	case 2:
+		mes "[賢い老女]";
+		mes "無料さね。";
+		next;
+		if(select("お願いします","必要ないです") == 2) {
+			break;
+		}
+		// fall through
+	case 1:
+		mes "[賢い老女]";
+		mes "よしよし。";
+		mes "どの武具のカードを取り外すんだね？";
+		next;
+		set '@part,select("やっぱりやめます",
+		                  getequipname(1),getequipname(2),getequipname(3),getequipname(4),getequipname(5),
+		                  getequipname(6),getequipname(7),getequipname(8),getequipname(9),getequipname(10))-1;
+		if('@part == 0)
+			break;
+		set '@count,getequipcardcnt('@part);
+		if('@count <= 0) {
+			mes "[賢い老女]";
+			mes "若いの、カードがついてないよ。";
+			mes "それじゃアタシの出番はないさ。";
+			close;
+		}
+		mes "[賢い老女]";
+		mes "この武具には" + '@count + "つカードがついてるね。";
+		next;
+		if(select("わかりました、お願いします","やっぱりやめます") == 2) {
+			break;
+		}		
+		mes "[賢い老女]";
+		mes "よし、始めるよ。";
+		next;
+		successremovecards '@part;
+		mes "[賢い老女]";
+		mes "うまくいったよ。";
+		mes "これらが武具とアイテムさ。じゃあね。";
+		close;
+	}
+	mes "[賢い老女]";
+	mes "わかったよ。";
+	mes "アタシの力が必要ならいつでも来な。";
+	close;
+}

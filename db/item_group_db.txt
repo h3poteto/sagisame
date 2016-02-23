@@ -1,0 +1,25 @@
+//item_db.txt＠AthenaDB計画 2004/08/30 20:38:16 +0900 (JST)
+//ID,Name,Jname,Group
+//1:赤,黄,白ポーション 2:ハーブ 3:飴 4:ｼﾞｭｰｽ 5:にく 6:さしみ 7:アイスクリーム 8:紅ポーション
+//9:バナナ 10:おいしい魚 11:化け物のエサ
+501,Red_Potion,赤ポーション,1
+502,Orange_Potion,紅ポーション,8
+503,Yellow_Potion,黄ポーション,1
+504,White_Potion,白ポーション,1
+507,Red_Herb,赤ハーブ,2
+508,Yellow_Herb,黄ハーブ,2
+509,White_Herb,白ハーブ,2
+513,Banana,バナナ,9
+517,Meat,にく,5
+528,Monster's_Feed,化け物のエサ,11
+529,Candy,キャンディ,3
+530,Candy_Cane,スティックキャンディ,3
+531,Apple_Juice,リンゴジュース,4
+532,Banana_Juice,バナナジュース,4
+533,Grape_Juice,ブドウジュース,4
+534,Carrot_Juice,ニンジンジュース,4
+536,Ice_Cream,アイスクリーム,7
+537,Pet_Food,ペットフード,5
+544,Raw_Fish,おさしみ,6
+551,Sushi,お寿司,6
+579,Delicious_Fish,おいしい魚,10

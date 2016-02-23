@@ -1,0 +1,78 @@
+prontera.gat,162,188,4	script	銀行員カプラ#プロンテラ中央噴水	112,{
+	cutin "kafra_06",2;
+	callfunc "kafrabank_func";
+	cutin "kafra_06",255;
+	end;
+}
+
+valkyrie.gat,51,84,4	script	銀行員カプラ#転生ヴァルキリー前	112,{
+	cutin "kafra_06",2;
+	callfunc "kafrabank_func";
+	cutin "kafra_06",255;
+	end;
+}
+
+geffen.gat,134,66,4	script	銀行員カプラ#ゲフェン中央	112,{
+	cutin "kafra_06",2;
+	callfunc "kafrabank_func";
+	cutin "kafra_06",255;
+	end;
+}
+
+//=========================================================================
+// 銀行カプラファンクション
+//	callfunc "kafrabank_func"
+//
+//	変数区分			変数名			説明
+//	アカント永続変数	#kafrabank		預金額	
+//
+//-------------------------------------------------------------------------
+function	script	kafrabank_func	{
+	mes "[" +strnpcinfo(0)+ "]";
+	mes "カプラ銀行サービスです。";
+	mes "毎度ご利用ありがとうございます♪";
+	next;
+	switch(select("預ける","引き出す","やっぱやめる")) {
+	case 1:
+		mes "[" +strnpcinfo(0)+ "]";
+		mes "預ける金額を入力してください♪";
+		input '@val;
+		mes "[" +strnpcinfo(0)+ "]";
+		if(Zeny < '@val) {
+			mes "持ち金が足りないようですね。";
+			break;
+		}
+		set Zeny,Zeny - '@val;
+		set #kafrabank,#kafrabank + '@val;
+		mes "無事に取り引きできました。";
+		break;
+	case 2:
+		if(#kafrabank == 0) {
+			mes "[" +strnpcinfo(0)+ "]";
+			mes "あなたからは、1zも";
+			mes "お預かりしていないですよ？";
+			break;
+		}
+		mes "[" +strnpcinfo(0)+ "]";
+		mes "現在あなたからお預かりしているのは";
+		mes "^135445" + #kafrabank + "^000000Zenyです。";
+		mes "引き出す金額を入力してください♪";
+		next;
+		input '@val;
+		mes "[" +strnpcinfo(0)+ "]";
+		if('@val < 1)
+			break;
+		if(#kafrabank < '@val) {
+			mes "そんなに預金はありませんよ？";
+			break;
+		}
+		set #kafrabank,#kafrabank - '@val;
+		set Zeny,Zeny + '@val;
+		mes "無事に取り引きできました。";
+		break;
+	case 3:
+		mes "[" +strnpcinfo(0)+ "]";
+		break;
+	}
+	close2;
+}

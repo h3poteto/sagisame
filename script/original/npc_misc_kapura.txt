@@ -1,0 +1,328 @@
+/*================================================
+	カプラ職員
+--------------------------------------------------
+作成者不明。多機能カプラ職員(統合カプラ)です。
+＜注意＞
+本スクリプトは kapura.txt の修正版です。
+					07/02/22
+--------------------------------------------------
+変更点：
+メインメニューの配置変更。
+現行Athenaに存在しなくなった倉庫functionを取り込み。
+カートサービスの内容修正。
+余計な換行、重複したラベルを削除。
+デフォルトの設置地点をプロンテラに戻しました。
+セーブポイントの座標を個別設定できるように、
+設置形式を"duplicate"から"callfunc"に変更。
+アイテム鑑定を正常に動けるように修正。
+--------------------------------------------------*/
+function	script	highkapura	{
+	cutin getarg(0),2;
+	mes "[カプラ職員]";
+	mes "いらっしゃいませ";
+	mes "カプラサービスは";
+	mes "いつも皆様のそばにいます。";
+	next;
+//	menu "位置セーブサービス",L1,"倉庫を利用する",L2,"ギルド倉庫を利用する",L3,"銀行を利用する",L4,"カートを利用する",L5,"ペコペコ ファルコン貸し出し",L6,"鑑定サービス",L7,"ヒールサービス",L8,"終了",L9;
+	menu "位置セーブサービス",L1,"倉庫を利用する",L2,"鑑定サービス",L7,"カートを利用する",L5,"ペコペコ ファルコン貸し出し",L6,"終了",L9;
+L1:
+	savepoint getarg(1),getarg(2),getarg(3);
+	mes "[カプラ職員]";
+	mes "セーブしました。";
+	mes "ゆっくりお過ごしください。";
+	goto L_EXIT;
+L2:
+	set '@zeny,40;
+	if (getskilllv(1) < 6) {
+		mes "[カプラ職員]";
+		mes "倉庫は基本スキルレベル6を";
+		mes "習得してから利用可能となります。";
+		goto L_EXIT;
+	}
+	if (Zeny < '@zeny) {
+		mes "[カプラ職員]";
+		mes "お客様、お金が足りません。";
+		mes "倉庫利用料金は"+'@zeny+"Zenyです。";
+		goto L_EXIT;
+	}
+	set Zeny,Zeny-'@zeny;
+	openstorage;
+	goto L_EXIT;
+L3:
+	set '@flag,guildopenstorage();
+	if('@flag == 1) goto GS_EXIT1;
+	if('@flag == 2) goto GS_EXIT2;
+	goto L_EXIT;
+GS_EXIT1:
+	mes "ギルドメンバーが倉庫を使用中です。";
+	mes "しばらく待ってから利用してください。";
+	goto L_EXIT;
+GS_EXIT2:
+	mes "ギルドに所属してない方は";
+	mes "利用することができません。";
+	goto L_EXIT;
+GS_EXIT3:
+	mes "またのご利用をお待ちしています♪";
+	goto L_EXIT;
+L4:
+	mes "[カプラ職員]";
+	mes "カプラ銀行サービスです。";
+	mes "毎度ご利用ありがとうございます♪";
+	mes "1000zからでのご利用になります。";
+	next;
+	menu "預ける",BANK_IN,"引き出す",BANK_OUT,"やっぱやめる",B_EXIT2;
+BANK_IN:
+	mes "[カプラ職員]";
+	mes "預ける金額を入力してください♪";
+	mes "ちなみに、手数料として";
+	mes "預かり金の1%頂きます。";
+	next;
+	input '@kafrabank;
+	if('@kafrabank<1000) goto B_EXIT2;
+	set '@kafrabank2,'@kafrabank*1/100;
+	if('@kafrabank+'@kafrabank2>Zeny) goto BANK_F;
+	set Zeny,Zeny-'@kafrabank-'@kafrabank2;
+	set #kafrabank,#kafrabank+'@kafrabank;
+	mes "手数料^135445" + '@kafrabank2 + "z^000000頂きますね。";
+	goto B_EXIT;
+BANK_OUT:
+	if(#kafrabank==0) goto BANK_F2;
+	mes "[カプラ職員]";
+	mes "現在あなたからお預かりしているのは";
+	mes "^135445" + #kafrabank + "^000000Zenyです。";
+	mes "引き出す金額を入力してください♪";
+	next;
+	input '@kafrabank;
+	if('@kafrabank<1) goto B_EXIT2;
+	if('@kafrabank>#kafrabank) goto BANK_F;
+	set #kafrabank,#kafrabank-'@kafrabank;
+	set Zeny,Zeny+'@kafrabank;
+	goto B_EXIT;
+BANK_F:
+	mes "[カプラ職員]";
+	mes "持ち金が足りないようですね。";
+	goto B_EXIT2;
+BANK_F2:
+	mes "[カプラ職員]";
+	mes "あなたからは、1zも";
+	mes "お預かりしていないですよ？";
+	goto B_EXIT2;
+B_EXIT:
+	mes "[カプラ職員]";
+	mes "無事に取り引きできました。";
+	mes "またのご利用をお待ちしています♪";
+	goto L_EXIT;
+B_EXIT2:
+	mes "[カプラ職員]";
+	mes "またのご利用をお待ちしています♪";
+	goto L_EXIT;
+L5:
+	set '@zeny,100;		//料金設定
+	if(Class!=5 && Class!=10 && Class!=18) goto L_mousiwake;
+	if(Cart) goto L_alcart;
+	mes "[カプラ職員]";
+	mes "カート利用料金は" +'@zeny+ "Zenyです。";
+	mes "また、カートを利用するには";
+	mes "「プッシュカート」スキルが必要です。";
+	mes "そのスキルがないとカートを利用";
+	mes "できずにお金だけ消えてしまいます。";
+	mes "準備はよろしいですか？";
+	next;
+	menu "利用する",Lcartuse,"取り消し",L9;
+Lcartuse:
+	if(Zeny<'@zeny) goto Ltarinaimoney;
+	mes "[カプラ職員]";
+	mes "ありがとうございました。";
+	mes "またご利用くださいませ。";
+	set Zeny,Zeny-'@zeny;
+	setcart;
+	goto L_EXIT;
+L_alcart:
+	mes "[カプラ職員]";
+	mes "お客様は現在カートを";
+	mes "利用されています。";
+	goto L_EXIT;
+L_mousiwake:
+	mes "[カプラ職員]";
+	mes "申し訳ございません。";
+	mes "カートは商人とその上位職専用の";
+	mes "サービスです。";
+	goto L_EXIT;
+Ltarinaimoney:
+	mes "[カプラ職員]";
+	mes "お客様、お金が足りません。";
+	mes "カート利用料金は"+'@zeny+"Zenyです。";
+	goto L_EXIT;
+L6:
+	mes "[カプラ職員]";
+	mes "ここでは、剣士ギルドと、";
+	mes "ハンターギルドから";
+	mes "許可を得てペコペコと";
+	mes "ファルコンの貸し出しをしています。";
+	mes "何をお手伝いいたしましょう？";
+	next;
+	menu "ペコペコ貸し出し",Lo1,"ファルコン貸し出し",Lo2,"終了",L9;
+Lo1:
+	if (!((Class == 7) || (Class == 13) || (Class == 14) || (Class == 21))) goto Lerroro1_1;
+	mes "[カプラ職員]";
+	mes "ペコペコ利用料金は 2000 Zenyです。";
+	mes "また、ペコペコを利用するには";
+	mes "｢ライディング｣スキルが必要です。";
+	mes "そのスキルがないとペコペコを利用";
+	mes "できずにお金だけ消えてしまいます。";
+	mes "準備はよろしいですか？";
+	next;
+	menu "利用する",Lo1_1,"取り消し",-;
+	mes "[カプラ職員]";
+	mes "ありがとうございました。";
+	mes "またご利用くださいませ。";
+	goto L_EXIT;
+Lo1_1:
+	if (Zeny < 2000) goto Lerroro1_2;
+	set Zeny,Zeny-2000;
+	setriding;
+	goto L_EXIT;
+Lerroro1_1:
+	mes "[カプラ職員]";
+	mes "申し訳ございません。";
+	mes "ペコペコは騎士とクルセイダー専用の";
+	mes "サービスです。";
+	goto L_EXIT;
+Lerroro1_2:
+	mes "[カプラ職員]";
+	mes "お客様、お金が足りません。";
+	mes "ペコペコ利用料金は 2000 Zenyです。";
+	goto L_EXIT;
+Lo2:
+	if (!(Class == 11)) goto Lerroro2_1;
+	mes "[カプラ職員]";
+	mes "ファルコン利用料金は 2500 Zenyです。";
+	mes "また、ファルコンを利用するには";
+	mes "｢ファルコンマスタリー｣が必要です。";
+	mes "そのスキルがないとファルコンを利用";
+	mes "できずにお金だけ消えてしまいます。";
+	mes "準備はよろしいですか？";
+	next;
+	menu "利用する",Lo2_1,"取り消し",-;
+	mes "[カプラ職員]";
+	mes "ありがとうございました。";
+	mes "またご利用くださいませ。";
+	goto L_EXIT;
+Lo2_1:
+	if (Zeny < 2500) goto Lerroro2_2;
+	set Zeny,Zeny-2500;
+	setfalcon;
+	goto L_EXIT;
+Lerroro2_1:
+	mes "[カプラ職員]";
+	mes "申し訳ございません。";
+	mes "ファルコンはハンター専用の";
+	mes "サービスです。";
+	goto L_EXIT;
+Lerroro2_2:
+	mes "[カプラ職員]";
+	mes "お客様、お金が足りません。";
+	mes "ファルコン利用料金は 2500 Zenyです。";
+	goto L_EXIT;
+L7:
+	mes "[カプラ職員]";
+	mes "鑑定したいアイテムはありますか？";
+	mes "何個でも500Zenyです。";
+	mes "ただし、鑑定するものが無くても";
+	mes "お代はいただきますので、";
+	mes "十分確認してください。";
+	next;
+	menu "鑑定してください",-,"今は特に無いです",Lnaidesu;
+	if (Zeny < 500) goto Lokanenai;
+	set Zeny,Zeny-500;
+	gmcommand "@itemidentify";
+	mes "[カプラ職員]";
+	mes "OK！です。";
+	mes "すべて鑑定済みになりました。";
+	goto L_EXIT;
+Lnaidesu:
+	mes "[カプラ職員]";
+	mes "ふむ……";
+	mes "なら私にに用は無いですね";
+	goto L_EXIT;
+Lokanenai:
+	mes "[カプラ職員]";
+	mes "お金が足りません。";
+	goto L_EXIT;
+L8:
+	mes "[カプラ職員]";
+	mes "こちらではHPSPの回復を";
+	mes "有料で行っています。";
+	mes "HPのみの回復で1000z";
+	mes "SPのみの回復で4000z";
+	mes "両方回復で5000z";
+	mes "となっております。";
+	next;
+	menu "HPとSP回復する",Lbothheal,"HPのみ回復する",Lhpheal,"SPのみ回復する",Lspheal,"やっぱやめる",L9;
+Lhpheal:
+	if(Zeny < 1000) goto Lmoney;
+	if((MaxHp == Hp)) goto Lgenki;
+	set Zeny,Zeny-1000;
+	gmcommand "@misceffect 325";
+	percentheal 100,0;
+	goto L9;
+Lspheal:
+	if(Zeny < 4000) goto Lmoney;
+	if((MaxSp == Sp)) goto Lgenki;
+	set Zeny,Zeny-4000;
+	gmcommand "@misceffect 325";
+	percentheal 0,100;
+	goto L9;
+Lbothheal:
+	if(Zeny < 5000) goto Lmoney;
+	if((MaxHp == Hp) && (MaxSp == Sp)) goto Lgenki;
+	set Zeny,Zeny-5000;
+	gmcommand "@misceffect 325";
+	percentheal 100,100;
+	goto L9;
+Lmoney:
+	mes "[カプラ職員]";
+	mes "お金が足りないようです。";
+	goto L_EXIT;
+Lgenki:
+	mes "[カプラ職員]";
+	mes "ヒールの必要は無いようです。";
+	goto L_EXIT;
+L9:
+	mes "[カプラ職員]";
+	mes "我々カプラサービスは、より完璧な";
+	mes "サービスと管理業務を目指し";
+	mes "お客様が安心してご利用いただけるよう";
+	mes "いつも最善を尽くしています。";
+	mes "カプラサービスをご利用いただき";
+	mes "ありがとうございました。";
+L_EXIT:
+	close2;
+	cutin getarg(0),255;
+	return;
+}
+/*================================================
+	設置例
+--------------------------------------------------
+cut-in名 / getarg(0)		ID番号
+========			======
+kafra_01 (デフォルテ)		117
+kafra_02 (ポニテ)		116
+kafra_03 (黒髪ロング)		115	
+kafra_04 (ショートオレンジ)	114
+kafra_05 (メガネ)		113
+kafra_06 (ツインテール)		112
+kafra_07 (コモド)		721
+kafra_08 (青ショット)		860
+kafra_09 (赤ロング)		861
+--------------------------------------------------
+callfunc "highkapura","カットイン名","セーブマップ",座標X,座標Y;
+--------------------------------------------------*/
+prontera.gat,149,194,5	script	カプラ職員::1	117,{
+	callfunc "highkapura","kafra_01","prontera.gat",155,195;
+	end;
+}
+alberta.gat,101,228,5	script	カプラ職員::2	116,{
+	callfunc "highkapura","kafra_02","alberta.gat",114,235;
+	end;
+}

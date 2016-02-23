@@ -1,0 +1,228 @@
+==========================================================================
+ サーバのWindowsサービス化の方法
+--------------------------------------------------------------------------
+
+AurigaのLogin / Char / MapサーバをWindowsのサービスとして組み込みます。
+
+
+--------------------------------------------------------------------------
+1. Aurigaの用意
+
+BCC、VC、Gcc for MinGw(-mnoオプション付きで)でコンパイルしたAuriga本体
+ (login-server.exe, char-server.exe, map-server.exe)
+
+※Gcc for Cygwinでコンパイルしたバイナリを使用する場合はstartのある
+  フォルダにCygz.dll/Cygwin1.dllを移動しておく必要があります。
+
+confフォルダにある設定、およびセーブデータの配置を行っておいてください。
+
+
+--------------------------------------------------------------------------
+2. sc.exeコマンドの確認
+
+Windows XP/2003以降はOSに標準搭載されています。
+コマンドプロンプトを開き、
+
+  > sc.exe
+
+を入力して結果が表示されれば問題ありません。
+
+「'sc.exe' は、内部コマンドまたは外部コマンド、操作可能なプログラムまたは
+バッチ ファイルとして認識されていません。」という結果の場合はコマンドが
+存在していません。別途リソースキットを導入してください。
+
+
+--------------------------------------------------------------------------
+3. 設定
+
+まず tool/instasv.bat をテキストエディタで開きます。
+
+  rem サービス名設定
+  set __LOGIN_SVC__=AurigaLoginServer
+  set __CHAR_SVC__=AurigaCharServer
+  set __MAP_SVC__=AurigaMapServer
+
+サービスに登録する際のサービス名です。
+一意の名前であれば変更可能です。
+指定しない場合はサービスへの登録は行われません。
+
+  rem サービス表示名・説明設定
+  set __LOGIN_DESC__=Auriga Login Server
+  set __CHAR_DESC__=Auriga Char Server
+  set __MAP_DESC__=Auriga Map Server
+
+サービスの表示名と説明です（兼用）。
+任意の名前に変更可能です。
+
+  rem 標準出力のリダイレクト先ログファイル名設定
+  set __LOGIN_LOGFILE__=./log/login-stdout.log
+  set __CHAR_LOGFILE__=./log/char-stdout.log
+  set __MAP_LOGFILE__=./log/map-stdout.log
+
+サービスはコンソールが表示されないため、標準出力を別途ログへリダイレクトします。
+ログファイル名を指定してください。
+exeが置いてあるあるパスがカレントディレクトリになります。
+
+※この例ではlogフォルダがあらかじめ必要です。
+  ディレクトリは自動的に作成されませんので、もしlogフォルダが無い場合はログが
+  残らないので注意してください。
+
+
+--------------------------------------------------------------------------
+4. インストール
+
+instasv.bat をダブルクリックして実行してください。
+エラーが出なければサービスに登録されているはずです
+
+  <<登録成功時のログはこうなります>>
+  =============================================================================================
+  ■Aurigaをサービスとして登録します。■
+  Installing Service "AurigaLoginServer" ...
+  [SC] CreateService SUCCESS
+  [SC] ChangeServiceConfig2 SUCCESS
+
+  Installing Service "AurigaCharServer" ...
+  [SC] CreateService SUCCESS
+  [SC] ChangeServiceConfig2 SUCCESS
+
+  Installing Service "AurigaMapServer" ...
+  [SC] CreateService SUCCESS
+  [SC] ChangeServiceConfig2 SUCCESS
+
+  ★Login, Char, MapサーバをWindowsのサービスとして登録しました。
+  ★障害時の自動起動をONにする場合はWindowsの「管理ツール」から「サービス」を選択してください。
+  =============================================================================================
+
+管理ツール内のサービスで登録されたサービスのプロパティを開きます。
+［全般］タブの「実行ファイルのパス」が以下のような記述になっていることを確認します。
+
+  C:\...\login-server.exe --service-name AurigaLoginServer --stdout ./log/login-stdout.log
+
+  ※--service-name [サービス名] の起動引数が存在していることが必須です。
+    これが無い場合、サービスとして起動できないので注意してください。
+
+もし必要であれば「スタートアップの種類」を変更してください。
+自動にしておけばマシン起動時に自動的にAurigaが立ち上がります。
+
+［回復タブ］からエラー時の処理の選択が出来ます。
+ここで、エラー(スタックも含む)が発生した場合、サービスを再起動にしておくと障害時に
+自動復旧するようになります。
+
+
+--------------------------------------------------------------------------
+5. 起動
+
+サービスから「開始」を実行してください。
+もしエラーが発生して起動できない場合、ログファイルを確認し原因を特定して
+ください。
+
+
+--------------------------------------------------------------------------
+6. アンインストール
+
+サービスが不要になった場合、tool/delasv.bat を使用します。
+まず delasv.bat をテキストエディタで開きます。
+
+  rem サービス名設定
+  set __LOGIN_SVC__=AurigaLoginServer
+  set __CHAR_SVC__=AurigaCharServer
+  set __MAP_SVC__=AurigaMapServer
+
+instasv.bat で指定したサービス名と同じものを指定します。
+指定しない場合はサービスからの削除は行われません。
+
+全てのAurigaサービスを停止します。
+そして delasv.bat をダブルクリックで実行してください。
+
+  <<登録成功時のログはこうなります>>
+  =============================================================================================
+  ■Aurigaをサービスから削除します■
+  UnInstalling Service "AurigaLoginServer" ...
+  [SC] DeleteService SUCCESS
+
+  UnInstalling Service "AurigaCharServer" ...
+  [SC] DeleteService SUCCESS
+
+  UnInstalling Service "AurigaMapServer" ...
+  [SC] DeleteService SUCCESS
+
+  ★Login, Char, MapサーバをWindowsのサービスから解除を試みました。
+  ★エラーが発生している場合は、あらかじめサービスを停止してから再度実行してください。
+  =============================================================================================
+
+サービス画面を開き、全てのAurigaサービスが存在しないことを確認してください。
+
+
+--------------------------------------------------------------------------
+7. 特記事項
+
+CharサーバおよびMapサーバを複数設定して分散したい場合の設定方法です。
+インストール方法については必要な数だけコマンドを増やすだけで良いです。
+
+  rem ----------------------------------------------------------------
+  rem サービス名設定
+  set __LOGIN_SVC__=AurigaLoginServer
+  set __CHAR_SVC__=AurigaCharServer
+  set __MAP_SVC__=AurigaMapServer
+  set __CHAR2_SVC__=AurigaCharServer2
+  set __MAP2_SVC__=AurigaMapServer2
+
+  rem サービス表示名設定
+  set __LOGIN_DESC__=Auriga Login Server
+  set __CHAR_DESC__=Auriga Char Server
+  set __MAP_DESC__=Auriga Map Server
+  set __CHAR2_DESC__=Auriga Char Server 2
+  set __MAP2_DESC__=Auriga Map Server 2
+
+  rem 標準出力のリダイレクト先ログファイル名設定
+  set __LOGIN_LOGFILE__=./log/login-stdout.log
+  set __CHAR_LOGFILE__=./log/char-stdout.log
+  set __MAP_LOGFILE__=./log/map-stdout.log
+  set __CHAR2_LOGFILE__=./log/char2-stdout.log
+  set __MAP2_LOGFILE__=./log/map2-stdout.log
+  rem ----------------------------------------------------------------
+
+  rem カレントディレクトリの補正
+  cd %~dp0
+  cd ..
+  set __BASE_DIR__=%cd%
+
+  echo ■Aurigaをサービスとして登録します。■
+
+  if "%__LOGIN_SVC__%"=="" goto SKIP1
+  echo Installing Service "%__LOGIN_SVC__%" ...
+  sc.exe create %__LOGIN_SVC__% DisplayName= "%__LOGIN_DESC__%" binPath= "%__BASE_DIR__%\login-server.exe --service-name %__LOGIN_SVC__% --stdout %__LOGIN_LOGFILE__%"
+  sc.exe description %__LOGIN_SVC__% "%__LOGIN_DESC__%"
+  echo.
+  :SKIP1
+
+  if "%__CHAR_SVC__%"=="" goto SKIP2
+  echo Installing Service "%__CHAR_SVC__%" ...
+  sc.exe create %__CHAR_SVC__% DisplayName= "%__CHAR_DESC__%" binPath= "%__BASE_DIR__%\char-server.exe --service-name %__CHAR_SVC__% --stdout %__CHAR_LOGFILE__%"
+  sc.exe description %__CHAR_SVC__% "%__CHAR_DESC__%"
+  echo.
+  :SKIP2
+
+  if "%__MAP_SVC__%"=="" goto SKIP3
+  echo Installing Service "%__MAP_SVC__%" ...
+  sc.exe create %__MAP_SVC__% DisplayName= "%__MAP_DESC__%" binPath= "%__BASE_DIR__%\map-server.exe --service-name %__MAP_SVC__%  --stdout %__MAP_LOGFILE__%"
+  sc.exe description %__MAP_SVC__% "%__MAP_DESC__%"
+  echo.
+  :SKIP3
+
+  if "%__CHAR_SVC2__%"=="" goto SKIP4
+  echo Installing Service "%__CHAR2_SVC__%" ...
+  sc.exe create %__CHAR2_SVC__% DisplayName= "%__CHAR2_DESC__%" binPath= "%__BASE_DIR__%\char-server.exe --service-name %__CHAR2_SVC__% --stdout %__CHAR2_LOGFILE__%" --char-config ./conf/char_auriga2.conf --inter-config ./conf/inter_auriga2.conf
+  sc.exe description %__CHAR2_SVC__% "%__CHAR2_DESC__%"
+  echo.
+  :SKIP4
+
+  if "%__MAP_SVC__%"=="" goto SKIP5
+  echo Installing Service "%__MAP2_SVC__%" ...
+  sc.exe create %__MAP2_SVC__% DisplayName= "%__MAP2_DESC__%" binPath= "%__BASE_DIR__%\map-server.exe --service-name %__MAP2_SVC__%  --stdout %__MAP2_LOGFILE__%" --map-config ./conf/map_auriga2.conf --script-confing ./conf/script_auriga2.conf
+  sc.exe description %__MAP2_SVC__% "%__MAP2_DESC__%"
+  echo.
+  :SKIP5
+
+  ※起動引数を使ってconfを切り替えるように指定します。
+    起動引数の詳細については doc/commandline_parameter.txt を参照してください。

@@ -1,0 +1,18 @@
+// original NPCs
+npc: script/original/teleporter/npc_original_teleporter.txt
+npc: script/original/Heal_NPC.txt
+npc: script/original/first_shop.txt
+npc: script/original/gon_ama.txt
+npc: script/original/shop_comodo.txt
+npc: script/original/shop_geffen.txt
+npc: script/original/refine.txt
+npc: script/original/npc_test_gstorage.txt
+npc: script/original/npc_misc_kapura.txt
+npc: script/original/npc_custom_bank.txt
+npc: script/original/npc_shop.txt
+npc: script/original/npc_original_jobchanger.txt
+npc: script/original/npc_debug_reset.txt
+npc: script/original/npc_custom_cardremover.txt
+
+//npc: script/sample/npc_custom_bank.txt
+//npc: script/sample/npc_debug_questskill.txt
