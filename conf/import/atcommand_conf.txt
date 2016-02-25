@@ -1,0 +1,3 @@
+rura: 0
+mobsearch: 0
+mes: 0

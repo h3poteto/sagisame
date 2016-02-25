@@ -1,0 +1,42 @@
+// アイテムドロップ倍率（100で通常、200で倍…）
+item_rate: 10000
+
+// base exp所得倍率（100で通常、200で倍…）
+base_exp_rate: 10000
+
+// job exp所得倍率（100で通常、200で倍…）
+job_exp_rate: 10000
+
+// BASE経験値デスペナルティの比率。単位は0.01%
+// 0で無しになります。
+death_penalty_base: 0
+
+// JOB経験値デスペナルティの比率。単位は0.01%
+// 0で無しになります。
+death_penalty_job: 0
+
+// 死んだ時無くなるゼニーの量。以下の3項目の合計額を損失させます。
+// 各項目にマイナスの値を入力することは可能ですが、ゼニーを与えることはありません。
+// 死んだ時減るわけではなく死んだ後セーヴポイントに戻る時適用されます。
+// zeny_penalty        : 損失するゼニーの額。
+// zeny_penalty_percent: ゼニーの比率、単位は0.01%。
+// zeny_penalty_by_lvl : ベースレベルに比例したゼニーを損失させる、値は傾き。
+zeny_penalty: 0
+zeny_penalty_percent: 0
+zeny_penalty_by_lvl: 0
+
+// 配置されている中ボスの再出現までの時間（0で即沸き、100で通常、200で倍の時間、…）
+mob_middle_boss_delay_rate: 5
+
+// 配置されているMVPボスの再出現までの時間（0で即沸き、100で通常、200で倍の時間、…）
+mob_mvp_boss_delay_rate: 5
+
+// PTボーナス、一人増えるごとに経験値+n% ohhsaba限定変更athena wiki よりのを改造(本鯖は0)
+// base経験値ボーナス
+pt_bonus_b: 100
+// job経験値ボーナス
+pt_bonus_j: 100
+
+// ボスはセージのエレメンタルチェンジを無効にする
+// 公式では無効と発表しているが実際は変更出来てしまっている
+boss_no_element_change: no
