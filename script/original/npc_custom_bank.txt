@@ -1,24 +1,25 @@
-prontera.gat,162,188,4	script	銀行員カプラ#プロンテラ中央噴水	112,{
+/*
+prontera.gat,162,188,4	script	銀行員カプラ::プロンテラ中央噴水	112,{
 	cutin "kafra_06",2;
 	callfunc "kafrabank_func";
 	cutin "kafra_06",255;
 	end;
 }
 
-valkyrie.gat,51,84,4	script	銀行員カプラ#転生ヴァルキリー前	112,{
+valkyrie.gat,51,84,4	script	銀行員カプラ::転生ヴァルキリー前	112,{
 	cutin "kafra_06",2;
 	callfunc "kafrabank_func";
 	cutin "kafra_06",255;
 	end;
 }
 
-geffen.gat,134,66,4	script	銀行員カプラ#ゲフェン中央	112,{
+geffen.gat,134,66,4	script	銀行員カプラ::ゲフェン中央	112,{
 	cutin "kafra_06",2;
 	callfunc "kafrabank_func";
 	cutin "kafra_06",255;
 	end;
 }
-
+*/
 //=========================================================================
 // 銀行カプラファンクション
 //	callfunc "kafrabank_func"
@@ -37,7 +38,6 @@ function	script	kafrabank_func	{
 		mes "[" +strnpcinfo(0)+ "]";
 		mes "預ける金額を入力してください♪";
 		input '@val;
-		mes "[" +strnpcinfo(0)+ "]";
 		if(Zeny < '@val) {
 			mes "持ち金が足りないようですね。";
 			break;
@@ -71,7 +71,6 @@ function	script	kafrabank_func	{
 		mes "無事に取り引きできました。";
 		break;
 	case 3:
-		mes "[" +strnpcinfo(0)+ "]";
 		break;
 	}
 	close2;
