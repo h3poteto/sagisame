@@ -51,3 +51,21 @@ gonryun.gat,156,122,4	script	街移動	115,{
 	cutin "kafra_03",255;
 	end;
 }
+
+new_1-1.gat,56,114,4	script	街移動	115,{
+	cutin "kafra_03",2;
+	mes "[街移動カプラ]";
+	mes "プロンテラかコンロンに送ってあげますよ。";
+	next;
+	switch(select("プロンテラに行く","コンロンに行く")){
+	case 1:
+         warp "prontera.gat",156,192; end;
+	case 2:
+         warp "gonryun.gat",160,118; end;
+	}
+	mes "[街移動カプラ]";
+	mes "またね。";
+	close2;
+	cutin "kafra_03",255;
+	end;
+}
