@@ -1,4 +1,6 @@
+//========================================
 // original NPCs
+//========================================
 npc: script/original/teleporter/npc_original_teleporter.txt
 npc: script/original/Heal_NPC.txt
 npc: script/original/first_shop.txt
@@ -16,3 +18,9 @@ npc: script/original/npc_custom_cardremover.txt
 
 //npc: script/sample/npc_custom_bank.txt
 //npc: script/sample/npc_debug_questskill.txt
+
+
+//=========================================
+// original monsters
+//=========================================
+npc: script/original/monster/boss.txt
