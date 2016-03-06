@@ -1,7 +1,6 @@
 //==============================================================================
 //Ragnarok Online SmileGirl Script
 //==============================================================================
-/*
 -	script	SmileGirl	92,{
 	mes "[スマイルガール]";
 	mes "こんにちは～";
@@ -89,4 +88,3 @@ alberta.gat,113,53,4	duplicate(SmileGirl)	スマイルマスク職員	92
 payon.gat,186,104,5	duplicate(SmileGirl)	スマイルマスク職員	92
 izlude.gat,129,118,4	duplicate(SmileGirl)	スマイルマスク職員	92
 morocc.gat,158,97,4	duplicate(SmileGirl)	スマイルマスク職員	92
-*/
