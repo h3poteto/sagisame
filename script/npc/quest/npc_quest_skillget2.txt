@@ -375,7 +375,7 @@ prontera.gat,66,358,5	script	騎士団員	733,{
 //==== シュリンク - CR_SHRINK
 //	■ SKILL_SHRINK   -> 0～8
 //-----------------------------------------------
-gef_tower.gat,62,176,3	script	フォード	752,{
+geffen.gat,110,117,3	script	フォード	752,{
 	if(getskilllv(1002)) {
 		mes "[フォード]";
 		mes "スラッティに薬を渡したようだね。";

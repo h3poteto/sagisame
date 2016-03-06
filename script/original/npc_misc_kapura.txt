@@ -24,7 +24,7 @@ function	script	highkapura	{
 	mes "いつも皆様のそばにいます。";
 	next;
 //	menu "位置セーブサービス",L1,"倉庫を利用する",L2,"ギルド倉庫を利用する",L3,"銀行を利用する",L4,"カートを利用する",L5,"ペコペコ ファルコン貸し出し",L6,"鑑定サービス",L7,"ヒールサービス",L8,"終了",L9;
-	menu "位置セーブサービス",L1,"倉庫を利用する",L2,"銀行を利用する",L4,"鑑定サービス",L7,"カートを利用する",L5,"ペコペコ ファルコン貸し出し",L6,"終了",L9;
+	menu "位置セーブサービス",L1,"倉庫を利用する",L2,"鑑定サービス",L7,"カートを利用する",L5,"ペコペコ ファルコン貸し出し",L6,"終了",L9;
 L1:
 	savepoint getarg(1),getarg(2),getarg(3);
 	mes "[カプラ職員]";
@@ -65,8 +65,6 @@ GS_EXIT3:
 	mes "またのご利用をお待ちしています♪";
 	goto L_EXIT;
 L4:
-	callfunc "kafrabank_func";
-/*
 	mes "[カプラ職員]";
 	mes "カプラ銀行サービスです。";
 	mes "毎度ご利用ありがとうございます♪";
@@ -118,7 +116,6 @@ B_EXIT2:
 	mes "[カプラ職員]";
 	mes "またのご利用をお待ちしています♪";
 	goto L_EXIT;
-*/
 L5:
 	set '@zeny,100;		//料金設定
 	if(Class!=5 && Class!=10 && Class!=18) goto L_mousiwake;
@@ -327,9 +324,5 @@ prontera.gat,149,194,5	script	カプラ職員::1	117,{
 }
 alberta.gat,101,228,5	script	カプラ職員::2	116,{
 	callfunc "highkapura","kafra_02","alberta.gat",114,235;
-	end;
-}
-valkyrie.gat,51,84,4	script	カプラ職員::3	112,{
-	callfunc "highkapura","kafra_03","
 	end;
 }
