@@ -7,7 +7,9 @@
 payon.gat,153,96,4		substore(SpecialItemShopper)	スペシャルアイテム販売	73
 alberta.gat,90,56,6		substore(SpecialItemShopper)	スペシャルアイテム販売	73
 prontera.gat,123,68,2		substore(SpecialItemShopper)	スペシャルアイテム販売	73
-geffen.gat,114,104,4		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+//geffen.gat,114,104,4		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+gef_tower.gat,60,176,4		substore(SpecialItemShopper)	スペシャルアイテム販売	73
+
 morocc.gat,169,80,2		substore(SpecialItemShopper)	スペシャルアイテム販売	73
 aldebaran.gat,135,123,4		substore(SpecialItemShopper)	スペシャルアイテム販売	73
 yuno.gat,167,187,3		substore(SpecialItemShopper)	スペシャルアイテム販売	73
