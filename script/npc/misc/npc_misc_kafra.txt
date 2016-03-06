@@ -618,7 +618,7 @@ cmd_fild07.gat,136,134,4	script	カプラ職員	721,{
 }
 
 //----------------------------------
-// < コモド > 
+// < コモド >
 //----------------------------------
 
 comodo.gat,195,150,4	script	カプラ職員	721,{
@@ -666,8 +666,8 @@ yuno.gat,152,187,4	script	カプラ職員	113,{
 	cutin "kafra_05",2;
 //	set '@code,8;
 //	set '@price,1200;
-	set '@code,8,1;
-	set '@price,1200,0;
+	setarray '@code,8,1;
+	setarray '@price,1200,0;
 	callfunc "KafraMain",0,0x7f,"yuno.gat",158,124,"NULL",0,0,40,800,'@code,'@price;
 	close2;
 	viewpoint 1,327,109,2,0x0000FF;
@@ -684,8 +684,8 @@ yuno.gat,327,109,4	script	カプラ職員	113,{
 	cutin "kafra_05",2;
 //	set '@code,8;
 //	set '@price,1200;
-	set '@code,8,1;
-	set '@price,1200,0;
+	setarray '@code,8,1;
+	setarray '@price,1200,0;
 	callfunc "KafraMain",0,0x7f,"yuno.gat",327,100,"NULL",0,0,40,800,'@code,'@price;
 	close2;
 	viewpoint 1,152,187,1,0x0000FF;
@@ -702,8 +702,8 @@ yuno.gat,277,221,4	script	カプラ職員	113,{
 	cutin "kafra_05",2;
 //	set '@code,8;
 //	set '@price,1200;
-	set '@code,8,1;
-	set '@price,1200,0;
+	setarray '@code,8,1;
+	setarray '@price,1200,0;
 	callfunc "KafraMain",0,0x7f,"yuno.gat",275,229,"NULL",0,0,40,800,'@code,'@price;
 	close2;
 	viewpoint 1,152,187,1,0x0000FF;
@@ -761,8 +761,8 @@ umbala.gat,87,160,5	script	カプラ職員	721,{
 	cutin "kafra_07",2;
 //	set '@code,10;
 //	set '@price,1800;
-	set '@code,10,1;
-	set '@price,1800,0;
+	setarray '@code,10,1;
+	setarray '@price,1800,0;
 	callfunc "KafraMain",0,0x57,"umbala.gat",100,154,"NULL",0,0,80,0,'@code,'@price;
 	end;
 }
