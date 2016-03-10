@@ -1,22 +1,15 @@
 /*
 prontera.gat,162,188,4	script	銀行員カプラ::プロンテラ中央噴水	112,{
-	cutin "kafra_06",2;
-	callfunc "kafrabank_func";
-	cutin "kafra_06",255;
+	callfunc "kafrabank_func","kafra_06";
 	end;
 }
 
 valkyrie.gat,51,84,4	script	銀行員カプラ::転生ヴァルキリー前	112,{
-	cutin "kafra_06",2;
-	callfunc "kafrabank_func";
-	cutin "kafra_06",255;
 	end;
 }
 
 geffen.gat,134,66,4	script	銀行員カプラ::ゲフェン中央	112,{
-	cutin "kafra_06",2;
-	callfunc "kafrabank_func";
-	cutin "kafra_06",255;
+	callfunc "kafrabank_func","kafra_06";
 	end;
 }
 */
@@ -24,11 +17,12 @@ geffen.gat,134,66,4	script	銀行員カプラ::ゲフェン中央	112,{
 // 銀行カプラファンクション
 //	callfunc "kafrabank_func"
 //
-//	変数区分			変数名			説明
+//	変数区分		変数名			説明
 //	アカント永続変数	#kafrabank		預金額	
 //
 //-------------------------------------------------------------------------
 function	script	kafrabank_func	{
+	cutin getarg(0),2;
 	mes "[" +strnpcinfo(0)+ "]";
 	mes "カプラ銀行サービスです。";
 	mes "毎度ご利用ありがとうございます♪";
@@ -74,4 +68,5 @@ function	script	kafrabank_func	{
 		break;
 	}
 	close2;
+	cutin getarg(0),255;
 }
