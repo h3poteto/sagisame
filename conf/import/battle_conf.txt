@@ -40,3 +40,6 @@ pt_bonus_j: 100
 // ボスはセージのエレメンタルチェンジを無効にする
 // 公式では無効と発表しているが実際は変更出来てしまっている
 boss_no_element_change: no
+
+// アイテムを鑑定状態で出す
+itemidentify: yes
