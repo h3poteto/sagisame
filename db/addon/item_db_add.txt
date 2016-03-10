@@ -5342,7 +5342,7 @@
 12243,M_Berserk_Potion,傭兵用バーサークポーション,2,,,100,,,,,1000333311,2,,,,,,{ mercsc_start SC_SpeedPot2,1800000,0; },{}
 12244,Old_Gift_Box,古いプレゼントボックス,2,,,200,,,,,1000333311,2,,,,,,{ getitem rand(5270,5272),1; },{}
 12245,Green_Ale_US,グリーンエール,2,,,500,,,,,1000333311,2,,,,,,{ percentheal 100,0; },{}
-12246,Magic_Card_Album,魔力が込められたカード帖,2,,,50,,,,,1000333311,2,,,,,,{},{}
+12246,Magic_Card_Album,魔力が込められたカード帖,2,,,50,,,,,1000333311,2,,,,,,{ getitem RAND_MAGIC_CARD_ALBUM,1,0 },{}
 12247,Halohalo,ハロハロ,2,,,100,,,,,1000333311,2,,,20,,,{ sc_start SC_MSTR,600000,3; sc_start SC_MAGI,600000,3; sc_start SC_MVIT,600000,3; sc_start SC_MINT,600000,3; sc_start SC_MDEX,600000,3; sc_start SC_MLUK,600000,3; },{}
 12248,Masquerade_Ball_Box,仮装舞踏会の箱,2,,,10,,,,,1000333311,2,,,,,,{ getitem 5296,1; getitem 5297,1; getitem 5298,1; },{}
 12249,Payroll_Of_Kafra_,カプラの月給明細書,2,,,10,,,,,1000333311,2,,,,,,{ set Zeny,Zeny+rand(1,1000000); },{}
