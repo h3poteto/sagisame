@@ -65,7 +65,7 @@ GS_EXIT3:
 	mes "またのご利用をお待ちしています♪";
 	goto L_EXIT;
 L4:
-	callfunc "kafrabank_func";
+	callfunc "kafrabank_func",getarg(0);
 /*
 	mes "[カプラ職員]";
 	mes "カプラ銀行サービスです。";
