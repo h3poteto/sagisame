@@ -71,3 +71,23 @@ comodo.gat,293,236,4	script	鷺雨ヒールサービス	67,3,3,{
 	sc_start SC_BLESSING,180000,1;
 	end;
 }
+
+alb2trea.gat,61,69,5	script	鷺雨ヒールサービス	67,3,3,{
+	percentheal 100,100;
+	gmcommand "@misceffect 83";
+	gmcommand "skill 34";
+	gmcommand "@repair";
+	sc_end SC_Poison;
+	sc_end SC_DPoison;
+	sc_end SC_Silence;
+	sc_end SC_Blind;
+	sc_end SC_Confusion;
+	sc_end SC_Curse;
+	sc_end SC_Hallucination;
+	sc_end SC_RaceUndead;
+	sc_start SC_BLESSING,240000,10;
+	sc_start SC_INCREASEAGI,240000,10;
+	
+	end;
+}
+
