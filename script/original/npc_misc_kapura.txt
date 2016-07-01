@@ -311,7 +311,7 @@ cut-in名 / getarg(0)		ID番号
 ========			======
 kafra_01 (デフォルテ)		117
 kafra_02 (ポニテ)		116
-kafra_03 (黒髪ロング)		115	
+kafra_03 (黒髪ロング)		115
 kafra_04 (ショートオレンジ)	114
 kafra_05 (メガネ)		113
 kafra_06 (ツインテール)		112
@@ -330,6 +330,6 @@ alberta.gat,101,228,5	script	カプラ職員::2	116,{
 	end;
 }
 valkyrie.gat,51,84,4	script	カプラ職員::3	112,{
-	callfunc "highkapura","kafra_03","
+	callfunc "highkapura","kafra_03","valkyrie.gat",56,85;
 	end;
 }
