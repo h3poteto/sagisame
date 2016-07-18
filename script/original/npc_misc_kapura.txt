@@ -160,8 +160,26 @@ Ltarinaimoney:
 L6:
 	//プレイヤーの職業チェック
 	switch(Job) {
-	  case Job_Knight:
 	  case Job_RuneKnight:
+		//プレイヤーの騎乗状態をチェック
+		if(checkdragon()) {
+			mes "[カプラ職員]";
+			mes "すでに騎乗していますよ。";
+			mes "またご利用くださいませ。";
+			goto L_EXIT;
+		}
+		//所持金チェック
+		if(Zeny < @cost){
+			mes "[カプラ職員]";
+			mes "お金が不足しております。";
+			mes @cost + "Zenyご用意してください。";
+			mes "またご利用くださいませ。";
+			goto L_EXIT;
+		}
+		set Zeny,Zeny-@cost;
+		setriding;
+		goto L_EXIT;
+	  case Job_Knight:
 	  case Job_Crusader:
 	  case Job_RoyalGuard:
 		set @cost,2500;
@@ -172,7 +190,7 @@ L6:
 			mes "またご利用くださいませ。";
 			goto L_EXIT;
 		}
-		//ライディング(ペコペコ、ドラゴン、グリフォン系共通)
+		//ライディング(ペコペコ、グリフォン系共通)
 		if(getskilllv(63) < 1){
 			mes "[カプラ職員]";
 			mes "スキルが不十分なようです。";
@@ -205,6 +223,7 @@ L6:
 			mes "スキルが不十分なようです。";
 			mes "またご利用くださいませ。";
 			goto L_EXIT;
+		}
 		//所持金チェック
 		if(Zeny < @cost){
 			mes "[カプラ職員]";
@@ -214,13 +233,12 @@ L6:
 			goto L_EXIT;
 		}
 		set Zeny,Zeny-@cost;
-		setriding;
+		setfalcon;
 		goto L_EXIT;
-		}
 	  default:
 		mes "[カプラ職員]";
 		mes "あなたのジョブでは、";
-		mes "レンタルできません。。";
+		mes "レンタルできません。";
 		mes "またご利用くださいませ。";
 		goto L_EXIT;
 	}
