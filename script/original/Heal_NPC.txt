@@ -28,7 +28,7 @@ alb2trea.gat,61,69,5	script	鷺雨ヒールサービス	67,3,3,{
 //	-
 //
 //-------------------------------------------------------------------------
-function	script	funcHealService{
+function	script	funcHealService	{
 	percentheal 100,100;
 	gmcommand "@misceffect 83";
 	gmcommand "skill 34";
@@ -36,7 +36,7 @@ function	script	funcHealService{
 
 	//ステータス異常からの救済
 	sc_end SC_Stone;
-	sc_end SC_Freeze:
+	sc_end SC_Freeze;
 	sc_end SC_Stun;
 	sc_end SC_Sleep;
 	sc_end SC_Poison;
