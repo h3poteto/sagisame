@@ -1,93 +1,59 @@
 prontera.gat,157,195,5	script	鷺雨ヒールサービス	67,2,2,{
-	percentheal 100,100;
-	gmcommand "@misceffect 83";
-	gmcommand "skill 34";
-	gmcommand "@repair";
-	sc_end SC_Poison;
-	sc_end SC_DPoison;
-	sc_end SC_Silence;
-	sc_end SC_Blind;
-	sc_end SC_Confusion;
-	sc_end SC_Curse;
-	sc_end SC_Hallucination;
-	sc_end SC_RaceUndead;
-	sc_start SC_BLESSING,240000,10;
-	sc_start SC_INCREASEAGI,240000,10;
-	
+	call function "funcHealService";
 	end;
 }
-
 geffen.gat,127,66,4	script	鷺雨ヒールサービス	67,3,3,{
-	
-	percentheal 100,100;
-	gmcommand "@misceffect 83";
-	gmcommand "skill 34";
-	gmcommand "@repair";
-	sc_end SC_Poison;
-	sc_end SC_DPoison;
-	sc_end SC_Silence;
-	sc_end SC_Blind;
-	sc_end SC_Confusion;
-	sc_end SC_Curse;
-	sc_end SC_Hallucination;
-	sc_end SC_RaceUndead;
-	sc_start SC_INCREASEAGI,180000,1;
-	sc_start SC_BLESSING,180000,1;
+	call function "funcHealService";
 	end;
 }
 nekomimi.gat,98,217,4	script	鷺雨ヒールサービス	67,3,3,{
-	
-	percentheal 100,100;
-	gmcommand "@misceffect 83";
-	gmcommand "@repair";
-	sc_end SC_Poison;
-	sc_end SC_DPoison;
-	sc_end SC_Silence;
-	sc_end SC_Blind;
-	sc_end SC_Confusion;
-	sc_end SC_Curse;
-	sc_end SC_Hallucination;
-	sc_end SC_RaceUndead;
-	sc_start SC_INCREASEAGI,180000,1;
-	sc_start SC_BLESSING,180000,1;
+	call function "funcHealService";
 	end;
 }
-
-
 comodo.gat,293,236,4	script	鷺雨ヒールサービス	67,3,3,{
-	
-	percentheal 100,100;
-	gmcommand "@misceffect 83";
-	gmcommand "@repair";
-	sc_end SC_Poison;
-	sc_end SC_DPoison;
-	sc_end SC_Silence;
-	sc_end SC_Blind;
-	sc_end SC_Confusion;
-	sc_end SC_Curse;
-	sc_end SC_Hallucination;
-	sc_end SC_RaceUndead;
-	sc_start SC_INCREASEAGI,180000,1;
-	sc_start SC_BLESSING,180000,1;
+	call function "funcHealService";
+	end;
+}
+alb2trea.gat,61,69,5	script	鷺雨ヒールサービス	67,3,3,{
+	call function "funcHealService";
 	end;
 }
 
-alb2trea.gat,61,69,5	script	鷺雨ヒールサービス	67,3,3,{
+
+//=========================================================================
+// 銀行カプラファンクション
+//	callfunc "kafrabank_func"
+//
+//	変数区分		変数名			説明
+//	-
+//
+//-------------------------------------------------------------------------
+function	script	funcHealService{
 	percentheal 100,100;
 	gmcommand "@misceffect 83";
 	gmcommand "skill 34";
 	gmcommand "@repair";
+	
+	//ステータス異常からの救済
+	sc_end SC_Stone;
+	sc_end SC_Freeze:
+	sc_end SC_Stun;
+	sc_end SC_Sleep;
 	sc_end SC_Poison;
-	sc_end SC_DPoison;
-	sc_end SC_Silence;
-	sc_end SC_Blind;
-	sc_end SC_Confusion;
 	sc_end SC_Curse;
+	sc_end SC_Silence;
+	sc_end SC_Confusion;
+	sc_end SC_Blind;
+	sc_end SC_Bleed;
+	sc_end SC_DPoison;
 	sc_end SC_Hallucination;
 	sc_end SC_RaceUndead;
-	sc_start SC_BLESSING,240000,10;
-	sc_start SC_INCREASEAGI,240000,10;
-	
+
+	//支援
+	sc_start SC_BLESSING,480000,10;
+	sc_start SC_INCREASEAGI,480000,10;
+	sc_start SC_ASSUMPTIO,1200000,5;
+	sc_start SC_WINDWALK,8000000,10;
+
 	end;
 }
-
