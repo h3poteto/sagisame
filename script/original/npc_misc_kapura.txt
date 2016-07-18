@@ -159,7 +159,7 @@ Ltarinaimoney:
 	goto L_EXIT;
 L6:
 	//プレイヤーの職業チェック
-	switch(Class) {
+	switch(Job) {
 	  case Job_Knight:
 	  case Job_RuneKnight:
 	  case Job_Crusader:
