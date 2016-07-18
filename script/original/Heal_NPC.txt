@@ -1,28 +1,28 @@
 prontera.gat,157,195,5	script	鷺雨ヒールサービス	67,2,2,{
-	call function "funcHealService";
+	callfunc "funcHealService";
 	end;
 }
 geffen.gat,127,66,4	script	鷺雨ヒールサービス	67,3,3,{
-	call function "funcHealService";
+	callfunc "funcHealService";
 	end;
 }
 nekomimi.gat,98,217,4	script	鷺雨ヒールサービス	67,3,3,{
-	call function "funcHealService";
+	callfunc "funcHealService";
 	end;
 }
 comodo.gat,293,236,4	script	鷺雨ヒールサービス	67,3,3,{
-	call function "funcHealService";
+	callfunc "funcHealService";
 	end;
 }
 alb2trea.gat,61,69,5	script	鷺雨ヒールサービス	67,3,3,{
-	call function "funcHealService";
+	callfunc "funcHealService";
 	end;
 }
 
 
 //=========================================================================
-// 銀行カプラファンクション
-//	callfunc "kafrabank_func"
+// ヒールファンクション
+//	callfunc "funcHealService"
 //
 //	変数区分		変数名			説明
 //	-
@@ -33,7 +33,7 @@ function	script	funcHealService{
 	gmcommand "@misceffect 83";
 	gmcommand "skill 34";
 	gmcommand "@repair";
-	
+
 	//ステータス異常からの救済
 	sc_end SC_Stone;
 	sc_end SC_Freeze:
