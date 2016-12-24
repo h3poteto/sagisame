@@ -10,37 +10,37 @@ item_rate_details: 3
 
 // type別のドロップ率ここからarrow_drop_rateまで、item_rate_detailsが3のときのみ有効
 // 回復アイテム（type0）のみのドロップ率（100で通常、200で倍…）
-potion_drop_rate: 10000
+potion_drop_rate: 30000
 
 // 消費アイテム（type2）のみのドロップ率（100で通常、200で倍…）
-consume_drop_rate: 10000
+consume_drop_rate: 30000
 
 // 鉱石以外の収集品アイテム（type3）のみのドロップ率（100で通常、200で倍…）
-etc_drop_rate: 10000
+etc_drop_rate: 30000
 
 // 武器アイテム（type4）のみのドロップ率（100で通常、200で倍…）
-weapon_drop_rate: 10000
+weapon_drop_rate: 30000
 
 // 防具アイテム（type5）のみのドロップ率（100で通常、200で倍…）
-equip_drop_rate: 10000
+equip_drop_rate: 30000
 
 // カード（type6）のみのドロップ率（100で通常、200で倍…）
-card_drop_rate: 30000
+card_drop_rate: 90000
 
 // ペット専用装備品（type8）のみのドロップ率（100で通常、200で倍…）
-petequip_drop_rate: 10000
+petequip_drop_rate: 30000
 
 // 飛び道具（type10）のみのドロップ率（100で通常、200で倍…）
-arrow_drop_rate: 10000
+arrow_drop_rate: 30000
 
 // その他のアイテム（type1,9）のドロップ率（100で通常、200で倍…）
-other_drop_rate: 10000
+other_drop_rate: 30000
 
 // 鉱石発見の鉱石発見率 (100 で 1%、10000 で 100%、item_rate の影響を受けます)
-finding_ore_drop_rate: 10000
+finding_ore_drop_rate: 30000
 
 // オリ・エルのドロップ率（100で通常、200で倍…）
-refine_drop_rate: 10000
+refine_drop_rate: 30000
 
 
 // base exp所得倍率（100で通常、200で倍…）
