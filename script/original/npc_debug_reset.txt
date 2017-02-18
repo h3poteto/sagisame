@@ -46,7 +46,7 @@ prontera.gat,152,183,4	script	リセット職員	117,{
 				next;
 				mes "[リセット職員]";
 				mes "アイテム消しちゃいました！";
-				gmcommand '@itemidentify';
+				gmcommand "@itemreset";
 			}
 			break;
 
