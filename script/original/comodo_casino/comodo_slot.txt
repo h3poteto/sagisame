@@ -116,7 +116,7 @@ function	script	comodo_slot	{
 	function	comodo_slot_bet;
 	function	comodo_slot_check_medalenogh;
 	function	comodo_slot_main;
-	function	comodo_slot_3;
+	function	comodo_slot_rule;
 
 Ltop:
 	mes "[" +strnpcinfo(0)+ "]";
