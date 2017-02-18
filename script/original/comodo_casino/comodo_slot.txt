@@ -114,7 +114,7 @@ function	script	comodo_slot	{
 
 	//プロトタイプ宣言
 	function	comodo_slot_bet;
-	function	comodo_slot_check_medalenogh;
+	function	comodo_slot_medalenogh;
 	function	comodo_slot_main;
 	function	comodo_slot_rule;
 
@@ -126,7 +126,7 @@ Ltop:
 	switch ( select("REBET","BET","設定をみる","スロットをやめる") ){
 	  case 1:
 		//掛けるメダル枚数を設定していない人の場合
-		if( '@Bet == 0 ){
+		if( '@Bet <= 0 ){
 			mes "[" +strnpcinfo(0)+ "]";
 			mes "...メダルを入れてください";
 			next;
@@ -134,7 +134,7 @@ Ltop:
 		}
 
 		//十分な所持メダルがあることをチェック
-		comodo_slot_check_medalenogh('@Bet) )
+		comodo_slot_medalenogh('@Bet) )
 
 		//掛けたメダルでスロットを回す
 		comodo_slot_main('@Bet);
@@ -147,7 +147,7 @@ Ltop:
 		if ('@Bet <= 0){ break; }
 
 		//十分な所持メダルがあることをチェック
-		comodo_slot_check_medalenogh('@Bet) )
+		comodo_slot_medalenogh('@Bet) )
 
 		//掛けたメダルでスロットを回す
 		comodo_slot_main('@Bet);
@@ -158,7 +158,7 @@ Ltop:
 		comodo_slot_rule();
 		goto Ltop;
 
-	  case default:
+	  default:
 		mes "...終了";
 		break;
 	}
@@ -191,7 +191,7 @@ Ltop:
 			break;
 		}
 
-		//賭ける金額を決める
+		//賭けるメダルの枚数を決める
 		set '@i, select('@BetRate[0] + "枚",'@BetRate[1] + "枚",'@BetRate[2] + "枚",'@BetRate[3] + "枚",'@BetRate[4] + "枚","スロットをやめる");
 
 		//0枚のときはメッセージを表示して終了
@@ -209,7 +209,7 @@ Ltop:
 	// 十分な所持メダルがあることをチェックする関数
 	//	第一引数	：掛け金
 	//===================================================================
-	function	comodo_slot_check_medalenogh	{
+	function	comodo_slot_medalenogh	{
 		if ( ComodoMedal < getarg(0) ){
 			mes "[" +strnpcinfo(0)+ "]";
 			mes "メダルが不足しています。";
@@ -317,7 +317,7 @@ Ltop:
 		  }
 		}
 
-		//ラインの横列が等しいか確認する。
+		//ラインの横列が等しいか確認する。本来は横一列以外の判定もある。アップデートの際はよろしく。
 		for ( set '@i, 0; '@i < @'LINE ; set '@i, '@i+1 ){
 		  for ( set '@j, 1; '@j < @'REEL ; set '@j, '@j+1 ){
 			//ラインが揃っていない場合、ハズレ判定が成立するため繰り返しをやめる
@@ -339,7 +339,7 @@ Ltop:
 		mes "LINE 3: " + '@Line$[2][0] + " " + '@Line$[2][1] + " " + '@Line$[2][2] + " " + '@Line$[2][3] + " " + '@Line$[2][4] + " ";
 		mes "...";
 
-		//メダルを消費する(サーバが落ちても損しないように最後に処理)
+		//メダルを消費する(キャラが落ちても損しないように最後に処理)
 		set ComodoMedal, ComodoMedal + getarg(0);
 
 		//ラインが揃っていれば配当
