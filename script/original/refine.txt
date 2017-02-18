@@ -4,7 +4,7 @@ prontera.gat,163,204,5	script	鷺雨精錬サービス	731,{
 	mes "希望の値の分だけ一気に精錬してあげるよ。";
 	next;
 
-	
+
 	set	'@i, select(getequipname(1),getequipname(2),getequipname(3),getequipname(4),getequipname(5),getequipname(6),getequipname(7),getequipname(8),getequipname(9),getequipname(10));
 
 	if(getequipisequiped('@i)==0){
@@ -27,19 +27,19 @@ prontera.gat,163,204,5	script	鷺雨精錬サービス	731,{
 	//アイテムID、価格格納
 	setarray '@refprice,5000,100,500,5000,10000;
 	setarray '@refitemid,985,1010,1011,984,984;
-	
-	
+
+
 	set	'@wlv,getequipweaponlv('@i);
-	     
+
 	do
 	{
 		input	'@refnum;
-	    
+
 		mes "[鷺雨]";
 		if('@refnum <= 0 ){
 			    mes "精錬しないのかい。";
 	    		    close;
-	     
+
 		}
 	   	if('@refnum + getequiprefinerycnt('@i)  > 10 ){
 	    		    mes "そんなには精錬できないよ";
@@ -77,7 +77,7 @@ prontera.gat,163,204,5	script	鷺雨精錬サービス	731,{
 			}
 			break;
 		}
-		
+
 		set '@finerefinenum, '@refnum + getequiprefinerycnt('@i);
 		mes "+"+'@finerefinenum + "に精錬しちゃうよ？";
 		next;
@@ -106,7 +106,7 @@ prontera.gat,163,204,5	script	鷺雨精錬サービス	731,{
 
 	// 精錬
 	set '@counter,0;
-	
+
 	while( '@counter < '@refnum ){
 	       set '@counter,'@counter + 1;
 	       if(getequippercentrefinery('@i) > rand(100)){
@@ -123,7 +123,7 @@ prontera.gat,163,204,5	script	鷺雨精錬サービス	731,{
 	mes "[鷺雨]";
 	mes "すごいな！成功したぞ！";
 	close;
-	
+
 }
 
 
@@ -159,56 +159,27 @@ function	script	SagisameRefine2	{
 	//アイテムID、価格格納
 	setarray '@refprice,5000,100,500,5000,10000;
 	setarray '@refitemid,7619,7620,7620,7620,7620;
-	
-	
+
+
 	set	'@wlv,getequipweaponlv('@i);
-	     
+
 	do
 	{
 		input	'@refnum;
-	    
+
 		mes "["+getarg(0)+"]";
 		if('@refnum <= 0 ){
 			    mes "精錬しないのかい。";
 	    		    close;
-	     
-		}
-	   	if('@refnum + getequiprefinerycnt('@i)  > 10 ){
-	    		    mes "そんなには精錬できないよ";
-	     		    next;
 
-	     		    continue;
+		}
+		if('@refnum + getequiprefinerycnt('@i)  > 10 ){
+			mes "そんなには精錬できないよ";
+			next;
+
+			continue;
 		}
 
-		// 安全圏だと精錬してくれない。
-		switch('@wlv){
-		case 0:
-			if(getequiprefinerycnt('@i) < 5 ){
-			    	    mes "安全圏で精錬はもったいないよ？";
-			}
-			close;
-		case 1:
-			if(getequiprefinerycnt('@i) < 8 ){
-			    	    mes "安全圏で精錬はもったいないよ？";
-			}
-			close;
-		case 2:
-			if(getequiprefinerycnt('@i) < 7 ){
-			    	    mes "安全圏で精錬はもったいないよ？";
-			}
-			close;
-		case 3:
-			if(getequiprefinerycnt('@i) < 6 ){
-			    	    mes "安全圏で精錬はもったいないよ？";
-			}
-			close;
-		case 4:
-			if(getequiprefinerycnt('@i) < 5 ){
-			    	    mes "安全圏で精錬はもったいないよ？";
-			}
-			close;
-		}
-		
 		set '@finerefinenum, '@refnum + getequiprefinerycnt('@i);
 		mes "+"+'@finerefinenum + "に精錬しちゃうよ？";
 		next;
@@ -246,7 +217,7 @@ function	script	SagisameRefine2	{
 
 	// 精錬
 	set '@counter,0;
-	
+
 	while( '@counter < '@refnum ){
 	       set '@counter,'@counter + 1;
 	       if('@parcent[getequiprefinerycnt('@i)] > rand(100)) {
@@ -265,11 +236,11 @@ function	script	SagisameRefine2	{
 	mes "["+getarg(0)+"]";
 	mes "すごいな！成功したぞ！";
 	close;
-	
+
 }
 
 // ----- ゲフェン室内 -----
-geffen_in.gat,100,174,5	script	鷺雨精錬スペシャルサービス	731,{
+geffen_in.gat,100,174,5	script	鷺雨濃縮精錬サービス	731,{
 	callfunc "SagisameRefine2","超・鷺雨",18,4;
 	close;
 }
@@ -309,19 +280,19 @@ function	script	SagisameRefine3	{
 	//アイテムID、価格格納
 	setarray '@refprice,5000,100,500,5000,10000;
 	setarray '@refitemid,6241,6240,6240,6240,6240;
-	
-	
+
+
 	set	'@wlv,getequipweaponlv('@i);
-	     
+
 	do
 	{
 		input	'@refnum;
-	    
+
 		mes "["+getarg(0)+"]";
 		if('@refnum <= 0 ){
 			    mes "精錬しないのかい。";
 	    		    close;
-	     
+
 		}
 	   	if('@refnum + getequiprefinerycnt('@i)  > 10 ){
 	    		    mes "そんなには精錬できないよ";
@@ -330,35 +301,6 @@ function	script	SagisameRefine3	{
 	     		    continue;
 		}
 
-		// 安全圏だと精錬してくれない。
-		switch('@wlv){
-		case 0:
-			if(getequiprefinerycnt('@i) < 5 ){
-			    	    mes "安全圏で精錬はもったいないよ？";
-			}
-			close;
-		case 1:
-			if(getequiprefinerycnt('@i) < 8 ){
-			    	    mes "安全圏で精錬はもったいないよ？";
-			}
-			close;
-		case 2:
-			if(getequiprefinerycnt('@i) < 7 ){
-			    	    mes "安全圏で精錬はもったいないよ？";
-			}
-			close;
-		case 3:
-			if(getequiprefinerycnt('@i) < 6 ){
-			    	    mes "安全圏で精錬はもったいないよ？";
-			}
-			close;
-		case 4:
-			if(getequiprefinerycnt('@i) < 5 ){
-			    	    mes "安全圏で精錬はもったいないよ？";
-			}
-			close;
-		}
-		
 		set '@finerefinenum, '@refnum + getequiprefinerycnt('@i);
 		mes "+"+'@finerefinenum + "に精錬しちゃうよ？";
 		next;
@@ -396,7 +338,7 @@ function	script	SagisameRefine3	{
 
 	// 精錬
 	set '@counter,0;
-	
+
 	while( '@counter < '@refnum ){
 	       set '@counter,'@counter + 1;
 	       if('@parcent[getequiprefinerycnt('@i)] > rand(100)) {
@@ -414,11 +356,11 @@ function	script	SagisameRefine3	{
 	mes "["+getarg(0)+"]";
 	mes "すごいな！成功したぞ！";
 	close;
-	
+
 }
 
 // ----- 異次元・サファ族の首都エルディカスティス -----
-dicastes01.gat,163,187,5	script	鷺雨精錬ミラクルサービス	731,{
+dicastes01.gat,163,187,5	script	鷺雨改良型精錬サービス	731,{
 	callfunc "SagisameRefine3","ビッグブラザー・鷺雨",18,4;
 	close;
 }
