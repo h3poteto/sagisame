@@ -1,128 +1,425 @@
 //自動精錬NPC
 prontera.gat,163,204,5	script	鷺雨精錬サービス	731,{
-			mes "[鷺雨]";
-			mes "希望の値の分だけ一気に精錬してあげるよ。";
+	mes "[鷺雨]";
+	mes "希望の値の分だけ一気に精錬してあげるよ。";
+	next;
+
+	
+	set	'@i, select(getequipname(1),getequipname(2),getequipname(3),getequipname(4),getequipname(5),getequipname(6),getequipname(7),getequipname(8),getequipname(9),getequipname(10));
+
+	if(getequipisequiped('@i)==0){
+		mes "何を精錬すればいいんだい？";
+		close;
+	}
+	if(getequipisenableref('@i)==0){
+		mes "このアイテムは精錬不可能だ。";
+		close;
+	}
+	if(getequipisidentify('@i)==0){
+		mes "これは未鑑定だから精錬できない。";
+		close;
+	}
+	if(getequiprefinerycnt('@i)>=10){
+		mes "これ以上は精錬できないよ。";
+		close;
+	}
+
+	//アイテムID、価格格納
+	setarray '@refprice,5000,100,500,5000,10000;
+	setarray '@refitemid,985,1010,1011,984,984;
+	
+	
+	set	'@wlv,getequipweaponlv('@i);
+	     
+	do
+	{
+		input	'@refnum;
+	    
+		mes "[鷺雨]";
+		if('@refnum <= 0 ){
+			    mes "精錬しないのかい。";
+	    		    close;
+	     
+		}
+	   	if('@refnum + getequiprefinerycnt('@i)  > 10 ){
+	    		    mes "そんなには精錬できないよ";
+	     		    next;
+
+	     		    continue;
+		}
+
+		// 種別ごとに安全圏レベルが違う
+		switch('@wlv){
+		case 0:
+		// 武具
+			if('@refnum + getequiprefinerycnt('@i) >= 5 ){
+			    	    mes "安全圏を突破しちゃうよ？";
+			}
+			break;
+		case 1:
+			if('@refnum + getequiprefinerycnt('@i) >= 8 ){
+			    	    mes "安全圏を突破しちゃうよ？";
+			}
+			break;
+		case 2:
+			if('@refnum + getequiprefinerycnt('@i) >= 7 ){
+			    	    mes "安全圏を突破しちゃうよ？";
+			}
+			break;
+		case 3:
+			if('@refnum + getequiprefinerycnt('@i) >= 6 ){
+			    	    mes "安全圏を突破しちゃうよ？";
+			}
+			break;
+		case 4:
+			if('@refnum + getequiprefinerycnt('@i) >= 5 ){
+			    	    mes "安全圏を突破しちゃうよ？";
+			}
+			break;
+		}
+		
+		set '@finerefinenum, '@refnum + getequiprefinerycnt('@i);
+		mes "+"+'@finerefinenum + "に精錬しちゃうよ？";
+		next;
+		if(select("はい","いいえ")==2){
 			next;
+			continue;
+		}else{
+			break;
+		}
+	}
+	while(1);
 
-			
-			set	'@i, select(getequipname(1),getequipname(2),getequipname(3),getequipname(4),getequipname(5),getequipname(6),getequipname(7),getequipname(8),getequipname(9),getequipname(10));
+	if(countitem('@refitemid['@wlv])<'@refnum || Zeny<('@refprice['@wlv] * '@refnum)) {
+		mes "[鷺雨]";
+		mes "それが君が持ってる全部かい？";
+		mes "残念だが、材料が足りないんじゃ";
+		mes "仕方がないな。";
+		mes "俺はただでやってやるほど";
+		mes "心が広くないからな。";
+		close;
+	}
 
-			if(getequipisequiped('@i)==0){
-				mes "何を精錬すればいいんだい？";
-				close;
-			}
-			if(getequipisenableref('@i)==0){
-				mes "このアイテムは精錬不可能だ。";
-				close;
-			}
-			if(getequipisidentify('@i)==0){
-				mes "これは未鑑定だから精錬できない。";
-				close;
-			}
-			if(getequiprefinerycnt('@i)>=10){
-				mes "これ以上は精錬できないよ。";
-				close;
-			}
+	// 材料回収
+	set Zeny, Zeny - ('@refnum * '@refprice['@wlv]);
+	delitem '@refitemid['@wlv], '@refnum;
 
-			//アイテムID、価格格納
-			setarray '@refprice,5000,100,500,5000,10000;
-			setarray '@refitemid,985,1010,1011,984,984;
-			
-			
-			set	'@wlv,getequipweaponlv('@i);
-			     
-			do
-			{
-				input	'@refnum;
-			    
-				mes "[鷺雨]";
-				if('@refnum <= 0 ){
-					    mes "精錬しないのかい。";
-			    		    close;
-			     
-				}
-			   	if('@refnum + getequiprefinerycnt('@i)  > 10 ){
-			    		    mes "そんなには精錬できないよ";
-			     		    next;
-
-			     		    continue;
-				}
-
-				// 種別ごとに安全圏レベルが違う
-				switch('@wlv){
-				case 0:
-				// 武具
-					if('@refnum + getequiprefinerycnt('@i) >= 5 ){
-					    	    mes "安全圏を突破しちゃうよ？";
-					}
-					break;
-				case 1:
-					if('@refnum + getequiprefinerycnt('@i) >= 8 ){
-					    	    mes "安全圏を突破しちゃうよ？";
-					}
-					break;
-				case 2:
-					if('@refnum + getequiprefinerycnt('@i) >= 7 ){
-					    	    mes "安全圏を突破しちゃうよ？";
-					}
-					break;
-				case 3:
-					if('@refnum + getequiprefinerycnt('@i) >= 6 ){
-					    	    mes "安全圏を突破しちゃうよ？";
-					}
-					break;
-				case 4:
-					if('@refnum + getequiprefinerycnt('@i) >= 5 ){
-					    	    mes "安全圏を突破しちゃうよ？";
-					}
-					break;
-				}
-				
-				set '@finerefinenum, '@refnum + getequiprefinerycnt('@i);
-				mes "+"+'@finerefinenum + "に精錬しちゃうよ？";
-				next;
-				if(select("はい","いいえ")==2){
-					next;
-					continue;
-				}else{
-					break;
-				}
-			}
-			while(1);
-
-			if(countitem('@refitemid['@wlv])<'@refnum || Zeny<('@refprice['@wlv] * '@refnum)) {
-				mes "[鷺雨]";
-				mes "それが君が持ってる全部かい？";
-				mes "残念だが、材料が足りないんじゃ";
-				mes "仕方がないな。";
-				mes "俺はただでやってやるほど";
-				mes "心が広くないからな。";
-				close;
-			}
-
-			// 材料回収
-			set Zeny, Zeny - ('@refnum * '@refprice['@wlv]);
-			delitem '@refitemid['@wlv], '@refnum;
-
-			// 精錬
-			set '@counter,0;
-			
-			while( '@counter < '@refnum ){
-			       set '@counter,'@counter + 1;
-			       if(getequippercentrefinery('@i) > rand(100)){
-					successrefitem '@i;
-				} else {
-					failedrefitem '@i;
-					next;
-					mes "[鷺雨]";
-					mes "失敗しちゃった。";
-					mes "(・ω<) てへぺろ";
-					close;
-				}
-			}
+	// 精錬
+	set '@counter,0;
+	
+	while( '@counter < '@refnum ){
+	       set '@counter,'@counter + 1;
+	       if(getequippercentrefinery('@i) > rand(100)){
+			successrefitem '@i;
+		} else {
+			failedrefitem '@i;
+			next;
 			mes "[鷺雨]";
-			mes "すごいな！成功したぞ！";
+			mes "失敗しちゃった。";
+			mes "(・ω<) てへぺろ";
 			close;
-			
+		}
+	}
+	mes "[鷺雨]";
+	mes "すごいな！成功したぞ！";
+	close;
+	
+}
+
+
+//
+//=====================================================================
+//自動精錬NPC（濃縮エルニウム、濃縮オリデオコン仕様）
+//  callfunc "SagisameRefine2","NPCName",SuccessEmotion,FalureEmotion;
+//--------------------------------------------------------------------
+function	script	SagisameRefine2	{
+	mes "["+getarg(0)+"]";
+	mes "希望の値の分だけ一気に精錬してあげるよ。";
+	next;
+
+	set	'@i, select(getequipname(1),getequipname(2),getequipname(3),getequipname(4),getequipname(5),getequipname(6));
+
+	if(getequipisequiped('@i)==0){
+		mes "何を精錬すればいいんだい？";
+		close;
+	}
+	if(getequipisenableref('@i)==0){
+		mes "このアイテムは精錬不可能だ。";
+		close;
+	}
+	if(getequipisidentify('@i)==0){
+		mes "これは未鑑定だから精錬できない。";
+		close;
+	}
+	if(getequiprefinerycnt('@i)>=10){
+		mes "これ以上は精錬できないよ。";
+		close;
+	}
+
+	//アイテムID、価格格納
+	setarray '@refprice,5000,100,500,5000,10000;
+	setarray '@refitemid,7619,7620,7620,7620,7620;
+	
+	
+	set	'@wlv,getequipweaponlv('@i);
+	     
+	do
+	{
+		input	'@refnum;
+	    
+		mes "["+getarg(0)+"]";
+		if('@refnum <= 0 ){
+			    mes "精錬しないのかい。";
+	    		    close;
+	     
+		}
+	   	if('@refnum + getequiprefinerycnt('@i)  > 10 ){
+	    		    mes "そんなには精錬できないよ";
+	     		    next;
+
+	     		    continue;
+		}
+
+		// 安全圏だと精錬してくれない。
+		switch('@wlv){
+		case 0:
+			if(getequiprefinerycnt('@i) < 5 ){
+			    	    mes "安全圏で精錬はもったいないよ？";
+			}
+			close;
+		case 1:
+			if(getequiprefinerycnt('@i) < 8 ){
+			    	    mes "安全圏で精錬はもったいないよ？";
+			}
+			close;
+		case 2:
+			if(getequiprefinerycnt('@i) < 7 ){
+			    	    mes "安全圏で精錬はもったいないよ？";
+			}
+			close;
+		case 3:
+			if(getequiprefinerycnt('@i) < 6 ){
+			    	    mes "安全圏で精錬はもったいないよ？";
+			}
+			close;
+		case 4:
+			if(getequiprefinerycnt('@i) < 5 ){
+			    	    mes "安全圏で精錬はもったいないよ？";
+			}
+			close;
+		}
+		
+		set '@finerefinenum, '@refnum + getequiprefinerycnt('@i);
+		mes "+"+'@finerefinenum + "に精錬しちゃうよ？";
+		next;
+		if(select("はい","いいえ")==2){
+			next;
+			continue;
+		}else{
+			break;
+		}
+	}
+	while(1);
+
+	if(countitem('@refitemid['@wlv])<'@refnum || Zeny<('@refprice['@wlv] * '@refnum)) {
+		mes "["+getarg(0)+"]";
+		mes "それが君が持ってる全部かい？";
+		mes "残念だが、材料が足りないんじゃ";
+		mes "仕方がないな。";
+		mes "俺はただでやってやるほど";
+		mes "心が広くないからな。";
+		close;
+	}
+
+	// 材料回収
+	set Zeny, Zeny - ('@refnum * '@refprice['@wlv]);
+	delitem '@refitemid['@wlv], '@refnum;
+
+	// 濃縮課金アイテム精錬テーブル
+	switch('@wlv) {
+		case 0: setarray '@parcent,100,100,100,100, 90, 60, 60, 30, 30, 10; break;
+		case 1: setarray '@parcent,100,100,100,100,100,100,100, 90, 60, 20; break;
+		case 2: setarray '@parcent,100,100,100,100,100,100, 90, 60, 30, 20; break;
+		case 3: setarray '@parcent,100,100,100,100,100, 90, 75, 30, 30, 20; break;
+		case 4: setarray '@parcent,100,100,100,100, 90, 60, 60, 30, 30, 10; break;
+	}
+
+	// 精錬
+	set '@counter,0;
+	
+	while( '@counter < '@refnum ){
+	       set '@counter,'@counter + 1;
+	       if('@parcent[getequiprefinerycnt('@i)] > rand(100)) {
+			emotion getarg(1);
+			successrefitem '@i;
+		} else {
+			emotion getarg(2);
+			failedrefitem '@i;
+			next;
+			mes "["+getarg(0)+"]";
+			mes "失敗しちゃった。";
+			mes "(・ω<) てへぺろ";
+			close;
+		}
+	}
+	mes "["+getarg(0)+"]";
+	mes "すごいな！成功したぞ！";
+	close;
+	
+}
+
+// ----- ゲフェン室内 -----
+geffen_in.gat,100,174,5	script	鷺雨精錬スペシャルサービス	731,{
+	callfunc "SagisameRefine2","超・鷺雨",18,4;
+	close;
+}
+
+
+
+
+//
+//=====================================================================
+//自動精錬NPC（改良型濃縮エルニウム、改良型濃縮オリデオコン仕様）
+//  callfunc "SagisameRefine3","NPCName",SuccessEmotion,FalureEmotion;
+//--------------------------------------------------------------------
+function	script	SagisameRefine3	{
+	mes "["+getarg(0)+"]";
+	mes "希望の値の分だけ一気に精錬してあげるよ。";
+	next;
+
+	set	'@i, select(getequipname(1),getequipname(2),getequipname(3),getequipname(4),getequipname(5),getequipname(6));
+
+	if(getequipisequiped('@i)==0){
+		mes "何を精錬すればいいんだい？";
+		close;
+	}
+	if(getequipisenableref('@i)==0){
+		mes "このアイテムは精錬不可能だ。";
+		close;
+	}
+	if(getequipisidentify('@i)==0){
+		mes "これは未鑑定だから精錬できない。";
+		close;
+	}
+	if(getequiprefinerycnt('@i)>=10){
+		mes "これ以上は精錬できないよ。";
+		close;
+	}
+
+	//アイテムID、価格格納
+	setarray '@refprice,5000,100,500,5000,10000;
+	setarray '@refitemid,6241,6240,6240,6240,6240;
+	
+	
+	set	'@wlv,getequipweaponlv('@i);
+	     
+	do
+	{
+		input	'@refnum;
+	    
+		mes "["+getarg(0)+"]";
+		if('@refnum <= 0 ){
+			    mes "精錬しないのかい。";
+	    		    close;
+	     
+		}
+	   	if('@refnum + getequiprefinerycnt('@i)  > 10 ){
+	    		    mes "そんなには精錬できないよ";
+	     		    next;
+
+	     		    continue;
+		}
+
+		// 安全圏だと精錬してくれない。
+		switch('@wlv){
+		case 0:
+			if(getequiprefinerycnt('@i) < 5 ){
+			    	    mes "安全圏で精錬はもったいないよ？";
+			}
+			close;
+		case 1:
+			if(getequiprefinerycnt('@i) < 8 ){
+			    	    mes "安全圏で精錬はもったいないよ？";
+			}
+			close;
+		case 2:
+			if(getequiprefinerycnt('@i) < 7 ){
+			    	    mes "安全圏で精錬はもったいないよ？";
+			}
+			close;
+		case 3:
+			if(getequiprefinerycnt('@i) < 6 ){
+			    	    mes "安全圏で精錬はもったいないよ？";
+			}
+			close;
+		case 4:
+			if(getequiprefinerycnt('@i) < 5 ){
+			    	    mes "安全圏で精錬はもったいないよ？";
+			}
+			close;
+		}
+		
+		set '@finerefinenum, '@refnum + getequiprefinerycnt('@i);
+		mes "+"+'@finerefinenum + "に精錬しちゃうよ？";
+		next;
+		if(select("はい","いいえ")==2){
+			next;
+			continue;
+		}else{
+			break;
+		}
+	}
+	while(1);
+
+	if(countitem('@refitemid['@wlv])<'@refnum || Zeny<('@refprice['@wlv] * '@refnum)) {
+		mes "["+getarg(0)+"]";
+		mes "それが君が持ってる全部かい？";
+		mes "残念だが、材料が足りないんじゃ";
+		mes "仕方がないな。";
+		mes "俺はただでやってやるほど";
+		mes "心が広くないからな。";
+		close;
+	}
+
+	// 材料回収
+	set Zeny, Zeny - ('@refnum * '@refprice['@wlv]);
+	delitem '@refitemid['@wlv], '@refnum;
+
+	// 濃縮課金アイテム精錬テーブル
+	switch('@wlv) {
+		case 0: setarray '@parcent,100,100,100,100, 90, 60, 60, 30, 30, 10; break;
+		case 1: setarray '@parcent,100,100,100,100,100,100,100, 90, 60, 20; break;
+		case 2: setarray '@parcent,100,100,100,100,100,100, 90, 60, 30, 20; break;
+		case 3: setarray '@parcent,100,100,100,100,100, 90, 75, 30, 30, 20; break;
+		case 4: setarray '@parcent,100,100,100,100, 90, 60, 60, 30, 30, 10; break;
+	}
+
+	// 精錬
+	set '@counter,0;
+	
+	while( '@counter < '@refnum ){
+	       set '@counter,'@counter + 1;
+	       if('@parcent[getequiprefinerycnt('@i)] > rand(100)) {
+			emotion getarg(1);
+			successrefitem '@i;
+		} else {
+			emotion getarg(2);
+			next;
+			mes "["+getarg(0)+"]";
+			mes "失敗しちゃった。";
+			mes "(・ω<) てへぺろ";
+			close;
+		}
+	}
+	mes "["+getarg(0)+"]";
+	mes "すごいな！成功したぞ！";
+	close;
+	
+}
+
+// ----- 異次元・サファ族の首都エルディカスティス -----
+dicastes01.gat,163,187,5	script	鷺雨精錬ミラクルサービス	731,{
+	callfunc "SagisameRefine3","ビッグブラザー・鷺雨",18,4;
+	close;
 }
 
