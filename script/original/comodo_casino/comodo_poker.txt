@@ -1,0 +1,401 @@
+//********************************************************
+//*POKER-NPC　共同製作:AKIHIRO,Reirei(3/16-3:14)         *
+//********************************************************
+//英語力向上計画推進中！
+//単語を身近で見る機会を作り日本人の語学力を向上させよう！
+cmd_in02.gat,84,48,7	script	ポーカー	86,{
+Ltop:
+	emotion 14;
+	mes "[POKER GAME]";
+	mes "ポーカーゲームへようこそ";
+	mes "メニューからお選びください。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	menu "^FF5500REBET^000000",Lrebet,"^FF5500BET^000000",Lbet,"やめる",Lclose;
+
+//REBET--------------------------------------------------------------------
+Lrebet:
+	if(ComodoMedal < 1 ) goto Lnomdl;
+	if(ComodoMedal < @memobp) goto Lnoeno;
+	if(@memobp <= 0) goto Lplease;
+
+	set ComodoMedal,ComodoMedal-@memobp;
+	set @betmedal,@memobp;
+	goto Lrebetout;
+
+//BET-----------------------------------------------------------------------
+Lbet:
+	if(ComodoMedal < 1 ) goto Lnomdl;
+	mes "[POKER GAME]";
+	mes "何枚メダルを賭けますか？";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	input @betmedal;
+
+	if(ComodoMedal < @betmedal) goto Lnoeno;
+	if(@betmedal <= 0) goto Lplease;
+
+	set @memobp,@betmedal;
+	set ComodoMedal,ComodoMedal-@betmedal;
+
+//初期設定-----------------------------------------------
+
+Lrebetout:
+	set i,0;
+	set j,0;
+	set @bai,0;
+
+//手札を決める-------------------------------------------
+Ldeal:
+for(set i,0;i<5;set i,i+1){
+	set @card[i],rand(1,13);
+	if(@card[i]==1){
+	set @card$[i],"A";
+	}
+	if((@card[i] >= 2)&&(@card[i] <= 10)){
+	set @card$[i],@card[i];
+	}
+	if(@card[i]==11){
+	set @card$[i],"J";
+	}
+	if(@card[i]==12){
+	set @card$[i],"Q";
+	}
+	if(@card[i]==13){
+	set @card$[i],"K";
+	}
+	set @mark[i],rand(1,4);
+	if(@mark[i] == 1){
+	set @mark$[i],"^0000FFｽﾍﾟｰﾄﾞ^000000";
+	}
+	if(@mark[i] == 2){
+	set @mark$[i],"^0000FFｸﾗﾌﾞ^000000";
+	}
+	if(@mark[i] == 3){
+	set @mark$[i],"^FF0000ﾀﾞｲﾔ^000000";
+	}
+	if(@mark[i] == 4){
+	set @mark$[i],"^FF0000ﾊｰﾄ^000000";
+	}
+}
+
+
+//カード重複チェック
+Lcheck:
+	if (((@mark$[0] + @card[0]) == (@mark$[1] + @card[1]))||((@mark$[0] + @card[0]) == (@mark$[2] + @card[2]))||((@mark$[0] + @card[0]) == (@mark$[3] + @card[3]))||((@mark$[0] + @card[0]) == (@mark$[4] + @card[4]))||((@mark$[1] + @card[1]) == (@mark$[2] + @card[2]))||((@mark$[1] + @card[1]) == (@mark$[3] + @card[3]))||((@mark$[1] + @card[1]) == (@mark$[4] + @card[4]))||((@mark$[2] + @card[2]) == (@mark$[3] + @card[3]))||((@mark$[2] + @card[2]) == (@mark$[4] + @card[4]))||((@mark$[3] + @card[3]) == (@mark$[4] + @card[4]))) goto Ldeal;
+
+//見やすくするため並び替え　セレクションソートを採用して改良。
+
+	for (set i,0;i<4;set i,i+1){
+		for (set j,i+1;j<5;set j,j+1) {
+			if (@card[j]<@card[i]) {
+			set @memon,@card[j];
+			set @card[j],@card[i];
+			set @card[i],@memon;
+			set @memon$,@card$[j];
+			set @card$[j],@card$[i];
+			set @card$[i],@memon$;
+			set @memon,@mark[j];
+			set @mark[j],@mark[i];
+			set @mark[i],@memon;
+			set @memon$,@mark$[j];
+			set @mark$[j],@mark$[i];
+			set @mark$[i],@memon$;
+			}
+		}
+	}
+
+
+//手札
+
+Lopen:
+	mes "[POKER GAME]";
+	mes "Deal Cards.";
+	mes "[//]]]";
+	mes "------------------------------";
+	mes "------------------------------";
+	mes "[//][//][//][//][//]";
+	next;
+
+	mes "[POKER GAME]";
+	mes "This is your Five Cards.";
+	mes "[//]]]";
+	mes "------------------------------";
+	mes "------------------------------";
+	mes "["+ @mark$[0] + @card$[0] +"]["+ @mark$[1] + @card$[1] +"]["+ @mark$[2] + @card$[2] +"]["+ @mark$[3] + @card$[3] +"]["+ @mark$[4] + @card$[4] +"]";
+	mes "カードを交換しますか？";
+	next;
+	menu "はい",-,"いいえ",Lbattle;
+	set @card$[10],0;
+	for (set i,0;i<5;set i,i+1){
+	set j,i+10;
+	set @card$[j],@card$[i];
+	set @mark$[j],@mark$[i];
+	}
+	set i,0;
+Lchage:
+	if (i > 4) goto Lbattle;
+	set j,i+1;
+	mes "[POKER GAME]";
+	mes "["+ @mark$[10] + @card$[10] +"]["+ @mark$[11] + @card$[11] +"]["+ @mark$[12] + @card$[12] +"]["+ @mark$[13] + @card$[13] +"]["+ @mark$[14] + @card$[14] +"]";
+	mes "("+j+")枚目：["+ @mark$[i] + @card$[i] +"]";
+	mes "交換しますか？";
+	next;
+	menu "はい",-,"いいえ",Lcheckend,"勝負!!",Lbattle;
+
+Lchange2:
+	set @card[i],rand(1,13);
+	if(@card[i]==1){
+	set @card$[i],"A";
+	}
+	if((@card[i] >= 2)&&(@card[i] <= 10)){
+	set @card$[i],@card[i];
+	}
+	if(@card[i]==11){
+	set @card$[i],"J";
+	}
+	if(@card[i]==12){
+	set @card$[i],"Q";
+	}
+	if(@card[i]==13){
+	set @card$[i],"K";
+	}
+
+	set @mark[i],rand(1,4);
+	if(@mark[i] == 1){
+	set @mark$[i],"^0000FFｽﾍﾟｰﾄﾞ^000000";
+	}
+	if(@mark[i] == 2){
+	set @mark$[i],"^0000FFｸﾗﾌﾞ^000000";
+	}
+	if(@mark[i] == 3){
+	set @mark$[i],"^FF0000ﾀﾞｲﾔ^000000";
+	}
+	if(@mark[i] == 4){
+	set @mark$[i],"^FF0000ﾊｰﾄ^000000";
+	}
+Lcheck2:
+	if (((@mark$[0] + @card[0]) == (@mark$[1] + @card[1]))||((@mark$[0] + @card[0]) == (@mark$[2] + @card[2]))||((@mark$[0] + @card[0]) == (@mark$[3] + @card[3]))||((@mark$[0] + @card[0]) == (@mark$[4] + @card[4]))||((@mark$[1] + @card[1]) == (@mark$[2] + @card[2]))||((@mark$[1] + @card[1]) == (@mark$[3] + @card[3]))||((@mark$[1] + @card[1]) == (@mark$[4] + @card[4]))||((@mark$[2] + @card[2]) == (@mark$[3] + @card[3]))||((@mark$[2] + @card[2]) == (@mark$[4] + @card[4]))||((@mark$[3] + @card[3]) == (@mark$[4] + @card[4]))) goto Lchange2;
+
+Lcheckend:
+	set i,i+1;
+	goto Lchage;
+//勝負
+Lbattle:
+	//見やすくするため並び替え　セレクションソートを採用して改良。
+	for (set i,0;i<4;set i,i+1){
+		for (set j,i+1;j<5;set j,j+1) {
+			if (@card[j]<@card[i]) {
+			set @memon,@card[j];
+			set @card[j],@card[i];
+			set @card[i],@memon;
+			set @memon$,@card$[j];
+			set @card$[j],@card$[i];
+			set @card$[i],@memon$;
+			set @memon,@mark[j];
+			set @mark[j],@mark[i];
+			set @mark[i],@memon;
+			set @memon$,@mark$[j];
+			set @mark$[j],@mark$[i];
+			set @mark$[i],@memon$;
+			}
+		}
+	}
+
+	mes "[POKER GAME]";
+	mes "This is your Changed Cards.";
+	mes "[//]]]";
+	mes "------------------------------";
+	mes "------------------------------";
+	mes "["+ @mark$[0] + @card$[0] +"]["+ @mark$[1] + @card$[1] +"]["+ @mark$[2] + @card$[2] +"]["+ @mark$[3] + @card$[3] +"]["+ @mark$[4] + @card$[4] +"]";
+	next;
+	menu "勝負!!",-,"降りる",Lcontinue;
+
+//役を組みやすくするため並び替え　セレクションソートを採用して改良。
+
+	for (set i,0;i<4;set i,i+1){
+		for (set j,i+1;j<5;set j,j+1) {
+			if (@card[j]<@card[i]) {
+			set @memon,@card[j];
+			set @card[j],@card[i];
+			set @card[i],@memon;
+			set @memon$,@card$[j];
+			set @card$[j],@card$[i];
+			set @card$[i],@memon$;
+			set @memon,@mark[j];
+			set @mark[j],@mark[i];
+			set @mark[i],@memon;
+			set @memon$,@mark$[j];
+			set @mark$[j],@mark$[i];
+			set @mark$[i],@memon$;
+			}
+		}
+	}
+
+//役チェック
+	//Royal Flush
+	if((@card[0]==1)&&(@card[1]==10)&&(@card[2]==11)&&(@card[3]==12)&&(@card[4]==13)&&(@mark[0]==@mark[1])&&(@mark[1]==@mark[2])&&(@mark[2]==@mark[3])&&(@mark[3]==@mark[4])){
+	set @post,9;
+	goto Lresult;
+	}
+
+	//Royal Straightは無し
+	//Straight Flush
+	if((@mark[0]==@mark[1])&&(@mark[1]==@mark[2])&&(@mark[2]==@mark[3])&&(@mark[3]==@mark[4])){
+		if((@card[2]==@card[0]+2)&&(@card[2]==@card[1]+1)&&(@card[2]==@card[3]-1)&&(@card[2]==@card[4]-2)){
+			set @post,8;
+			goto Lresult;
+		}
+	}
+	//Four of a Kind
+	if(
+	((@card[0]==@card[1])&&(@card[0]==@card[2])&&(@card[0]==@card[3]))||	((@card[4]==@card[3])&&(@card[4]==@card[2])&&(@card[4]==@card[1]))){
+		set @post,7;
+		goto Lresult;
+	}
+	//Full House
+	if(
+	((@card[0]==@card[1])&&((@card[2]==@card[3])&&(@card[2]==@card[4])))||
+	((@card[4]==@card[3])&&((@card[2]==@card[1])&&(@card[2]==@card[0])))){
+		set @post,6;
+		goto Lresult;
+	}
+	//Flush
+	if(
+	(@mark[0] == @mark[1])&&(@mark[2] == @mark[3])&&(@mark[0] == @mark[4])&&(@mark[2] == @mark[4])){
+		set @post,5;
+		goto Lresult;
+	}
+	//Straight
+	if(
+	(@card[2]==@card[0]+2)&&(@card[2]==@card[1]+1)&&(@card[2]==@card[3]-1)&&(@card[2]==@card[4]-2)){
+		set @post,4;
+		goto Lresult;
+	}
+	if(
+	(@card[0]==1)&&(@card[1]==10)&&(@card[2]==11)&&(@card[3]==12)&&(@card[4]==13)){
+		set @post,4;
+		goto Lresult;
+	}
+	//Three of a Kind
+	if(
+	((@card[0]==@card[1])&&(@card[0]==@card[2]))||((@card[1]==@card[2])&&(@card[1]==@card[3]))||((@card[2]==@card[3])&&(@card[2]==@card[4]))){
+		set @post,3;
+		goto Lresult;
+	}
+	//Two Pair
+	if(((@card[0]==@card[1])&&(@card[2]==@card[3]))||((@card[0]==@card[1])&&(@card[3]==@card[4]))||((@card[1]==@card[2])&&(@card[3]==@card[4]))){
+		set @post,2;
+		goto Lresult;
+	}
+	//Jacks or Better
+	if(
+	((@card[0]==@card[1])||(@card[1]==@card[2])||(@card[2]==@card[3])||(@card[3]==@card[4]))&&
+	((@card[1]==1)||(@card[3]==1)||(@card[1]>=11)||(@card[3]>=11))){
+		set @post,1;
+		goto Lresult;
+	}
+	set @post,0;
+	
+Lresult://結果を表示
+	if(@post == 9){
+		set @yaku$,"ロイヤルストレートフラッシュ";
+		set @bai,800;
+	}
+	if(@post == 8){
+		set @yaku$,"ストレートフラッシュ";
+		set @bai,50;
+	}
+	if(@post == 7){
+		set @yaku$,"フォーカード";
+		set @bai,25;
+	}
+	if(@post == 6){
+		set @yaku$,"フルハウス";
+		set @bai,9;
+	}
+	if(@post == 5){
+		set @yaku$,"フラッシュ";
+		set @bai,6;
+	}
+	if(@post == 4){
+		set @yaku$,"ストレート";
+		set @bai,4;
+	}
+	if(@post == 3){
+		set @yaku$,"スリーカード";
+		set @bai,3;
+	}
+	if(@post == 2){
+		set @yaku$,"ツーペア";
+		set @bai,2;
+	}
+	if(@post == 1){
+		set @yaku$,"ジャックスオアベター";
+		set @bai,1;
+	}
+
+	if(@post>0) { 
+		goto Lwin;
+	}
+
+//勝ち負け判定
+Llose:
+	mes "[POKER GAME]";
+	mes "残念！";
+	mes "ノーペアーです。";
+	emotion 16;
+	next;
+	goto Lcontinue;
+Lwin:
+	emotion 21;
+	set @Outmedal,@betmedal*@bai;
+	set ComodoMedal,ComodoMedal+@Outmedal;
+	mes "[POKER GAME]";
+	mes "おめでとうございます。"+ strcharinfo(0) +"さん";
+	mes "["+ @mark$[0] + @card$[0] +"]["+ @mark$[1] + @card$[1] +"]["+ @mark$[2] + @card$[2] +"]["+ @mark$[3] + @card$[3] +"]["+ @mark$[4] + @card$[4] +"]";
+	mes "[" + @yaku$ + "]です。";
+	mes "得点は" + @bai + "点です。";
+	next;
+	mes "[POKER GAME]";
+	mes "賞金";
+	mes "^FF5500" + @betmedal + "^000000 × ^FF5500"+ @bai +" ^000000 = ^FF5500"+ @Outmedal +"^000000枚";
+	mes "メダル差し上げます。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+
+Lcontinue:
+	mes "[POKER GAME]";
+	mes "もう一回やりますか？";
+	next;
+	menu "はい",Ltop,"いいえ",Lclose;
+
+Lnoeno:
+	mes "[POKER GAME]";
+	mes @betmedal +"^000000枚賭けようとしましたが";
+	mes "メダルが足りませんでした。";
+	mes "やり直してください。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	goto Ltop;
+Lplease:
+	mes "[POKER GAME]";
+	mes "メダルが賭けられてません。";
+	mes "やりなおしてください。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	goto Ltop;
+
+Lnomdl:
+	mes "[POKER GAME]";
+	mes "メダルがありません。";
+	mes "メダルを購入してください。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	goto Ltop;
+
+Lclose:
+	mes "[POKER GAME]";
+	mes "BYE BYE";
+	close;
+}

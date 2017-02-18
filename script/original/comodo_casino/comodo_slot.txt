@@ -1,0 +1,402 @@
+//=========================================================================
+// NPCのリスト   (http://kalen.s79.xrea.com/npc/npc.shtml)
+// NPCの向き設定 (http://dianaeleven.blog134.fc2.com/blog-entry-14.html)
+//	1  0   7
+//	 ＼│／
+//	2─　─6
+//	 ／│＼
+//	3  4   5
+
+cmd_in02.gat,187,107,5	script	スロット(低レート)	111,{
+	callfunc "comodo_slot",1;
+	close;
+}
+
+cmd_in02.gat,185,107,5	script	スロット(低レート)	111,{
+	callfunc "comodo_slot",1;
+	close;
+}
+
+cmd_in02.gat,183,107,5	script	スロット(低レート)	111,{
+	callfunc "comodo_slot",1;
+	close;
+}
+
+cmd_in02.gat,181,107,5	script	スロット(低レート)	111,{
+	callfunc "comodo_slot",1;
+	close;
+}
+cmd_in02.gat,171,101,5	script	スロット(中レート)	111,{
+	callfunc "comodo_slot",2;
+	close;
+}
+
+cmd_in02.gat,169,101,5	script	スロット(中レート)	111,{
+	callfunc "comodo_slot",2;
+	close;
+}
+
+cmd_in02.gat,167,101,5	script	スロット(中レート)	111,{
+	callfunc "comodo_slot",2;
+	close;
+}
+
+cmd_in02.gat,165,101,5	script	スロット(中レート)	111,{
+	callfunc "comodo_slot",2;
+	close;
+}
+cmd_in02.gat,165,101,5	script	スロット(中レート)	111,{
+	callfunc "comodo_slot",2;
+	close;
+}
+
+cmd_in02.gat,184,101,5	script	スロット(高レート)	111,{
+	callfunc "comodo_slot",3;
+	close;
+}
+cmd_in02.gat,186,101,5	script	スロット(高レート)	111,{
+	callfunc "comodo_slot",3;
+	close;
+}
+cmd_in02.gat,188,101,5	script	スロット(高レート)	111,{
+	callfunc "comodo_slot",3;
+	close;
+}
+cmd_in02.gat,190,101,5	script	スロット(高レート)	111,{
+	callfunc "comodo_slot",3;
+	close;
+}
+
+//=========================================================================
+// ジャックポット変数の設定
+//	変数区分		変数名			説明
+//	サーバ永続変数		$JackPot		スロットのジャックポット積立金
+//-------------------------------------------------------------------------
+cmd_in02.gat,0,0,0	script	#ジャックポット	-1,{
+OnInit:
+	//マップ起動時にゼロ以下なら初期化する
+	if ( $JackPot < 0 ){
+		set $JackPot, 0
+	}
+	end;
+}
+
+
+//=========================================================================
+// スロットNPC
+//	callfunc "comodo_slot",レート
+//	変数区分		変数名			説明
+//	キャラクター変数	ComodoMedal		コモドカジノでの通貨を増減させる
+//-------------------------------------------------------------------------
+//
+//	○イメージ Line:3, Reel:5
+//	[1] [2] [3] [4] [5] 
+//	[1] [2] [3] [4] [5] 
+//	[1] [2] [3] [4] [5] 
+//
+//	○絵柄
+//	[1],[2],[3],[4],[5],[6],[7],[8],[9],[B] BAR
+//
+//	○配当率
+//	低: [1],[2],[3],[4],[5],[6],[8],[9]
+//	高: [7]
+//	中: [B] BAR
+//
+//	○プログレッシブジャックポット
+//	掛け金の20%が山積みされる + rand(100)
+//
+
+
+function	script	comodo_slot	{
+
+	//初期化
+	set '@Bet, 0;
+
+	//プロトタイプ宣言
+	function	comodo_slot_bet;
+	function	comodo_slot_check_medalenogh;
+	function	comodo_slot_main;
+	function	comodo_slot_3;
+
+Ltop:
+	mes "[" +strnpcinfo(0)+ "]";
+	mes "メダル残高.......... "^5555FF" + ComodoMedal + "^000000枚)";
+	mes "ジャックポット配当.. "^FF5500" + $JackPot + "^000000枚)";
+
+	switch ( select("REBET","BET","設定をみる","スロットをやめる") ){
+	  case 1:
+		//掛けるメダル枚数を設定していない人の場合
+		if( '@Bet == 0 ){
+			mes "[" +strnpcinfo(0)+ "]";
+			mes "...メダルを入れてください";
+			next;
+			goto Ltop;
+		}
+
+		//十分な所持メダルがあることをチェック
+		comodo_slot_check_medalenogh('@Bet) )
+
+		//掛けたメダルでスロットを回す
+		comodo_slot_main('@Bet);
+
+		goto Ltop;
+
+	  case 2:
+		//スロットに掛けるメダル数を選択
+		set '@Bet, comodo_slot_bet(getarg(0));
+		if ('@Bet <= 0){ break; }
+
+		//十分な所持メダルがあることをチェック
+		comodo_slot_check_medalenogh('@Bet) )
+
+		//掛けたメダルでスロットを回す
+		comodo_slot_main('@Bet);
+		goto Ltop;
+
+	  case 3:
+		//スロットの設定ルール説明
+		comodo_slot_rule();
+		goto Ltop;
+
+	  case default:
+		mes "...終了";
+		break;
+	}
+
+	close;
+
+	//===================================================================
+	// 掛けるメダル枚数を決めるプライベート関数
+	//	第一引数	：1(低レート), 2(中レート), 3(高レート)
+	//	戻り値		：BET数
+	//===================================================================
+	function	comodo_slot_bet	{
+
+		switch(getarg(0)){
+		  case 1:
+			//低レート
+			setarray '@BetRate, 10,20,30,40,50,0;
+			break;
+		  case 2:
+			//中レート
+			setarray '@BetRate, 50,100,150,200,250,0;
+			break;
+		  case 3:
+			//高レート
+			setarray '@BetRate, 500,1000,1500,2000,2500,0;
+			break;
+		  default:
+			//ダミーレート
+			setarray '@BetRate, 0,0,0,0,0;
+			break;
+		}
+
+		//賭ける金額を決める
+		set '@i, select('@BetRate[0] + "枚",'@BetRate[1] + "枚",'@BetRate[2] + "枚",'@BetRate[3] + "枚",'@BetRate[4] + "枚","スロットをやめる");
+
+		//0枚のときはメッセージを表示して終了
+		if ('@BetRate['@i-1] <= 0){
+			mes "[" +strnpcinfo(0)+ "]";
+			mes "...終了";
+			close;
+		}
+
+		//掛け金を戻り値とする(メニュー選択は、1始まりなので-1する)
+		return '@BetRate['@i-1];
+	}
+
+	//===================================================================
+	// 十分な所持メダルがあることをチェックする関数
+	//	第一引数	：掛け金
+	//===================================================================
+	function	comodo_slot_check_medalenogh	{
+		if ( ComodoMedal < getarg(0) ){
+			mes "[" +strnpcinfo(0)+ "]";
+			mes "メダルが不足しています。";
+			mes "メダルを購入してきてください。";
+			close;
+		}
+		return;
+	}
+
+
+	//===================================================================
+	// スロットの設定ルールを表示するだけの関数
+	//===================================================================
+	function	comodo_slot_rule	{
+		mes "[" +strnpcinfo(0)+ "]";
+		mes "真横に同じ絵柄が揃ったらアタリ！";
+		mes "";
+		mes "○イメージ Line:3, Reel:5";
+		mes "[1] [2] [3] [4] [5] ";
+		mes "[1] [2] [3] [4] [5] ";
+		mes "[1] [2] [3] [4] [5] ";
+		mes "";
+		mes "○絵柄";
+		mes "[1],[2],[3],[4],[5],[6],[7],[8],[9],[B]";
+
+		next;
+		mes "[" +strnpcinfo(0)+ "]";
+		mes "○配当率
+		mes "高: [7]..........10000倍";
+		mes "中: [BAR].........5000倍";
+		mes "低: [1]～[9]...10～430倍";
+
+		mes "○ジャックポットあり";
+		mes "スロットは当たれば一攫千金！";
+		next;
+		return;
+	}
+
+	//===================================================================
+	// スロットメイン関数
+	//	第一引数	：掛け金
+	//===================================================================
+	function	comodo_slot_main	{
+
+		mes "[" +strnpcinfo(0)+ "]";
+		mes " ...ガショ！";
+		mes "(...スロットが高速で回り始める)";
+		next;
+		mes "[" +strnpcinfo(0)+ "]";
+		mes " ｼｬｷｰﾝ！";
+		next;
+
+		mes "[" +strnpcinfo(0)+ "]";
+		mes " ｼｬｷｰﾝ！";
+		mes " ｼｬｷｰﾝ！！";
+		next;
+
+		mes "[" +strnpcinfo(0)+ "]";
+		mes " ｼｬｷｰﾝ！";
+		mes " ｼｬｷｰﾝ！！";
+		mes " ｼｬｷｰﾝ！！！！！！";
+		next;
+		//------------------------------------------------------------------------------------------------------------------
+		// 内部処理
+		//------------------------------------------------------------------------------------------------------------------
+
+		//ライン数、リール数、ジャックポットの確率、配当金、アタリハズレのフラグ
+		set	 '@LINE, 3;
+		set	 '@REEL, 5;
+		set	 '@JACKPOT_PER, 10;
+		set	 '@SlotPrize, 0;
+		setarray '@LineHit,'@FALSE,'@FALSE,'@FALSE;
+		set	 '@TRUE, 1;
+		set	 '@FALSE, 1;
+
+		//ラインの初期化(ビジュアルがわかるようにあえてベタ打ち)
+		setarray '@Line$[0],"[ ]","[ ]","[ ]","[ ]","[ ]";
+		setarray '@Line$[1],"[ ]","[ ]","[ ]","[ ]","[ ]";
+		setarray '@Line$[2],"[ ]","[ ]","[ ]","[ ]","[ ]";
+
+		//リールの絵柄(中身は適当)
+		setarray '@Reel$[0],"[1]","[3]","[1]","[4]","[3]","[1]","[6]","[2]","[B]","[4]","[9]","[2]","[B]","[6]","[1]","[7]","[2]","[7]","[1]","[6]","[2]","[5]";
+		setarray '@Reel$[1],"[1]","[3]","[B]","[6]","[4]","[4]","[1]","[8]","[7]","[1]","[3]","[9]","[9]","[2]","[7]","[6]","[2]","[7]","[2]","[1]","[2]","[4]";
+		setarray '@Reel$[2],"[1]","[6]","[9]","[1]","[1]","[4]","[2]","[7]","[3]","[7]","[9]","[9]","[2]","[4]","[1]","[6]","[8]","[4]","[2]","[8]","[4]","[B]";
+		setarray '@Reel$[3],"[1]","[3]","[7]","[8]","[2]","[4]","[8]","[8]","[B]","[2]","[1]","[3]","[3]","[9]","[3]","[4]","[1]","[6]","[8]","[B]","[6]","[3]";
+		setarray '@Reel$[4],"[1]","[7]","[4]","[6]","[3]","[8]","[1]","[1]","[B]","[2]","[7]","[2]","[B]","[2]","[9]","[3]","[8]","[8]","[3]","[2]","[4]","[6]";
+
+		//リールの停止位置を乱数で生成。3ラインに表示できるように範囲は[0]～[配列数-3]とする。
+		setarray '@RealMem, 
+		  rand( getarraysize( '@Reel$[0]) - '@LINE ),
+		  rand( getarraysize( '@Reel$[1]) - '@LINE ),
+		  rand( getarraysize( '@Reel$[2]) - '@LINE ),
+		  rand( getarraysize( '@Reel$[3]) - '@LINE ),
+		  rand( getarraysize( '@Reel$[4]) - '@LINE )
+		;
+
+		//停止したリール5本を、ライン3本に格納していく。以下のアルファベット順に格納するイメージ。
+		//'@Line$[0],"[A]","[D]","[G]","[J]","[M]";
+		//'@Line$[1],"[B]","[E]","[H]","[K]","[N]";
+		//'@Line$[2],"[C]","[F]","[I]","[L]","[O]";
+		//
+		for ( set '@j, 0; '@j < @'REEL ; set '@j, '@j+1 ){
+		  for ( set '@i, 0; '@i < @'LINE ; set '@i, '@i+1 ){
+			set '@Line$['@i]['@j], '@Reel$['@j][ '@RealMem['@j]+'@i ];
+		  }
+		}
+
+		//ラインの横列が等しいか確認する。
+		for ( set '@i, 0; '@i < @'LINE ; set '@i, '@i+1 ){
+		  for ( set '@j, 1; '@j < @'REEL ; set '@j, '@j+1 ){
+			//ラインが揃っていない場合、ハズレ判定が成立するため繰り返しをやめる
+			if ( '@Line$['@i]['@j] != '@Reel$['@i][@i-1] )
+			    set '@LineHit['@i], '@FALSE;
+			    break;
+			} else {
+			    set '@LineHit['@i], '@TRUE;
+			}
+		  }
+		}
+
+		//------------------------------------------------------------------------------------------------------------------
+		// 内部処理ここまで
+		//------------------------------------------------------------------------------------------------------------------
+		mes "[" +strnpcinfo(0)+ "]";
+		mes "LINE 1: " + '@Line$[0][0] + " " + '@Line$[0][1] + " " + '@Line$[0][2] + " " + '@Line$[0][3] + " " + '@Line$[0][4] + " ";
+		mes "LINE 2: " + '@Line$[1][0] + " " + '@Line$[1][1] + " " + '@Line$[1][2] + " " + '@Line$[1][3] + " " + '@Line$[1][4] + " ";
+		mes "LINE 3: " + '@Line$[2][0] + " " + '@Line$[2][1] + " " + '@Line$[2][2] + " " + '@Line$[2][3] + " " + '@Line$[2][4] + " ";
+		mes "...";
+
+		//メダルを消費する(サーバが落ちても損しないように最後に処理)
+		set ComodoMedal, ComodoMedal + getarg(0);
+
+		//ラインが揃っていれば配当
+		for ( set '@i, 0; '@i < @'LINE ; set '@i, '@i+1 ){
+			if ( '@LineHit['@i] == '@TRUE ){
+			    
+
+			    //配当金計算
+			    switch( '@Line$['@i][0] ){
+			      case "[7]": set '@SlotPrize, '@SlotPrize + getarg(0) * 10000;	break;
+			      case "[B]": set '@SlotPrize, '@SlotPrize + getarg(0) * 5000;	break;
+			      case "[1]": set '@SlotPrize, '@SlotPrize + getarg(0) * 10;	break;
+			      case "[2]": set '@SlotPrize, '@SlotPrize + getarg(0) * 20;	break;
+			      case "[3]": set '@SlotPrize, '@SlotPrize + getarg(0) * 30;	break;
+			      case "[4]": set '@SlotPrize, '@SlotPrize + getarg(0) * 50;	break;
+			      case "[5]": set '@SlotPrize, '@SlotPrize + getarg(0) * 80;	break;
+			      case "[6]": set '@SlotPrize, '@SlotPrize + getarg(0) * 130;	break;
+			      case "[8]": set '@SlotPrize, '@SlotPrize + getarg(0) * 210;	break;
+			      case "[9]": set '@SlotPrize, '@SlotPrize + getarg(0) * 430;	break;
+			    }
+			}
+		}
+
+		//ジャックポットの判定、配当金があったら上乗せする。
+		if ( '@SlotPrize > 0 ){
+
+			//レベルアップ音
+			misceffect 371;
+
+			if ( $JackPot > 0 && rand(100) < '@JACKPOT_PER ){
+			  set '@SlotPrize, '@SlotPrize + $JackPot;
+
+			  //MVPエフェクト音とお金エモ、マップアナウンスで晒す
+			  emotion 8;
+			  misceffect 68;
+			  mes "^FF5555おめでとうございます！^000000";
+			  mapannounce "this","☆☆☆☆ジャックポット☆☆☆☆",9;
+
+			  //ジャックポット積立金の初期化
+			  set $JackPot, 0;
+			} else {
+
+			  //ジャックポット積立金、乱数部分はミッドガッツの誰かがプレイした分という設定
+			  set $JackPot, $JackPot + getarg(0)/20 + rand(100);
+
+			  //スキッドトラップで滑った音とお金エモ
+			  emotion 8;
+			  misceffect 69;
+			  mes "^5555FF...ハズレ^000000";
+		        }
+
+			//配当の支払いと配当の初期化
+			mes "配当枚数: ^FF5555" + '@SlotPrize +"^000000枚";
+			set ComodoMedal, ComodoMedal + '@SlotPrize;
+			set '@SlotPrize, 0;
+		}
+		next;
+		return 0;
+	}
+}
