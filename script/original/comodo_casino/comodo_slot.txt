@@ -347,19 +347,19 @@ Ltop:
 			if ( '@LineHit['@i] == '@TRUE ){
 
 
-			    //îzìñã‡åvéZ
-			    switch( '@Line$['@i][0] ){
-			      case "[7]": set '@SlotPrize, '@SlotPrize + getarg(0) * 10000;	break;
-			      case "[B]": set '@SlotPrize, '@SlotPrize + getarg(0) * 5000;	break;
-			      case "[1]": set '@SlotPrize, '@SlotPrize + getarg(0) * 10;	break;
-			      case "[2]": set '@SlotPrize, '@SlotPrize + getarg(0) * 20;	break;
-			      case "[3]": set '@SlotPrize, '@SlotPrize + getarg(0) * 30;	break;
-			      case "[4]": set '@SlotPrize, '@SlotPrize + getarg(0) * 50;	break;
-			      case "[5]": set '@SlotPrize, '@SlotPrize + getarg(0) * 80;	break;
-			      case "[6]": set '@SlotPrize, '@SlotPrize + getarg(0) * 130;	break;
-			      case "[8]": set '@SlotPrize, '@SlotPrize + getarg(0) * 210;	break;
-			      case "[9]": set '@SlotPrize, '@SlotPrize + getarg(0) * 430;	break;
-			    }
+			//    //îzìñã‡åvéZ
+			//    switch( '@Line$['@i][0] ){
+			//      case "[7]": set '@SlotPrize, '@SlotPrize + getarg(0) * 10000;	break;
+			//      case "[B]": set '@SlotPrize, '@SlotPrize + getarg(0) * 5000;	break;
+			//      case "[1]": set '@SlotPrize, '@SlotPrize + getarg(0) * 10;	break;
+			//      case "[2]": set '@SlotPrize, '@SlotPrize + getarg(0) * 20;	break;
+			//      case "[3]": set '@SlotPrize, '@SlotPrize + getarg(0) * 30;	break;
+			//      case "[4]": set '@SlotPrize, '@SlotPrize + getarg(0) * 50;	break;
+			//      case "[5]": set '@SlotPrize, '@SlotPrize + getarg(0) * 80;	break;
+			//      case "[6]": set '@SlotPrize, '@SlotPrize + getarg(0) * 130;	break;
+			//      case "[8]": set '@SlotPrize, '@SlotPrize + getarg(0) * 210;	break;
+			//      case "[9]": set '@SlotPrize, '@SlotPrize + getarg(0) * 430;	break;
+			//    }
 			}
 		}
 
