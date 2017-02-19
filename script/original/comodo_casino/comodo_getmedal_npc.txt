@@ -90,7 +90,7 @@ Ltop:
 		}
 
 		//Œ»‹à‚©‚çx•¥‚¢
-		set '@Payment, Zeny - ( '@getarg(0)*'@val );
+		set '@Payment, Zeny - ( getarg(0)*'@val );
 		mes "^5555FF" + '@Payment + "^000000Zeny‚Ì‚¨x•¥‚É‚È‚è‚Ü‚·I‚ ‚è‚ª‚Æ‚¤‚²‚´‚¢‚Ü‚µ‚½I";
 		set Zeny,Zeny - '@Payment;
 
