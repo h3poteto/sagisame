@@ -54,14 +54,14 @@ Ltop:
 
 	switch ( select("現金で購入","アイテム交換","倉庫を開く") ){
 	case 1:
-		comodo_getmedal_payzeny('@Price);
+		comodo_getmedal_payzeny '@Price;
 		break;
 	case 2:
-		comodo_getmedal_payitem();
+		comodo_getmedal_payitem;
 		break;
 
 	case 3:
-		comodo_getmedal_openstorage();
+		comodo_getmedal_openstorage;
 		goto Ltop;
 
 	default:
