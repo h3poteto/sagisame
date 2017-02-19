@@ -76,7 +76,7 @@ cmd_in02.gat,0,0,0	script	#ジャックポット	-1,{
 OnInit:
 	//マップ起動時にゼロ以下なら初期化する
 	if ( $JackPot < 0 ){
-		set $JackPot, 0
+		set $JackPot, 0;
 	}
 	end;
 }
@@ -90,9 +90,9 @@ OnInit:
 //-------------------------------------------------------------------------
 //
 //	○イメージ Line:3, Reel:5
-//	[1] [2] [3] [4] [5] 
-//	[1] [2] [3] [4] [5] 
-//	[1] [2] [3] [4] [5] 
+//	[1] [2] [3] [4] [5]
+//	[1] [2] [3] [4] [5]
+//	[1] [2] [3] [4] [5]
 //
 //	○絵柄
 //	[1],[2],[3],[4],[5],[6],[7],[8],[9],[B] BAR
@@ -120,8 +120,8 @@ function	script	comodo_slot	{
 
 Ltop:
 	mes "[" +strnpcinfo(0)+ "]";
-	mes "メダル残高.......... "^5555FF" + ComodoMedal + "^000000枚)";
-	mes "ジャックポット配当.. "^FF5500" + $JackPot + "^000000枚)";
+	mes "メダル残高.......... ^5555FF" + ComodoMedal + "^000000枚)";
+	mes "ジャックポット配当.. ^FF5500" + $JackPot + "^000000枚)";
 
 	switch ( select("REBET","BET","設定をみる","スロットをやめる") ){
 	  case 1:
@@ -134,10 +134,10 @@ Ltop:
 		}
 
 		//十分な所持メダルがあることをチェック
-		comodo_slot_medalenogh('@Bet) )
+		comodo_slot_medalenogh '@Bet;
 
 		//掛けたメダルでスロットを回す
-		comodo_slot_main('@Bet);
+		comodo_slot_main '@Bet;
 
 		goto Ltop;
 
@@ -147,15 +147,15 @@ Ltop:
 		if ('@Bet <= 0){ break; }
 
 		//十分な所持メダルがあることをチェック
-		comodo_slot_medalenogh('@Bet) )
+		comodo_slot_medalenogh '@Bet;
 
 		//掛けたメダルでスロットを回す
-		comodo_slot_main('@Bet);
+		comodo_slot_main '@Bet;
 		goto Ltop;
 
 	  case 3:
 		//スロットの設定ルール説明
-		comodo_slot_rule();
+		comodo_slot_rule;
 		goto Ltop;
 
 	  default:
@@ -237,7 +237,7 @@ Ltop:
 
 		next;
 		mes "[" +strnpcinfo(0)+ "]";
-		mes "○配当率
+		mes "○配当率";
 		mes "高: [7]..........10000倍";
 		mes "中: [BAR].........5000倍";
 		mes "低: [1]～[9]...10～430倍";
@@ -298,7 +298,7 @@ Ltop:
 		setarray '@Reel$[4],"[1]","[7]","[4]","[6]","[3]","[8]","[1]","[1]","[B]","[2]","[7]","[2]","[B]","[2]","[9]","[3]","[8]","[8]","[3]","[2]","[4]","[6]";
 
 		//リールの停止位置を乱数で生成。3ラインに表示できるように範囲は[0]～[配列数-3]とする。
-		setarray '@RealMem, 
+		setarray '@RealMem,
 		  rand( getarraysize( '@Reel$[0]) - '@LINE ),
 		  rand( getarraysize( '@Reel$[1]) - '@LINE ),
 		  rand( getarraysize( '@Reel$[2]) - '@LINE ),
@@ -311,17 +311,17 @@ Ltop:
 		//'@Line$[1],"[B]","[E]","[H]","[K]","[N]";
 		//'@Line$[2],"[C]","[F]","[I]","[L]","[O]";
 		//
-		for ( set '@j, 0; '@j < @'REEL ; set '@j, '@j+1 ){
-		  for ( set '@i, 0; '@i < @'LINE ; set '@i, '@i+1 ){
+		for ( set '@j, 0; '@j < '@REEL ; set '@j, '@j+1 ){
+		  for ( set '@i, 0; '@i < '@LINE ; set '@i, '@i+1 ){
 			set '@Line$['@i]['@j], '@Reel$['@j][ '@RealMem['@j]+'@i ];
 		  }
 		}
 
 		//ラインの横列が等しいか確認する。本来は横一列以外の判定もある。アップデートの際はよろしく。
-		for ( set '@i, 0; '@i < @'LINE ; set '@i, '@i+1 ){
-		  for ( set '@j, 1; '@j < @'REEL ; set '@j, '@j+1 ){
+		for ( set '@i, 0; '@i < '@LINE ; set '@i, '@i+1 ){
+		  for ( set '@j, 1; '@j < '@REEL ; set '@j, '@j+1 ){
 			//ラインが揃っていない場合、ハズレ判定が成立するため繰り返しをやめる
-			if ( '@Line$['@i]['@j] != '@Reel$['@i][@i-1] )
+			if ( '@Line$['@i]['@j] != '@Reel$['@i][@i-1] ) {
 			    set '@LineHit['@i], '@FALSE;
 			    break;
 			} else {
@@ -343,23 +343,23 @@ Ltop:
 		set ComodoMedal, ComodoMedal + getarg(0);
 
 		//ラインが揃っていれば配当
-		for ( set '@i, 0; '@i < @'LINE ; set '@i, '@i+1 ){
+		for ( set '@i, 0; '@i < '@LINE ; set '@i, '@i+1 ){
 			if ( '@LineHit['@i] == '@TRUE ){
-			    
 
-			    //配当金計算
-			    switch( '@Line$['@i][0] ){
-			      case "[7]": set '@SlotPrize, '@SlotPrize + getarg(0) * 10000;	break;
-			      case "[B]": set '@SlotPrize, '@SlotPrize + getarg(0) * 5000;	break;
-			      case "[1]": set '@SlotPrize, '@SlotPrize + getarg(0) * 10;	break;
-			      case "[2]": set '@SlotPrize, '@SlotPrize + getarg(0) * 20;	break;
-			      case "[3]": set '@SlotPrize, '@SlotPrize + getarg(0) * 30;	break;
-			      case "[4]": set '@SlotPrize, '@SlotPrize + getarg(0) * 50;	break;
-			      case "[5]": set '@SlotPrize, '@SlotPrize + getarg(0) * 80;	break;
-			      case "[6]": set '@SlotPrize, '@SlotPrize + getarg(0) * 130;	break;
-			      case "[8]": set '@SlotPrize, '@SlotPrize + getarg(0) * 210;	break;
-			      case "[9]": set '@SlotPrize, '@SlotPrize + getarg(0) * 430;	break;
-			    }
+
+			//    //配当金計算
+			//    switch( '@Line$['@i][0] ){
+			//      case "[7]": set '@SlotPrize, '@SlotPrize + getarg(0) * 10000;	break;
+			//      case "[B]": set '@SlotPrize, '@SlotPrize + getarg(0) * 5000;	break;
+			//      case "[1]": set '@SlotPrize, '@SlotPrize + getarg(0) * 10;	break;
+			//      case "[2]": set '@SlotPrize, '@SlotPrize + getarg(0) * 20;	break;
+			//      case "[3]": set '@SlotPrize, '@SlotPrize + getarg(0) * 30;	break;
+			//      case "[4]": set '@SlotPrize, '@SlotPrize + getarg(0) * 50;	break;
+			//      case "[5]": set '@SlotPrize, '@SlotPrize + getarg(0) * 80;	break;
+			//      case "[6]": set '@SlotPrize, '@SlotPrize + getarg(0) * 130;	break;
+			//      case "[8]": set '@SlotPrize, '@SlotPrize + getarg(0) * 210;	break;
+			//      case "[9]": set '@SlotPrize, '@SlotPrize + getarg(0) * 430;	break;
+			//    }
 			}
 		}
 
