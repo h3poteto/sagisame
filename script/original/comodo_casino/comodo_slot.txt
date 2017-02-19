@@ -134,10 +134,10 @@ Ltop:
 		}
 
 		//十分な所持メダルがあることをチェック
-		comodo_slot_medalenogh('@Bet) )
+		comodo_slot_medalenogh '@Bet;
 
 		//掛けたメダルでスロットを回す
-		comodo_slot_main('@Bet);
+		comodo_slot_main '@Bet;
 
 		goto Ltop;
 
@@ -147,15 +147,15 @@ Ltop:
 		if ('@Bet <= 0){ break; }
 
 		//十分な所持メダルがあることをチェック
-		comodo_slot_medalenogh('@Bet) )
+		comodo_slot_medalenogh '@Bet;
 
 		//掛けたメダルでスロットを回す
-		comodo_slot_main('@Bet);
+		comodo_slot_main '@Bet;
 		goto Ltop;
 
 	  case 3:
 		//スロットの設定ルール説明
-		comodo_slot_rule();
+		comodo_slot_rule;
 		goto Ltop;
 
 	  default:
