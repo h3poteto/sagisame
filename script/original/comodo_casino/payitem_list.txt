@@ -1,4 +1,4 @@
-//"@CmdItemID,"@CmdExRate,"@CmdItemName$,
+//"@CmdItemID,"@CmdExRate,"@CmdItemName$
 7289,300,"Ç©ÇÒÇÁÇÒêŒ"
 7290,300,"ã‡â_ïÍ"
 7291,300,"ÇﬂÇÃÇ§"
