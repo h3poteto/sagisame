@@ -321,7 +321,7 @@ Ltop:
 		for ( set '@i, 0; '@i < '@LINE ; set '@i, '@i+1 ){
 		  for ( set '@j, 1; '@j < '@REEL ; set '@j, '@j+1 ){
 			//ラインが揃っていない場合、ハズレ判定が成立するため繰り返しをやめる
-			if ( '@Line$['@i]['@j] != '@Reel$['@i][@i-1] )
+			if ( '@Line$['@i]['@j] != '@Reel$['@i][@i-1] ) {
 			    set '@LineHit['@i], '@FALSE;
 			    break;
 			} else {
