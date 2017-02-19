@@ -311,15 +311,15 @@ Ltop:
 		//'@Line$[1],"[B]","[E]","[H]","[K]","[N]";
 		//'@Line$[2],"[C]","[F]","[I]","[L]","[O]";
 		//
-		for ( set '@j, 0; '@j < @'REEL ; set '@j, '@j+1 ){
-		  for ( set '@i, 0; '@i < @'LINE ; set '@i, '@i+1 ){
+		for ( set '@j, 0; '@j < '@REEL ; set '@j, '@j+1 ){
+		  for ( set '@i, 0; '@i < '@LINE ; set '@i, '@i+1 ){
 			set '@Line$['@i]['@j], '@Reel$['@j][ '@RealMem['@j]+'@i ];
 		  }
 		}
 
 		//ラインの横列が等しいか確認する。本来は横一列以外の判定もある。アップデートの際はよろしく。
-		for ( set '@i, 0; '@i < @'LINE ; set '@i, '@i+1 ){
-		  for ( set '@j, 1; '@j < @'REEL ; set '@j, '@j+1 ){
+		for ( set '@i, 0; '@i < '@LINE ; set '@i, '@i+1 ){
+		  for ( set '@j, 1; '@j < '@REEL ; set '@j, '@j+1 ){
 			//ラインが揃っていない場合、ハズレ判定が成立するため繰り返しをやめる
 			if ( '@Line$['@i]['@j] != '@Reel$['@i][@i-1] )
 			    set '@LineHit['@i], '@FALSE;
@@ -343,7 +343,7 @@ Ltop:
 		set ComodoMedal, ComodoMedal + getarg(0);
 
 		//ラインが揃っていれば配当
-		for ( set '@i, 0; '@i < @'LINE ; set '@i, '@i+1 ){
+		for ( set '@i, 0; '@i < '@LINE ; set '@i, '@i+1 ){
 			if ( '@LineHit['@i] == '@TRUE ){
 
 
