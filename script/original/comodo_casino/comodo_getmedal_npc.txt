@@ -53,18 +53,18 @@ Ltop:
 	mes "現金相場：メダル1枚 -> [" + '@Price + "]Zeny";
 
 	switch ( select("現金で購入","アイテム交換","倉庫を開く") ){
-	  case 1:
+	case 1:
 		comodo_getmedal_payzeny('@Price);
 		break;
-	  case 2:
+	case 2:
 		comodo_getmedal_payitem();
 		break;
 
-	  case 3:
+	case 3:
 		comodo_getmedal_openstorage();
 		goto Ltop;
 
-	  default:
+	default:
 		mes "またお越しください。";
 		break;
 	}
@@ -120,31 +120,32 @@ Ltop:
 		mes "交換するアイテム数量を指定して下さい";
 
 		select("すべて交換","交換アイテムの確認","キャンセル"){
-		  case 1:
+		case 1:
 			//交換対象のアイテム数だけ繰り返す
-			for( set '@i,0 ; '@i < getarraysize('@CmdItemID) ; set '@i,'@i + 1)
+			for( set '@i,0 ; '@i < getarraysize('@CmdItemID) ; set '@i,'@i + 1) {
 
-			  //アイテムを所持していれば削除し、メダルを追加する。
-			  set  '@val, countitem('@CmdItemID['@i]);
+				//アイテムを所持していれば削除し、メダルを追加する。
+				set  '@val, countitem('@CmdItemID['@i]);
 
-			  if ( '@val > 0 ){
-			    delitem '@CmdItemID['@i],'@val;
-			    set ComodoMedal,ComodoMedal + '@CmdExRate['@i] * '@val;
-			  }
+				if ( '@val > 0 ){
+					delitem '@CmdItemID['@i],'@val;
+					set ComodoMedal,ComodoMedal + '@CmdExRate['@i] * '@val;
+				}
+			}
 			mes "ご利用ありがとうございました！";
 			break;
 
-		  case 2:
+		case 2:
 			//配列に格納されているアイテム名をすべて表示
-			for( set '@i,0 ; '@i < getarraysize('@CmdItemName) ; set '@i,'@i + 1)
-			  mes "[" + '@i +"] " + '@CmdItemName$['@i] + "(^5555FF"+ '@CmdExRate['@i] +"^000000枚)";
+			for( set '@i,0 ; '@i < getarraysize('@CmdItemName) ; set '@i,'@i + 1) {
+				mes "[" + '@i +"] " + '@CmdItemName$['@i] + "(^5555FF"+ '@CmdExRate['@i] +"^000000枚)";
 
-			  //改ページ処理
-			  if ('@i >= 30){ next; }
+				//改ページ処理
+				if ('@i >= 30){ next; }
 			}
 			break;
 
-		  default:
+		default:
 			mes "何もしないんですね。";
 			break;
 		}
