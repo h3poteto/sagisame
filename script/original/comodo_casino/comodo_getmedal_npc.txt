@@ -49,7 +49,7 @@ function	script	comodo_medal_exchange	{
 Ltop:
 	mes "[" +strnpcinfo(0)+ "]";
 	mes "メダル交換所です。コモドカジノで遊ぶためのメダルを購入・確認できます！";
-	mes "メダル残高は"^135445" + ComodoMedal + "^000000枚です。";
+	mes "メダル残高は^135445" + ComodoMedal + "^000000枚です。";
 	mes "現金相場：メダル1枚 -> [" + '@Price + "]Zeny";
 
 	switch ( select("現金で購入","アイテム交換","倉庫を開く") ){

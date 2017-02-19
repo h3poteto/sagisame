@@ -120,8 +120,8 @@ function	script	comodo_slot	{
 
 Ltop:
 	mes "[" +strnpcinfo(0)+ "]";
-	mes "メダル残高.......... "^5555FF" + ComodoMedal + "^000000枚)";
-	mes "ジャックポット配当.. "^FF5500" + $JackPot + "^000000枚)";
+	mes "メダル残高.......... ^5555FF" + ComodoMedal + "^000000枚)";
+	mes "ジャックポット配当.. ^FF5500" + $JackPot + "^000000枚)";
 
 	switch ( select("REBET","BET","設定をみる","スロットをやめる") ){
 	  case 1:
