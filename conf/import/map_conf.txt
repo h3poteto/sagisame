@@ -17,7 +17,6 @@ npc: script/original/npc_debug_reset.txt
 npc: script/original/npc_custom_cardremover.txt
 
 npc: script/original/comodo_casino/comodo_getmedal_npc.txt
-npc: script/original/comodo_casino/payitem_list.txt
 npc: script/original/comodo_casino/comodo_blackjack.txt
 npc: script/original/comodo_casino/comodo_poker.txt
 npc: script/original/comodo_casino/comodo_slot.txt
