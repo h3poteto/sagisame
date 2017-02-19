@@ -1,0 +1,885 @@
+//ブラックジャックNPC(製作:AKIHIRO.Majestic)
+//ダウンロードされた方はゲストブックに書くべし!!
+cmd_in02.gat,78,84,4	script	ブラックジャック	86,{
+	if(kaiwaend >= 1) goto Lbj_4;
+	mes "[ブラックジャック]";
+	mes "ブラックジャックやる？";
+	mes "メダルを1,000,000枚集めたら";
+	mes "私の宝物と交換してあげる・・・";
+	mes "それでは始めましょうか！?";
+	next;
+Lbj_4:
+	set kaiwaend,1;
+	set @medal,0;
+	emotion 14;
+	mes "[ブラックジャック]";
+	mes "◇BLACK JACK ゲーム◇";
+	mes "いらっしゃいませ～♪";
+	mes "メニューから選んでください。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	menu "^FF5500REBET^000000",Lrebet,"^FF5500BET^000000",Lgamestart,"ルールブック",Lrule,"やめる",Lclse;
+Lmedal:
+
+//ブラックジャック*ルールブック-------------------------------------------------
+Lrule:
+	mes "[ブラックジャック*ルールブック]";
+	mes "■ブラックジャックは、手持ちのカードの数字の合計が「21」を超えない範囲で「21」に近づけるゲームです。";
+	mes "■単純過ぎず、複雑過ぎずカジノのなかでは一番楽しく、かつ奥の深いゲームでしょう。上級者とビギナーではかなりの差が出ると言われています。攻略法を参考にして頂ければ、勝率もぐっとアップするはずです。";
+	next;
+	menu "遊び方・ルール",Lrule1,"ブラックジャック用語集",Lrule2,"メニューに戻る",Lbj_4;
+
+Lrule1:
+	mes "[遊び方・ルール]";
+	mes "○遊びかた";
+	mes "■プレーヤーは、賭けるチップをベッティング・サークルの中心に置きます。ディーラーがカード2枚を各プレーヤーに表向きにして配り、ディーラー自身にも1枚は表向きにして、もう1枚はふせて、合計2枚をディーラー自身に配ります。";
+	mes "■プレーヤーは、一度に最高3つの手でゲームを楽しむことが出来ます。複数の手でプレーしたい場合は、両側にあるベッティング・サークルの中にチップを置いてください。";
+	mes "○カードの数え方";
+	mes "■絵札(キング、クイーン、ジャック)と10は、すべて10としてカウント";
+	mes "■エースは、1または11として、状況に応じてプレーヤーの都合のよい方にカウント";
+	mes "■その他の2から9までのカードは、そのままの数でカウント";
+	mes "○スコア";
+	mes "■最初の2枚のカードが、エースと10としてカウントされるカードの組み合わせであれば、プレーヤーは「ブラックジャック」となり、ディーラーもブラックジャックでない限り、賭けたチップの1.5倍が払われます。もし、プレーヤーの手とディーラーの手がともに「ブラックジャック」の場合、つまり引き分けの場合は、賭け金はそのまま戻されること(Push)になります。";
+	mes "■エースと10としてカウントされるカードの組み合わせである「ブラックジャック」と、3枚以上のカードの合計が21になる組み合わせの手では、「ブラックジャック」の勝ちとなります。例えば、エースと10の「ブラックジャック」と、10と5と6の組み合わせの「21」では、前者「ブラックジャック」の勝ちです。";
+	mes "■「ブラックジャック」でなかった場合、カードの合計を21に近づけるため、合計が21を超えるまでは好きなだけカードを引くことができます。合計が21を超えると負けで、賭けたチップは没収されます。";
+	mes "■ディーラーはディーラーのカードの数の合計数が、16以下の場合はカードを引き続けなければなりません。また、ディーラーは、17以上になったら、スタンド（カードをそれ以上引かないこと）しなければなりません。";
+
+	next;
+	menu "ブラックジャック＊ルールブック",Lrule,"メニューに戻る",Lbj_4;
+Lrule2:
+	mes "ブラックジャック用語集";
+	mes "○BET（ベット）：賭け金のこと。また、賭けることもベット(する)と言います。";
+	mes "○REBET（リベット）：前回と同額のチップを、ベッティング・サークルに置くこと。";
+	mes "○DEAL（ディール）：ディーラーがカードを配ること。ベッティング・サークルに賭けるチップを置き、「DEAL」ボタンをクリックしてプレーを開始してください。";
+	mes "○HIT（ヒット）：もう1枚カードを引くこと。";
+	mes "○STAND(スタンド）：それ以上カードを引かないで、勝負にでること。";
+	mes "○SPLIT（スプリット）：";
+	mes "プレーヤーが、最初に賭けたチップと同額のチップを追加して賭けることにより、最初に配られた2枚のカードを2つの手に分けること。2枚のカードは等価値でなければなりません（例：8のペアー、10とジャックの組み合わせ、等）。";
+	mes "また、2つの手に分けたあとで、エースと10の価値があるカードの組み合わせができても、「ブラックジャック」とはみなされません。";
+	mes "○DOUBLE DOWN（ダブルダウン）：";
+	mes "プレーヤーが、最初に配られた2枚のカードを見て、最初に賭けたチップと同額のチップを追加して賭けることを選択することができます。";
+	mes "この場合、あと1枚だけカードが配られます。手が「ブラックジャック」のときは、ダブルダウンすることはできません。";
+	mes "○INSURE（インシュア）PASS(パス)：";
+	mes "ディーラーの表向きに配られたカードがエースのとき、プレイヤーは、次のいづれかを選択します。";
+	mes "（１）INSURE（インシュア）　最初に賭けたチップの半額を追加することにより、インシュランス（保険）をかける。";
+	mes "（２）PASS(パス)　インシュランス（保険）をかけないでゲーム続行。確率的にはPASS（パス）したほうが有利";
+	mes "INSURE（インシュア）　最初に賭けたチップの半額の保険をかけた場合";
+	mes "・ディーラーが「ブラックジャック」の場合";
+	mes "保険金が2対1で支払われます。";
+	mes "最初に10ドル賭けて、半額の5ドルの保険を掛けたとすれば、保険金10ドルが戻り、差し引き「0」となります。また、プレイヤーも「ブラックジャック」なら、引き分けで最初の賭け金10ドルも戻ってきます。";
+	mes "・ディーラーが「ブラックジャック」でない場合";
+	mes "保険金のみ没収され、通常のゲームを続けます。";
+	mes "↑上記用語がわかればOK↑↓下記の用語も覚えておきましょう↓";
+	mes "○BURST（バースト）：ヒットした後に、カードの合計が21を超えた場合。";
+	mes "○PUSH（プッシュ）：引き分け、ベット（賭け金）は戻ってきます。";
+	mes "○NATURAL（ナチュラル）：最初の二枚のカードで手の合計が21になること。";
+	mes "○SOFT HAND（ソフトハンド）：エースを含み、エースを11として数えても21を超えない手。ソフトハンド の場合、あと一枚ひいてもバーストすることはありません。";
+	mes "○HARD HAND（ハードハンド）：ソフトハンドではない手のこと。";
+	mes "○UP CARD（アップカード）：オープンしたカードのこと。";
+	mes "○HOLE CARD（ホールカード）：伏せたままのカードこと。";
+	next;
+	menu "ブラックジャック*ルールブック",Lrule,"メニューに戻る",Lbj_4;
+
+//REBET--------------------------------------------------------------------
+Lrebet:
+	if(ComodoMedal < 1 ) goto Lnomedal;
+	if(ComodoMedal < @memobetmedal) goto Lnotenough;
+	if(@memobetmedal <= 0) goto Lplz;
+
+	set ComodoMedal,ComodoMedal-@memobetmedal;
+	set @betmedal,@memobetmedal;
+	goto Lrebetout;
+
+//BET-----------------------------------------------------------------------
+Lgamestart:
+	if(ComodoMedal < 1 ) goto Lnomedal;
+	mes "[ブラックジャック]";
+	mes "何枚メダルを賭けますか？";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	input @betmedal;
+
+	if(ComodoMedal < @betmedal) goto Lnotenough;
+	if(@betmedal <= 0) goto Lplz;
+
+	set @memobetmedal,@betmedal;
+	set ComodoMedal,ComodoMedal-@betmedal;
+
+//初期設定-----------------------------------------------
+
+Lrebetout:
+	set @Bairitu,2;
+	set @bjda,0;
+	set @i,0;
+	set @daubledown,0;	
+
+//カード決定ループ----------------------------------------
+Ldealcards:
+	set @dealcard1,rand(1,10);
+	set @dealcard2,rand(1,10);
+
+	set @i,@i+1;
+
+	if(@i == 2) goto Lhit1;
+	if(@i == 3) goto Lhit3;
+	if(@i == 4) goto Lstand2;
+	if(@i == 5) goto Lstand3;
+
+	set @card7,rand(1,10);
+	set @card8,rand(1,10);
+
+	set @card1,@dealcard1;
+	set @card2,@dealcard2;
+
+
+//ユーザーの番------------------------------------------
+
+	if(@card1 != 1) goto Lcard211dayo;
+	set @card1,11;
+	goto Lgame_1;
+Lcard211dayo:
+	if(@card2 != 1) goto Lgame_1;
+	set @card2,11;
+
+Lgame_1:
+	set @maisu,2;
+	set @Goukei,@card1+@card2;
+
+	mes "[ブラックジャック]";
+	mes "BET ^FF5500"+ @betmedal + "^000000枚";
+	mes "親のカードは";
+	mes "["+ @card7 +"][*]";
+	mes "あなたのカードは";
+	mes "["+ @card1 +"]["+ @card2 +"]" ;
+	mes "合計"+ @Goukei +"です。";
+	next;
+	if(@Goukei == 21) goto Lblackjack;
+	goto LAor11;
+
+Lmenuhitstand_1:
+
+	menu "HIT(もう1枚引く)",Ldealcards,"STAND(勝負！)",Lstand,"DOUBLE(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lhit1:
+	set @card3,@dealcard1;
+	set @card4,@dealcard2;
+
+	set @Goukei,@card1+@card2+@card3;
+
+	if(@Goukei <= 21) goto Lgame_2;
+	if(@card1 != 11) goto Lcard211;
+	set @card1,1;
+	goto Lgame_2;
+
+Lcard211:
+	if(@card2 != 11) goto Lgame_2;
+	set @card2,1;
+	goto Lgame_2;
+
+Lgame_2:
+	set @maisu,3;
+	set @Goukei,@card1+@card2+@card3;
+
+	mes "[ブラックジャック]";
+	mes "親のカードは";
+	mes "["+ @card7 +"][*]";
+	mes "あなたのカードは";
+	mes "["+@card1+"]["+@card2+"]["+@card3+"]" ;
+	mes "合計"+ @Goukei +"です。";
+	next;
+	goto LAor11;
+
+Lnext2:
+	if(@Goukei > 21) goto Lbuta;
+	if(@daubledown == 1) goto Lstand;
+
+	menu "HIT(もう1枚引く)",Lhit2,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lhit2:
+	set @Goukei,@card1+@card2+@card3+@card4;
+
+	if(@Goukei <= 21) goto Lgame_3;
+	if(@card1 != 11) goto Lcard221;
+	set @card1,1;
+	goto Lgame_3;
+Lcard221:
+	if(@card2 != 11) goto Lcard321;
+	set @card2,1;
+	goto Lgame_3;
+Lcard321:
+	if(@card3 != 11) goto Lgame_3;
+	set @card3,1;
+	goto Lgame_3;
+
+Lgame_3:
+	set @maisu,4;
+	set @Goukei,@card1+@card2+@card3+@card4;
+
+	mes "[ブラックジャック]";
+	mes "親のカードは";
+	mes "["+ @card7 +"][*]";
+	mes "貴方のカードは";
+	mes "["+@card1+"]["+@card2+"]["+@card3+"]["+@card4+"]" ;
+	mes "合計"+ @Goukei +"です。";
+	next;
+	goto LAor11;
+
+Lnext3:
+	if(@Goukei > 21) goto Lbuta;
+	if(@daubledown == 1) goto Lstand;
+
+	menu "HIT(もう1枚引く)",Ldealcards,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lhit3:
+	if(@Goukei > 21) goto Lbuta;
+
+	set @card5,@dealcard1;
+	set @card6,@dealcard2;
+
+	set @Goukei,@card1+@card2+@card3+@card4+@card5;
+	if(@Goukei <= 21) goto Lgame_4;
+	if(@card1 != 11) goto Lcard221a;
+	set @card1,1;
+	goto Lgame_4;
+Lcard221a:
+	if(@card2 != 11) goto Lcard321a;
+	set @card2,1;
+	goto Lgame_4;
+Lcard321a:
+	if(@card3 != 11) goto Lcard421a;
+	set @card3,1;
+	goto Lgame_4;
+Lcard421a:
+	if(@card4 != 11) goto Lgame_4;
+	set @card4,1;
+	goto Lgame_4;
+
+Lgame_4:
+	set @maisu,5;
+	set @Goukei,@card1+@card2+@card3+@card4+@card5;
+
+	mes "[ブラックジャック]";
+	mes "親のカードは";
+	mes "["+ @card7 +"][*]";
+	mes "貴方のカードは";
+	mes "["+@card1+"]["+@card2+"]["+@card3+"]["+@card4+"]["+@card5+"]" ;
+	mes "合計"+ @Goukei +"です。";
+	next;
+	goto LAor11;
+
+Lnext4:
+	if(@Goukei > 21) goto Lbuta;
+	if(@daubledown == 1) goto Lstand;
+
+	menu "HIT(もう1枚引く)",Lhit4,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lhit4:
+	if(@Goukei > 21) goto Lbuta;
+
+	set @Goukei,@card1+@card2+@card3+@card4+@card5+@card6;
+	if(@Goukei <= 21) goto Lgame_5;
+	if(@card1 != 11) goto Lcard221b;
+	set @card1,1;
+	goto Lgame_5;
+Lcard221b:
+	if(@card2 != 11) goto Lcard321b;
+	set @card2,1;
+	goto Lgame_5;
+Lcard321b:
+	if(@card3 != 11) goto Lcard421b;
+	set @card3,1;
+	goto Lgame_5;
+Lcard421b:
+	if(@card4 != 11) goto Lcard521b;
+	set @card4,1;
+	goto Lgame_5;
+Lcard521b:
+	if(@card5 != 11) goto Lgame_5;
+	set @card5,1;
+	goto Lgame_5;
+
+Lgame_5:
+	set @Goukei,@card1+@card2+@card3+@card4+@card5+@card6;
+
+	mes "[ブラックジャック]";
+	mes "親のカードは";
+	mes "["+ @card7 +"][*]";
+	mes "貴方のカードは";
+	mes "["+ @card1 +"]["+ @card2 +"]["+ @card3 +"]["+ @card4 +"]["+ @card5 +"]["+ @card6 +"]" ;
+	mes "合計"+ @Goukei +"です。";
+	next;
+	if(@Goukei > 21) goto Lbuta;
+
+	set @Bairitu,5;
+	emotion 46;
+	mes "^0077FF★★★★★★★★★★★★★★★★^000000";
+	mes "☆シックスカード☆";
+	mes "おめでとうございます！！";
+	mes "「シックスカードﾞ」ルールにより貴方の勝ちです。";
+	mes "ボーナス！！獲得メダルが5倍になりました！！";
+	mes "^0077FF★★★★★★★★★★★★★★★★^000000";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	goto Lkati2;
+
+//Aor11判定------------------------------------------------------------
+
+LAor11:
+	if(!((@card1 == 1)||(@card1 == 11)))goto Lchange2;
+	if(@daubledown == 1) goto Ldda11;
+	if(@maisu == 3) goto Lmaisu3menu;
+	if(@maisu == 5) goto Lmaisu5menu;
+
+
+	menu "[A]or[11](チェンジする)",Lchange1a,"HIT(もう1枚引く)",Ldealcards,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lmaisu3menu:
+	menu "[A]or[11](チェンジする)",Lchange1a,"HIT(もう1枚引く)",Lhit2,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lmaisu5menu:
+	menu "[A]or[11](チェンジする)",Lchange1a,"HIT(もう1枚引く)",Lhit4,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Ldda11:
+	menu "[A]or[11](チェンジする)",Lchange1a,"STAND(勝負！)",Lstand,"DROP OUT(リタイア)",Lmake2;
+
+Lchange1a:
+	mes "[ブラックジャック]";
+	mes "あなたのカードは";
+	mes "[A]["+ @card2 +"] or [11]["+ @card2 +"]";
+	mes "どうしますか？";
+	next;
+	menu "[A]["+ @card2 +"]にする",Lace_1,"[11]["+ @card2 +"]にする",Lace_11;
+
+Lace_1:
+	set @card1,1;
+	if(@maisu == 3) goto Lgame_2;
+	if(@maisu == 4) goto Lgame_3;
+	if(@maisu == 5) goto Lgame_4;
+	goto Lgame_1;
+
+Lace_11:
+	set @card1,11;
+	if(@maisu == 3) goto Lgame_2;
+	if(@maisu == 4) goto Lgame_3;
+	if(@maisu == 5) goto Lgame_4;
+	goto Lgame_1;
+
+Lchange2:
+	if(!((@card2 == 1)||(@card2 == 11))) goto Lchange3;
+	if(@daubledown == 1) goto Ldda11_2;
+	if(@maisu == 3) goto Lmaisu3menu_2;
+	if(@maisu == 5) goto Lmaisu5menu_2;
+
+	menu "[A]or[11](チェンジする)",Lchange2a,"HIT(もう1枚引く)",Ldealcards,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lmaisu3menu_2:
+		menu "[A]or[11](チェンジする)",Lchange2a,"HIT(もう1枚引く)",Lhit2,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lmaisu5menu_2:
+		menu "[A]or[11](チェンジする)",Lchange2a,"HIT(もう1枚引く)",Lhit4,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Ldda11_2:
+	menu "[A]or[11](チェンジする)",Lchange2a,"STAND(勝負！)",Lstand,"DROP OUT(リタイア)",Lmake2;
+
+Lchange2a:
+	mes "[ブラックジャック]";
+	mes "あなたのカードは";
+	mes "["+ @card1 +"][A] or ["+ @card1 +"][11]";
+	mes "どうしますか？";
+	next;
+	menu "["+ @card1 +"][A]にする",Lace_1a,"["+ @card1 +"][11]にする",Lace_11a;
+Lace_1a:
+	set @card2,1;
+	if(@maisu == 3) goto Lgame_2;
+	if(@maisu == 4) goto Lgame_3;
+	if(@maisu == 5) goto Lgame_4;
+	goto Lgame_1;
+
+Lace_11a:
+	set @card2,11;
+	if(@maisu == 3) goto Lgame_2;
+	if(@maisu == 4) goto Lgame_3;
+	if(@maisu == 5) goto Lgame_4;
+	goto Lgame_1;
+
+Lchange3:
+	if(@maisu == 2) goto Lmenuhitstand_1;
+	if(!((@card3 == 1)||(@card3 == 11)))goto Lchange4;
+
+	if(@daubledown == 1) goto Ldda11_3;
+	if(@maisu == 3) goto Lmaisu3menu_3;
+	if(@maisu == 5) goto Lmaisu5menu_3;
+
+	menu "[A]or[11](チェンジする)",Lchange3a,"HIT(もう1枚引く)",Ldealcards,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lmaisu3menu_3:
+	menu "[A]or[11](チェンジする)",Lchange3a,"HIT(もう1枚引く)",Lhit2,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lmaisu5menu_3:
+	menu "[A]or[11](チェンジする)",Lchange3a,"HIT(もう1枚引く)",Lhit4,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Ldda11_3:
+	menu "[A]or[11](チェンジする)",Lchange3a,"STAND(勝負！)",Lstand,"DROP OUT(リタイア)",Lmake2;
+
+Lchange3a:
+	mes "[ブラックジャック]";
+	mes "あなたのカードは";
+	mes "["+@card1+"]["+ @card2 +"][A] or ["+@card1+"]["+ @card2 +"][11]";
+	mes "どうしますか？";
+	next;
+	menu "["+ @card1 +"]["+ @card2 +"][A]にする",Lace1b,"["+ @card1 +"]["+ @card2 +"][11]にする",Lace11b;
+
+Lace1b:
+	set @card3,1;
+	if(@maisu == 3) goto Lgame_2;
+	if(@maisu == 4) goto Lgame_3;
+	goto Lgame_4;
+Lace11b:
+	set @card3,11;
+	if(@maisu == 3) goto Lgame_2;
+	if(@maisu == 4) goto Lgame_3;
+	goto Lgame_4;
+
+Lchange4:
+	if(@maisu == 3) goto Lnext2;
+	if(!((@card4 == 1)||(@card4 == 11)))goto Lchange5;
+	if(@daubledown == 1) goto Ldda11_4;
+	if(@maisu == 3) goto Lmaisu3menu_4;
+	if(@maisu == 5) goto Lmaisu5menu_4;
+
+	menu "[A]or[11](チェンジする)",Lchange4a,"HIT(もう1枚引く)",Ldealcards,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lmaisu3menu_4:
+	menu "[A]or[11](チェンジする)",Lchange4a,"HIT(もう1枚引く)",Lhit2,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lmaisu5menu_4:
+	menu "[A]or[11](チェンジする)",Lchange4a,"HIT(もう1枚引く)",Lhit4,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Ldda11_4:
+	menu "[A]or[11](チェンジする)",Lchange4a,"STAND(勝負！)",Lstand,"DROP OUT(リタイア)",Lmake2;
+
+Lchange4a:
+	mes "[ブラックジャック]";
+	mes "あなたのカードは";
+	mes "["+@card1+"]["+@card2+"]["+@card3+"][A] or ["+@card1+"]["+@card2+"]["+@card3+"][11]";
+	mes "どうしますか？";
+	next;
+	menu "["+@card1+"]["+ @card2 +"]["+@card3+"][A]にする",Lace1c,"["+@card1+"]["+ @card2 +"]["+@card3+"][11]にする",Lace11c;
+
+Lace1c:
+	set @card4,1;
+	if(@maisu == 4) goto Lgame_3;
+	goto Lgame_4;
+Lace11c:
+	set @card4,11;
+	if(@maisu == 4) goto Lgame_3;
+	goto Lgame_4;
+
+Lchange5:
+	if(@maisu == 4) goto Lnext3;
+	if(!((@card5 == 1)||(@card5 == 11)))goto Lnext4;
+	if(@daubledown == 1) goto Ldda11_5;
+	if(@maisu == 5) goto Lmaisu5menu_5;
+
+	menu "[A]or[11](チェンジする)",Lchange5a,"HIT(もう1枚引く)",Ldealcards,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Lmaisu5menu_5:
+	menu "[A]or[11](チェンジする)",Lchange5a,"HIT(もう1枚引く)",Lhit4,"STAND(勝負！)",Lstand,"DOUBLE DOWN(２倍賭け)",Ldoubledown,"DROP OUT(リタイア)",Lmake2;
+
+Ldda11_5:
+	menu "[A]or[11](チェンジする)",Lchange5a,"STAND(勝負！)",Lstand,"DROP OUT(リタイア)",Lmake2;
+
+Lchange5a:
+	mes "[ブラックジャック]";
+	mes "あなたのカードは";
+	mes "["+@card1+"]["+@card2+"]["+@card3+"]["+@card4+"][A] or ["+@card1+"]["+@card2+"]["+@card3+"]["+@card4+"][11]";
+	mes "どうしますか？";
+	next;
+	menu "["+@card1+"]["+ @card2 +"]["+@card3+"]["+@card4+"][A]にする",Lace1d,"["+@card1+"]["+ @card2 +"]["+@card3+"]["+@card4+"][11]にする",Lace11d;
+
+Lace1d:
+	set @card5,1;
+	goto Lgame_4;
+Lace11d:
+	set @card5,11;
+	goto Lgame_4;
+
+Lblackjack:
+	set @Bairitu,3;
+	emotion 5;
+	mes "^FF0000★★★★★★★★★★★★★^000000";
+	mes "^FFCC00★★★★★★★★★★★★★^000000";
+	mes "^FFee00★★★★★★★★★★★★★^000000";
+	mes "^00FF88★★★^FF5500ブラックジャック^00FF88★★★^000000";
+	mes "^00CCFF★★★★★★★★★★★★★^000000";
+	mes "^7700FF★★★★★★★★★★★★★^000000";
+	mes "^FF00CC★★★★★★★★★★★★★^000000";
+
+Lbjdaend:
+	next;
+	set @bjda,1;
+
+	menu "STAND(勝負！)",Lstand,"DROP OUT(リタイア)",Lmake2;
+
+
+//親の番----------------------------------------------------------------
+
+Ldoubledown:
+	if(ComodoMedal < @betmedal) goto Lnomedaldd;
+
+	set ComodoMedal,ComodoMedal-@betmedal;
+	set @betmedal,@betmedal*2;
+	set @daubledown,1;
+	if(@maisu == 3) goto Lhit2;
+	if(@maisu == 5) goto Lhit4;
+	goto Ldealcards;
+
+Lstand:
+	if(@Goukei >= 22) goto Lbuta;
+
+	if(@Goukei != 21) goto Lstand_nobj;
+	if(@bjda != 1) goto Lstand_nobj;
+	if(@i != 1) goto Lstand_nobj;
+
+	if(@card7 != 1) goto Lcard711_bj;
+	set @card7,11;
+	goto Loyagame1_bj;
+Lcard711_bj:
+	if(@card8 != 1) goto Loyagame1_bj;
+	set @card8,11;
+Loyagame1_bj:
+	set @Oyagoukei,@card7+@card8;
+	mes "[ブラックジャック]";
+	mes "親のカードは";
+	mes "["+@card7+"]["+@card8+"]";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "貴方のカードの合計は"+ @Goukei +"です。";
+	next;
+
+	if(@Oyagoukei == @Goukei) goto Lhikiwake;
+	goto Lkatistand;
+
+Lstand_nobj:
+
+	set @i,3;
+Lstand1:
+	set @Oyagoukei,@card7+@card8;
+
+	if(@card7 != 1) goto Lcard711;
+	set @card7,11;
+	goto Lcardchking;
+Lcard711:
+	if(@card8 != 1) goto Loyagame1;
+	set @card8,11;
+	goto Lcardchking;
+Lcardchking:
+	set @Oyagoukei,@card7+@card8;
+	if(!((@Oyagoukei >= 17)&&(@Oyagoukei < @Goukei))) goto Loyagame1;
+	if(@card7 != 11) goto Lcardchking2;
+	set @card7,1;
+	goto Loyagame1;
+Lcardchking2:
+	if(@card8 != 11) goto Loyagame1;
+	set @card8,1;
+	goto Loyagame1;
+
+Loyagame1:
+	set @Oyagoukei,@card7+@card8;
+	mes "[ブラックジャック]";
+	mes "親のカードは";
+	mes "["+@card7+"]["+@card8+"]";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "貴方のカードの合計は"+ @Goukei +"です。";
+	next;
+
+	if(@Oyagoukei == 21)goto Lmakebj;
+	if(@Oyagoukei <= 16) goto Ldealcards;
+	if(@Oyagoukei > @Goukei) goto Lmake;
+	if(@Oyagoukei == @Goukei) goto Lhikiwake;
+	if(@Oyagoukei < @Goukei) goto Lkatistand;
+
+
+Lstand2:
+	set @card9,@dealcard1;
+	set @card10,@dealcard2;
+	set @Oyagoukei,@card7+@card8+@card9;
+
+	if(@card9 != 1) goto Loyaoya_1;
+	set @card9,11;
+
+Loyaoya_1:
+	set @Oyagoukei,@card7+@card8+@card9;
+
+	if((@Oyagoukei >= 17)&&(@Oyagoukei < @Goukei)) goto Lapple;
+	if(@Oyagoukei <= 21) goto Loyagame2;
+Lapple:
+	if(@card7 != 11) goto Lcard711_2;
+	set @card7,1;
+	goto Loyagame2;
+Lcard711_2:
+	if(@card8 != 11) goto Lcard811_2;
+	set @card8,1;
+	goto Loyagame2;
+Lcard811_2:
+	if(@card9 != 11) goto Loyagame2;
+	set @card9,1;
+
+
+Loyagame2:
+	set @Oyagoukei,@card7+@card8+@card9;
+	mes "[ブラックジャック]";
+	mes "親のカードは";
+	mes "["+@card7+"]["+@card8+"]["+@card9+"]";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "貴方のカードの合計は"+ @Goukei +"です。";
+	next;
+	if(@Oyagoukei > 21) goto Lkati;
+	if(@Oyagoukei > @Goukei) goto Lmake;
+	if(@Oyagoukei == @Goukei) goto Lhikiwake;
+	if(@Oyagoukei <= 16) goto Lstand2a;
+	if(@Oyagoukei < @Goukei) goto Lkatistand;
+
+Lstand2a:
+	set @Oyagoukei,@card7+@card8+@card9+@card10;
+
+	if(@card10 != 1) goto Loyaoya_2;
+	set @card10,11;
+
+Loyaoya_2:
+	set @Oyagoukei,@card7+@card8+@card9+@card10;
+
+	if((@Oyagoukei >= 17)&&(@Oyagoukei < @Goukei)) goto Lapple1;
+	if(@Oyagoukei <= 21) goto Loyagame2akana;
+
+Lapple1:
+	if(@card7 != 11) goto Lcard711_3;
+	set @card7,1;
+	goto Loyagame2akana;
+Lcard711_3:
+	if(@card8 != 11) goto Lcard811_3;
+	set @card8,1;
+	goto Loyagame2akana;
+Lcard811_3:
+	if(@card9 != 11) goto Lcard911_3;
+	set @card9,1;
+	goto Loyagame2akana;
+Lcard911_3:
+	if(@card10 != 11) goto Loyagame2akana;
+	set @card10,1;
+
+Loyagame2akana:
+	set @Oyagoukei,@card7+@card8+@card9+@card10;
+	mes "[ブラックジャック]";
+	mes "親のカードは";
+	mes "["+@card7+"]["+@card8+"]["+@card9+"]["+@card10+"]";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "貴方のカードの合計は"+ @Goukei +"です。";
+	next;
+	if(@Oyagoukei > 21) goto Lkati;
+	if(@Oyagoukei <= 16)goto Ldealcards;
+	if(@Oyagoukei > @Goukei) goto Lmake;
+	if(@Oyagoukei == @Goukei) goto Lhikiwake;
+	if(@Oyagoukei < @Goukei) goto Lkatistand;
+
+Lstand3:
+	set @card11,@dealcard1;
+	set @card12,@dealcard2;
+	set @Oyagoukei,@card7+@card8+@card9+@card10+@card11;
+
+	if(@card11 != 1) goto Loyaoya_3;
+	set @card11,11;
+
+Loyaoya_3:
+	set @Oyagoukei,@card7+@card8+@card9+@card10+@card11;
+	if((@Oyagoukei >= 17)&&(@Oyagoukei < @Goukei)) goto Lapple2;
+	if(@Oyagoukei <= 21) goto Loyagame3;
+Lapple2:
+	if(@card7 != 11) goto Lcard711_4;
+	set @card7,1;
+	goto Loyagame3;
+Lcard711_4:
+	if(@card8 != 11) goto Lcard811_4;
+	set @card8,1;
+	goto Loyagame3;
+Lcard811_4:
+	if(@card9 != 11) goto Lcard911_4;
+	set @card9,1;
+	goto Loyagame3;
+Lcard911_4:
+	if(@card10 != 11) goto Lcard1011_4;
+	set @card10,1;
+	goto Loyagame3;
+Lcard1011_4:
+	if(@card11 != 11) goto Loyagame3;
+	set @card11,1;
+
+Loyagame3:
+	set @Oyagoukei,@card7+@card8+@card9+@card10+@card11;
+	mes "[ブラックジャック]";
+	mes "親のカードは";
+	mes "["+@card7+"]["+@card8+"]["+@card9+"]["+@card10+"]["+@card11+"]";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "貴方のカードの合計は"+ @Goukei +"です。";
+	next;
+	if(@Oyagoukei > 21) goto Lkati;
+	if(@Oyagoukei <= 16)goto Lstand4;
+	if(@Oyagoukei > @Goukei) goto Lmake;
+	if(@Oyagoukei == @Goukei) goto Lhikiwake;
+	if(@Oyagoukei < @Goukei) goto Lkatistand;
+
+Lstand4:
+	set @Oyagoukei,@card7+@card8+@card9+@card10+@card11+@card12;
+
+	if((@Oyagoukei >= 17)&&(@Oyagoukei < @Goukei)) goto Lapple4;
+	if(@Oyagoukei <= 21) goto Loyagame5;
+Lapple4:
+	if(@card7 != 11) goto Lcard711_5;
+	set @card7,1;
+	goto Loyagame5;
+Lcard711_5:
+	if(@card8 != 11) goto Lcard811_5;
+	set @card8,1;
+	goto Loyagame5;
+Lcard811_5:
+	if(@card9 != 11) goto Lcard911_5;
+	set @card9,1;
+	goto Loyagame5;
+Lcard911_5:
+	if(@card10 != 11) goto Lcard1011_5;
+	set @card10,1;
+	goto Loyagame5;
+Lcard1011_5:
+	if(@card11 != 11) goto Loyagame5;
+	set @card11,1;
+
+Loyagame5:
+	set @Oyagoukei,@card7+@card8+@card9+@card10+@card11+@card12;
+	mes "[ブラックジャック]";
+	mes "親のカードは";
+	mes "["+@card7+"]["+@card8+"]["+@card9+"]["+@card10+"]["+@card11+"]["+@card12+"]";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "貴方のカードの合計は"+ @Goukei +"です。";
+	next;
+	if(@Oyagoukei > 21) goto Lkati;
+
+	mes "[ブラックジャック]";
+	mes "親のカードは";
+	mes "["+@card7+"]["+@card8+"]["+@card9+"]["+@card10+"]["+@card11+"]["+@card12+"]";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "Σ「シックスカード」ルールにより親の勝ちです。Σ";
+	next;
+	goto Lmake2;
+
+Lkatistand:
+	mes "[ブラックジャック]";
+	mes "親 > Stand!!";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "貴方の合計は"+ @Goukei +"です。";
+	next;
+	goto Lkati2;
+Lkati:
+	mes "[ブラックジャック]";
+	mes "親 がBURST!!「21」を オーバーしました。";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "貴方の合計は"+ @Goukei +"です。";
+	next;
+Lkati2:
+	emotion 21;
+	set @Outmedal,@betmedal*@Bairitu;
+	set ComodoMedal,ComodoMedal+@Outmedal;
+	mes "[ブラックジャック]";
+	mes "おめでとうございます。"+ strcharinfo(0) +"さんの勝ちです♪";
+	mes "賞金";
+	mes "^FF5500" + @betmedal + "^000000 × ^FF5500"+ @Bairitu +" ^000000 = ^FF5500"+ @Outmedal +"^000000枚";
+	mes "メダル差し上げます。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	menu "もう一回やる",Lbj_4,"やめる",Lclse;
+
+Lmakebj:
+	mes "[ブラックジャック]";
+	mes "親 > BLACK JACK!!";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "貴方の合計は"+ @Goukei +"です。";
+	next;
+	goto Lmake2;
+Lmake:
+	mes "[ブラックジャック]";
+	mes "親 > Stand!!";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "貴方の合計は"+ @Goukei +"です。";
+	next;
+Lmake2:
+	emotion 39;
+	mes "[ブラックジャック]";
+	mes "Σ残念、あなたの負けです。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	menu "もう一回やる",Lbj_4,"やめる",Lclse;
+
+Lbuta:
+	emotion 39;
+	mes "[ブラックジャック]";
+	mes "BURST!!「21」をオーバーしました。";
+	mes "あなたの負けです。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	menu "もう一回やる",Lbj_4,"やめる",Lclse;
+
+Lhikiwake:
+	mes "[ブラックジャック]";
+	mes "親 > Stand!!";
+	mes "親の合計は"+ @Oyagoukei +"です。";
+	mes "貴方の合計は"+ @Goukei +"です。";
+	next;
+
+	set ComodoMedal,ComodoMedal+@betmedal;
+	mes "[ブラックジャック]";
+	mes "PUSH!!引き分けです。";
+	mes "賭け金を返します。";
+	mes "メダルを^FF5500"+ @betmedal + "^000000枚獲得しました。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	menu "もう一回やる",Lbj_4,"やめる",Lclse;
+
+Lnotenough:
+	mes "[ブラックジャック]^FF5500";
+	mes @betmedal +"^000000枚賭けようとしましたが";
+	mes "メダルが足りませんでした。";
+	mes "やり直してください。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	goto Lbj_4;
+
+Lplz:
+	mes "[ブラックジャック]";
+	mes "メダルが賭けられてません。";
+	mes "やりなおしてください。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	goto Lbj_4;
+
+Lnomedal:
+	mes "[ブラックジャック]";
+	mes "メダルがありません。";
+	mes "メダルを購入してください。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	goto Lbj_4;
+
+Lnomedaldd:
+	mes "[ブラックジャック]";
+	mes "メダルが足りません。";
+	mes "やり直してください。";
+	mes "所持メダル^FF5500" + ComodoMedal + "^000000枚";
+	next;
+	if(@maisu == 2) goto Lgame_1;
+	if(@maisu == 3) goto Lgame_2;
+	if(@maisu == 4) goto Lgame_3;
+	if(@maisu == 5) goto Lgame_4;
+
+Lclse:
+	mes "[ブラックジャック]";
+	mes "・・・さようなら";
+	close;
+}

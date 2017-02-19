@@ -1,0 +1,164 @@
+//=========================================================================
+// NPCのリスト   (http://kalen.s79.xrea.com/npc/npc.shtml)
+// NPCの向き設定 (http://dianaeleven.blog134.fc2.com/blog-entry-14.html)
+//	1  0   7
+//	 ＼│／
+//	2─　─6
+//	 ／│＼
+//	3  4   5
+
+cmd_in02.gat,110,101,5	script	受付嬢	803,{
+	callfunc "comodo_medal_exchange";
+	close;
+}
+
+cmd_in02.gat,174,131,7	script	受付嬢	803,{
+	callfunc "comodo_medal_exchange";
+	close;
+}
+
+cmd_in02.gat,145,101,4	script	受付嬢	803,{
+	callfunc "comodo_medal_exchange";
+	close;
+}
+
+cmd_in02.gat,57,64,7	script	受付嬢	803,{
+	callfunc "comodo_medal_exchange";
+	close;
+}
+
+//=========================================================================
+// カジノメダル交換NPC
+//	callfunc "comodo_medal_exchange"
+//
+//	変数区分		変数名			説明
+//	キャラクター変数	ComodoMedal		コモドカジノでの通貨
+//-------------------------------------------------------------------------
+
+
+function	script	comodo_medal_exchange	{
+
+	//メダル購入金額
+	set '@Price, 100;
+
+	//プロトタイプ宣言
+	function	comodo_getmedal_payzeny;
+	function	comodo_getmedal_payitem;
+	function	comodo_getmedal_openstorage;
+
+Ltop:
+	mes "[" +strnpcinfo(0)+ "]";
+	mes "メダル交換所です。コモドカジノで遊ぶためのメダルを購入・確認できます！";
+	mes "メダル残高は"^135445" + ComodoMedal + "^000000枚です。";
+	mes "現金相場：メダル1枚 -> [" + '@Price + "]Zeny";
+
+	switch ( select("現金で購入","アイテム交換","倉庫を開く") ){
+	  case 1:
+		comodo_getmedal_payzeny('@Price);
+		break;
+	  case 2:
+		comodo_getmedal_payitem();
+		break;
+
+	  case 3:
+		comodo_getmedal_openstorage();
+		goto Ltop;
+
+	  default:
+		mes "またお越しください。";
+		break;
+	}
+
+	close;
+
+	//メダルを現金購入で取得するプライベート関数
+	function	comodo_getmedal_payzeny	{
+		mes "[" +strnpcinfo(0)+ "]";
+		mes "購入するメダルの枚数を入力してください♪";
+		input '@val;
+
+		//メダル購入が0枚以下の場合
+		if( '@val < 0 ) {
+			mes "何もしないんですね。";
+			break;
+		}
+
+		//所持金が不足している場合
+		if(Zeny < '@val) {
+			mes "所持金が足りないようですね。";
+			return 0;
+		}
+
+		//現金から支払い
+		set '@Payment, Zeny - ( '@getarg(0)*'@val );
+		mes "^5555FF" + '@Payment + "^000000Zenyのお支払になります！ありがとうございました！";
+		set Zeny,Zeny - '@Payment;
+
+		//メダルの取得
+		set ComodoMedal,ComodoMedal + '@val;
+
+		return 0;
+	}
+
+	//メダルをアイテム交換で取得するプライベート関数
+	function	comodo_getmedal_payitem	{
+
+		// CSVファイルの指定、メダルと交換できるアイテムを読み込む
+		set '@item_list$,"script/original/comodo_casino/payitem_list.txt";
+
+		// CSVファイルの内容を配列に格納する
+		for(set '@i,0; '@i < csvgetrows('@item_list$); set '@i,'@i+1){
+			setarray '@CmdItemID['@i],csvread('@item_list$, '@i, 0);	//アイテムID
+			setarray '@CmdExRate['@i],csvread('@item_list$, '@i, 1);	//メダル交換レート
+			setarray '@CmdItemName$['@i],csvread('@item_list$, '@i, 2);	//アイテム名
+		}
+
+		mes "[" +strnpcinfo(0)+ "]";
+		mes "交換対象のアイテムを、所持品からすべて交換させてもらいます♪";
+
+		mes "[" +strnpcinfo(0)+ "]";
+		mes "交換するアイテム数量を指定して下さい";
+
+		select("すべて交換","交換アイテムの確認","キャンセル"){
+		  case 1:
+			//交換対象のアイテム数だけ繰り返す
+			for( set '@i,0 ; '@i < getarraysize('@CmdItemID) ; set '@i,'@i + 1)
+
+			  //アイテムを所持していれば削除し、メダルを追加する。
+			  set  '@val, countitem('@CmdItemID['@i]);
+
+			  if ( '@val > 0 ){
+			    delitem '@CmdItemID['@i],'@val;
+			    set ComodoMedal,ComodoMedal + '@CmdExRate['@i] * '@val;
+			  }
+			mes "ご利用ありがとうございました！";
+			break;
+
+		  case 2:
+			//配列に格納されているアイテム名をすべて表示
+			for( set '@i,0 ; '@i < getarraysize('@CmdItemName) ; set '@i,'@i + 1)
+			  mes "[" + '@i +"] " + '@CmdItemName$['@i] + "(^5555FF"+ '@CmdExRate['@i] +"^000000枚)";
+
+			  //改ページ処理
+			  if ('@i >= 30){ next; }
+			}
+			break;
+
+		  default:
+			mes "何もしないんですね。";
+			break;
+		}
+		return 0;
+	}
+
+	//倉庫を開くプライベート関数
+	function	comodo_getmedal_openstorage	{
+		//個人倉庫を開く
+		//カジノで金を使ってくれるので手数料は無い設定。
+		openstorage;
+
+		//倉庫を開くためNPCとの会話ウィンドウは終了
+		close;
+		return 0;
+	}
+}

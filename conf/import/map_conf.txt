@@ -16,6 +16,12 @@ npc: script/original/npc_original_jobchanger.txt
 npc: script/original/npc_debug_reset.txt
 npc: script/original/npc_custom_cardremover.txt
 
+npc: script/original/comodo_casino/comodo_getmedal_npc
+npc: script/original/comodo_casino/payitem_list.txt
+npc: script/original/comodo_casino/comodo_blackjack.txt
+npc: script/original/comodo_casino/comodo_poker.txt
+npc: script/original/comodo_casino/comodo_slot.txt
+
 //npc: script/sample/npc_custom_bank.txt
 //npc: script/sample/npc_debug_questskill.txt
 
