@@ -80,7 +80,7 @@ Ltop:
 		//ƒƒ_ƒ‹w“ü‚ª0–‡ˆÈ‰º‚Ìê‡
 		if( '@val < 0 ) {
 			mes "‰½‚à‚µ‚È‚¢‚ñ‚Å‚·‚ËB";
-			break;
+			return 0;
 		}
 
 		//ŠŽ‹à‚ª•s‘«‚µ‚Ä‚¢‚éê‡
