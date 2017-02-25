@@ -4,6 +4,7 @@
 npc: script/original/teleporter/npc_original_teleporter.txt
 npc: script/original/Heal_NPC.txt
 npc: script/original/first_shop.txt
+npc: script/original/rune_shop.txt
 npc: script/original/gon_ama.txt
 npc: script/original/shop_comodo.txt
 npc: script/original/shop_geffen.txt
