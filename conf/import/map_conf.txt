@@ -16,6 +16,7 @@ npc: script/original/npc_shop.txt
 npc: script/original/npc_original_jobchanger.txt
 npc: script/original/npc_debug_reset.txt
 npc: script/original/npc_custom_cardremover.txt
+npc: script/original/npc_original_stylist.txt
 
 npc: script/original/comodo_casino/comodo_getmedal_npc.txt
 npc: script/original/comodo_casino/comodo_blackjack.txt
