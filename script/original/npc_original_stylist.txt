@@ -1,0 +1,118 @@
+//***********************************************
+//  スタイリストNPC
+//  2011.04  はじめてのAuriga - kiy
+//***********************************************
+
+prontera.gat,141,182,4	script	スタイリスト	116,{
+
+//『Auriga/src/common/mmo.h』に合わせる
+//#define MAX_HAIR_STYLE 24	//定義より -1 した値を設定する
+//#define MAX_HAIR_COLOR 9
+//#define MAX_CLOTH_COLOR 5	//服の色は３次職が３色のため合わせる
+
+set @MAX_HAIR_STYLE,	23;	//髪型の数
+set @MAX_HAIR_COLOR,	8;	//髪の色数
+set @MAX_CLOTH_COLOR,	3;	//服の色数
+
+	cutin "kafra_02",2;
+	mes "[テーリング]";
+	mes "あら、ごきげんよう。";
+	mes "こちらではヘアメイクや";
+	mes "ファッションコーディネートを";
+	mes "承っています。";
+	mes " ";
+	mes "あなたもご利用になりますか？";
+	next;
+	set '@menu,select("髪型を変えてみたい","髪の色を変えたい","服の色を変えたい","今のままでいいです");
+
+	switch('@menu) {
+		case 1:
+			set @look_id,1;
+			set @select_object$,"髪型の変更";
+			set @max_number,@MAX_HAIR_STYLE;
+			break;
+		case 2:
+			set @look_id,6;
+			set @select_object$,"髪の染色";
+			set @max_number,@MAX_HAIR_COLOR;
+			break;
+		case 3:
+			set @look_id,7;
+			set @select_object$,"服の染色";
+			set @max_number,@MAX_CLOTH_COLOR;
+			break;
+		case 4:
+			mes "[テーリング]";
+			mes "あら、よろしいですの。";
+			mes "それでは、いつでもいらしてね。";
+			close2;
+			cutin "kafra_02",255;
+			end;
+	}
+
+	mes "[テーリング]";
+	mes "はい、" +@select_object$+ "ですね。";
+	mes "これは" +@max_number+ "種類あるの。";
+	mes "何番目がいいかしら？";
+	next;
+	set '@menu,select("番号を指定する","最初から見ていく","やっぱり今度にします");
+
+	switch('@menu) {
+	case 1:
+		mes "[テーリング]";
+		mes "何番から見始める？";
+		mes "" +@max_number+ "番の次は0番に戻るからね。";
+		next;
+		input @number;
+		if((@number > @max_number) || (@number < 0)) {
+			mes "[テーリング]";
+			mes "あら、お客さま。";
+			mes "" +@select_object$+ "は、";
+			mes "0～" +@max_number+ "の間でご指定下さいませ。";
+			close2;
+			cutin "kafra_02",255;
+			end;
+		}
+		break;
+	case 2:
+		set @number,0;
+		break;
+	case 3:
+		mes "[テーリング]";
+		mes "あらあら、そうですの。";
+		mes "それでは、いつでもいらしてね。";
+		close2;
+		cutin "kafra_02",255;
+		end;
+	}
+
+	set @end_flag,1;
+	while(@end_flag == 1){
+		setlook @look_id,@number;
+		if (@number != @max_number){set @next_number,@number +1;}else{set @next_number,0;}
+		if (@number != 0){set @prev_number,@number -1;}else{set @prev_number,@max_number;}
+		switch(select(
+			"次の番号を見る","１つ前の番号を見る","これに決めた！ (" +@number+ "番)")){
+		case 1:
+			set @number,@next_number;
+			break;
+		case 2:
+			set @number,@prev_number;
+			break;
+		case 3:
+			set @end_flag,2;
+			break;
+		}
+	}
+
+	mes "[テーリング]";
+	mes "とてもお似合いですよ！";
+	mes "またのご利用をお待ちしております。";
+	mes " ";
+	mes "* 今回のスタイリング *";
+	mes " 『 " +@select_object$+ " ： " +@number+ "番 』";
+	close2;
+	cutin "kafra_02",255;
+	end;
+
+}
