@@ -1,0 +1,33 @@
+0014@tower.gat,50,18,5	script	鷺雨ヒールサービス	67,2,2,{
+	callfunc "funcDunHealService";
+	end;
+}
+0015@tower.gat,96,68,5	script	鷺雨ヒールサービス	67,2,2,{
+	callfunc "funcDunHealService";
+	end;
+}
+0016@tower.gat,45,99,5	script	鷺雨ヒールサービス	67,2,2,{
+	callfunc "funcDunHealService";
+	end;
+}
+
+
+//=========================================================================
+// ヒールファンクション（ダンジョン出張用）
+//	callfunc "funcDunHealService"
+//
+//	変数区分		変数名			説明
+//	-
+//
+//-------------------------------------------------------------------------
+function	script	funcDunHealService	{
+	percentheal 100,100;
+	gmcommand "@misceffect 83";
+	gmcommand "skill 34";
+
+	//支援
+	sc_start SC_BLESSING,480000,10;
+	sc_start SC_INCREASEAGI,480000,10;
+
+	end;
+}
