@@ -1,0 +1,57 @@
+/*================================================
+	カプラ職員（ダンジョン出張用）
+--------------------------------------------------
+
+function	script	dun_highkapura	{
+	cutin getarg(0),2;
+	mes "[カプラ職員]";
+	mes "カプラサービスは";
+	mes "いつも皆様のそばにいます。";
+	next;
+	menu "倉庫を利用する",L2,"鑑定サービス",L7,"終了",L9;
+L2:
+	set Zeny,Zeny-'@zeny;
+	openstorage;
+	goto L_EXIT;
+L7:
+	gmcommand "@itemidentify";
+	mes "[カプラ職員]";
+	mes "すべて鑑定済みになりました。";
+	goto L_EXIT;
+L9:
+	mes "[カプラ職員]";
+	mes "ご武運を。";
+L_EXIT:
+	close2;
+	cutin getarg(0),255;
+	return;
+}
+/*================================================
+	設置例
+--------------------------------------------------
+cut-in名 / getarg(0)		ID番号
+========			======
+kafra_01 (デフォルテ)		117
+kafra_02 (ポニテ)		116
+kafra_03 (黒髪ロング)		115
+kafra_04 (ショートオレンジ)	114
+kafra_05 (メガネ)		113
+kafra_06 (ツインテール)		112
+kafra_07 (コモド)		721
+kafra_08 (青ショット)		860
+kafra_09 (赤ロング)		861
+--------------------------------------------------
+callfunc "highkapura","カットイン名","セーブマップ",座標X,座標Y;
+--------------------------------------------------*/
+0014@tower.gat,47,18,5	script	出張カプラ職員::1	112,{
+	callfunc "dun_highkapura","kafra_06";
+	end;
+}
+0015@tower.gat,99,68,5	script	出張カプラ職員::2	113,{
+	callfunc "dun_highkapura","kafra_05";
+	end;
+}
+0016@tower.gat,42,99,5	script	出張カプラ職員::3	114,{
+	callfunc "dun_highkapura","kafra_04";
+	end;
+}

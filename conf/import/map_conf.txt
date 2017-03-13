@@ -23,6 +23,9 @@ npc: script/original/comodo_casino/comodo_blackjack.txt
 npc: script/original/comodo_casino/comodo_poker.txt
 npc: script/original/comodo_casino/comodo_slot.txt
 
+npc: script/original/endlesstower/dun_HealService.txt
+npc: script/original/endlesstower/dun_highkapura.txt
+
 //npc: script/sample/npc_custom_bank.txt
 //npc: script/sample/npc_debug_questskill.txt
 
