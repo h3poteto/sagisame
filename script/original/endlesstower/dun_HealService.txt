@@ -1,12 +1,12 @@
-0014@tower.gat,50,18,5	script	鷺雨ヒールサービス	67,2,2,{
+4@tower.gat,50,18,5	script	鷺雨ヒールサービス	67,2,2,{
 	callfunc "funcDunHealService";
 	end;
 }
-0015@tower.gat,96,68,5	script	鷺雨ヒールサービス	67,2,2,{
+5@tower.gat,96,68,5	script	鷺雨ヒールサービス	67,2,2,{
 	callfunc "funcDunHealService";
 	end;
 }
-0016@tower.gat,45,99,5	script	鷺雨ヒールサービス	67,2,2,{
+6@tower.gat,45,99,5	script	鷺雨ヒールサービス	67,2,2,{
 	callfunc "funcDunHealService";
 	end;
 }
