@@ -1,0 +1,13 @@
+0014@tower.gat,50,18,5	script	鷺雨ヒールサービス	67,2,2,{
+	callfunc "funcHealService";
+	end;
+}
+0015@tower.gat,96,68,5	script	鷺雨ヒールサービス	67,2,2,{
+	callfunc "funcHealService";
+	end;
+}
+0016@tower.gat,45,99,5	script	鷺雨ヒールサービス	67,2,2,{
+	callfunc "funcHealService";
+	end;
+}
+
