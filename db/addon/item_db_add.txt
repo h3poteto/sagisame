@@ -784,7 +784,7 @@
 1487,Lance_C,ランス,9,,,0,220,,3,0,16514,2,34,,1,5,,{},{ bonus2 bAddSize,Size_Small,50; bonus2 bAddSize,Size_Medium,50; bonus2 bAddSize,Size_Big,50; }
 1488,Ahlspiess_C,アルシェピース,9,20,,1000,135,15:15,3,0,16512,2,34,4,1,5,,{},{}
 1489,Spearfish_,マカジキR,9,20,,0,220,15:15,3,,16514,2,34,1,50,5,1,{},{ bonus3 bAddEffSkill,56,Eff_Bleed,1000;bonus3 bAddEffSkill,397,Eff_Bleed,1000;bonus2 bAddEff2,Eff_Freeze,200;bonus2 bAddSkillDamageRate,397,100;bonus2 bAddSkillDamageRate,2325,50;if(BaseLevel>=100)bonus bBaseAtk,30; }
-1490,Gigantic_Lance,ギガントランス,9,20,,20000,20,15:15,3,,128,2,34,4,140,5,1,{},{ bonus bAspd,-10; bonus bSPPenaltyUnrig,600; if(readparam(bStr)>=120) bonus bBaseAtk,300; }
+1490,Gigantic_Lance,ギガントランス,9,20,,20000,100,15:15,3,4,128,2,34,4,100,5,1,{},{ bonus bStr,20; bonus bAgi,20; bonus bDex,20; bonus bHit,getequiprefinerycnt(4)*10; bonus2 bFixCastRate,-40,0; bonus2 bAddSkillDamageRate,56,400; bonus2 bAddSkillDamageRate,253,400; bonus2 bAddSkillDamageRate,2008,50; }
 
 1494,Unknown_Item,オンディーヌの槍,9,,,3800,190,15:15,3,3,16514,2,34,4,105,5,1,{},{ bonus bAtkEle,Ele_Water; bonus bMaxHPrate,getequiprefinerycnt(4); }
 
