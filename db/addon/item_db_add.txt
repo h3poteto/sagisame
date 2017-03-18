@@ -1599,7 +1599,7 @@
 2580,White_Wing_Manteau,白羽のマント,4,20,,200,,15,,,2048,2,4,,100,,1,{},{ bonus bAgi,2; bonus bFlee,10; bonus3 bAutoActiveWeapon,2580,10,7000; if(checkactiveitem()) { misceffect 224,""; bonus bFlee,20; } }
 2581,Black_Wing_Manteau,黒羽のマント,4,20,,200,,15,,,2048,2,4,,100,,1,{},{ bonus bInt,2; if(getequiprefinerycnt(5) >= 7) bonus bFlee2,getequiprefinerycnt(5)-6; }
 2582,Salvage_Cape,サルベージケープ,4,20,,400,,1,,,512,,4,,130,,1,{},{ skill 531,1; bonus bUseSPrate,100; bonus bSPPenaltyUnrig,1200; }
-2583,Unknown_Item,聖なるケープ,4,,,100,,5,,1,1000333311,2,4,,50,,1,{},{}
+2583,Unknown_Item,聖なるケープ,4,,,100,,5,,1,1000333311,2,4,,50,,1,{},{ bonus bMdef,5; bonus2 bSubRace,Rct_Undead,5; bonus2 bSubRace,Rct_Demon,5; }
 2584,Unknown_Item,彷徨う者の羽織,4,,,500,,8,,1,1000333311,2,4,,0,,1,{},{}
 
 2588,Ragamuffin_Cape_,ぼろマント,4,56000,,500,,4:10,,1,991944702,2,4,,0,0,1,{},{}
@@ -1611,7 +1611,7 @@
 2594,Unknown_Item,風呂敷マント,4,,,100,,0,,1,1000333311,2,4,,1,,1,{},{}
 2595,Unknown_Item,ソンブルマント,4,,,700,,20,,1,1000333311,2,4,,65,,1,{},{}
 2596,Unknown_Item,シャレールマント,4,,,700,,20,,1,1000333311,2,4,,65,,1,{},{}
-2597,Unknown_Item,真紅のポンチョ,4,,,0,,10,,1,1000333311,2,4,,50,,1,{},{}
+2597,Unknown_Item,真紅のポンチョ,4,,,0,,10,,1,1000333311,2,4,,50,,1,{},{ bonus bMdef,5; bonus2 bAddCriticalDamage,3; if(getequipid(7)==2616 || getequipid(8)==2616) { bonus bCritical,10; bonus2 bAddCriticalDamage,5; if(getequiprefinerycnt(5)>=5) {bonus2 bAddCriticalDamage,3; } if(getequiprefinerycnt(5)>=7) {bonus2 bAddCriticalDamage,4; } } }
 2598,Unknown_Item,ラモールマント,4,,,700,,20,,1,1000333311,2,4,,65,,1,{},{}
 2599,Goibne's_Shoulder_Arms_,ゴヴニュの肩飾り,4,30000,,700,,11:2,,1,991944702,2,4,,54,,1,{},{ bonus bVit,1; bonus bLongAtkDef,10; }
 
@@ -7964,7 +7964,7 @@
 18595,Horn_Of_Ancient,古代人の角,4,,,0,,,,,,2,,,,757,,{},{}
 18596,Sprout_Hat,新芽の帽子,4,,,0,,,,,,,,,,758,,{},{}
 18597,Mercury_Helm,マーキュリーライザー,4,,,0,,,,,,2,,,,759,,{},{}
-18598,Unknown_Item,聖なるクリスマスツリー,4,,,50,,0,,1,1000333311,2,256,,1,727,,{},{bonus bMdef,20;}
+18598,Unknown_Item,聖なるクリスマスツリー,4,,,50,,0,,1,1000333311,2,256,,1,727,,{},{bonus bMdef,20; if(getequipid(10)==18658) { bonusbMdef,3; } }
 18599,Black_Devil_Mask,黒い悪魔の仮面,4,,,100,,0,,,1000333311,2,512,,1,760,,{},{ bonus bMaxHPrate,1; bonus bMaxSPrate,1; }
 18600,Cat_Ears_Beret,ネコミミベレー,4,,,0,,,,,,2,,,,761,,{},{}
 18601,Red_Bread_Hat,赤ポンバンド,4,,,0,,,,,,2,,,,762,,{},{}
@@ -8007,7 +8007,7 @@
 18655,Unknown_Item,とんぼの片眼鏡,4,,,100,,0,,0,1000333311,2,512,,50,807,,{},{ bonus bAgi,2; bonus3 bAutoSpell,50,1,100; }
 
 18657,Pegasus_Wing_Ears,天馬の羽耳,4,,,0,,1,,0,1000333311,2,512,,80,568,,{},{}
-18658,Unknown_Item,聖なるサンタのひげ,4,,,0,,0,,,1000333311,2,1,,1,25,,{},{}
+18658,Unknown_Item,聖なるサンタのひげ,4,,,0,,0,,,1000333311,2,1,,1,25,,{},{ bonus2 bAddEle,Ele_Dark,2; }
 
 18666,CD_In_Mouth,くわえたディスク,4,,,150,,,,,1000333311,2,1,,10,815,,{},{ bonus bHit,5; bonus bAspdAddRate,-1; }
 
