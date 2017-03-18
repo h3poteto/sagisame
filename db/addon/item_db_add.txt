@@ -1890,7 +1890,7 @@
 2878,Unknown_Item,アルナとアイリの腕輪,4,,,200,,1,,,1000333311,2,136,,10,,,{},{}
 2879,Unknown_Item,アルゴルのバッジ,4,,,200,,1,,,1000333311,2,136,,10,,,{},{}
 2880,Unknown_Item,ルファクの指輪,4,,,200,,1,,,1000333311,2,136,,10,,,{},{}
-2881,Orleans_Necklace,オルレアンネックレス,4,20,,100,,0,,1,1000333311,2,136,,10,,,{},{ bonus bDex,2; bonus bMatk,20; if(getequipid(7)==2701 || getequipid(8)==2701) { bonus bMatk,10; } if(getequipid(4)==2365) { bonus bCastRate,-15; } }
+2881,Orleans_Necklace,オルレアンネックレス,4,20,,100,,0,,1,1000333311,2,136,,10,,,{},{ bonus bDex,2; bonus bMatk,20; if(getequipid(7)==2701 || getequipid(8)==2701) { bonus bMatk,10; } if(getequipid(2)==2365) { bonus bCastRate,-15; } }
 2882,Unknown_Item,ECO×ROカードスリーブ,4,,,100,,0,,1,1000333311,2,136,,,,,{},{}
 2883,Urj_Seal,ウルズブローチ,4,20,,200,,4,,1,128,2,136,,100,,,{},{ bonus bMaxHPrate,2; bonus2 bAddSpCost,397,-5; bonus2 bAddSpCost,2004,-5; }
 2884,Pertz_Seal,ペオースブローチ,4,20,,200,,3,,1,128,2,136,,100,,,{},{ bonus bMaxSP,20; bonus bBaseAtk,15; }
