@@ -5,7 +5,7 @@ prontera.gat,163,204,5	script	ë‰J¸˜BƒT[ƒrƒX	731,{
 	next;
 
 
-	set	'@i, select(getequipname(1),getequipname(2),getequipname(3),getequipname(4),getequipname(5),getequipname(6),getequipname(7),getequipname(8),getequipname(9),getequipname(10));
+	set	'@i, select(getequipname(1),getequipname(2),getequipname(3),getequipname(4),getequipname(5),getequipname(6));
 
 	if(getequipisequiped('@i)==0){
 		mes "‰½‚ğ¸˜B‚·‚ê‚Î‚¢‚¢‚ñ‚¾‚¢H";
@@ -100,15 +100,16 @@ prontera.gat,163,204,5	script	ë‰J¸˜BƒT[ƒrƒX	731,{
 		close;
 	}
 
-	// Ş—¿‰ñû
-	set Zeny, Zeny - ('@refnum * '@refprice['@wlv]);
-	delitem '@refitemid['@wlv], '@refnum;
-
 	// ¸˜B
 	set '@counter,0;
 
 	while( '@counter < '@refnum ){
 	       set '@counter,'@counter + 1;
+
+		// Ş—¿‰ñû
+		set Zeny, Zeny - '@refprice['@wlv];
+		delitem '@refitemid['@wlv], 1;
+
 	       if(getequippercentrefinery('@i) > rand(100)){
 			successrefitem '@i;
 		} else {
@@ -157,7 +158,7 @@ function	script	SagisameRefine2	{
 	}
 
 	//ƒAƒCƒeƒ€IDA‰¿ŠiŠi”[
-	setarray '@refprice,5000,100,500,5000,10000;
+	setarray '@refprice,25000,500,2500,25000,50000;
 	setarray '@refitemid,7619,7620,7620,7620,7620;
 
 
@@ -202,17 +203,13 @@ function	script	SagisameRefine2	{
 		close;
 	}
 
-	// Ş—¿‰ñû
-	set Zeny, Zeny - ('@refnum * '@refprice['@wlv]);
-	delitem '@refitemid['@wlv], '@refnum;
-
 	// ”Zk‰Û‹àƒAƒCƒeƒ€¸˜Bƒe[ƒuƒ‹
 	switch('@wlv) {
-		case 0: setarray '@parcent,100,100,100,100, 90, 60, 60, 30, 30, 10; break;
-		case 1: setarray '@parcent,100,100,100,100,100,100,100, 90, 60, 20; break;
-		case 2: setarray '@parcent,100,100,100,100,100,100, 90, 60, 30, 20; break;
-		case 3: setarray '@parcent,100,100,100,100,100, 90, 75, 30, 30, 20; break;
-		case 4: setarray '@parcent,100,100,100,100, 90, 60, 60, 30, 30, 10; break;
+		case 0: setarray '@parcent,100,100,100,100, 95, 65, 65, 40, 40, 20; break;
+		case 1: setarray '@parcent,100,100,100,100,100,100,100, 95, 65, 30; break;
+		case 2: setarray '@parcent,100,100,100,100,100,100, 95, 65, 35, 30; break;
+		case 3: setarray '@parcent,100,100,100,100,100, 95, 80, 35, 35, 30; break;
+		case 4: setarray '@parcent,100,100,100,100, 95, 65, 65, 40, 40, 20; break;
 	}
 
 	// ¸˜B
@@ -220,6 +217,11 @@ function	script	SagisameRefine2	{
 
 	while( '@counter < '@refnum ){
 	       set '@counter,'@counter + 1;
+
+		// Ş—¿‰ñû
+		set Zeny, Zeny - '@refprice['@wlv];
+		delitem '@refitemid['@wlv], 1;
+
 	       if('@parcent[getequiprefinerycnt('@i)] > rand(100)) {
 			emotion getarg(1);
 			successrefitem '@i;
@@ -278,7 +280,7 @@ function	script	SagisameRefine3	{
 	}
 
 	//ƒAƒCƒeƒ€IDA‰¿ŠiŠi”[
-	setarray '@refprice,5000,100,500,5000,10000;
+	setarray '@refprice,50000,1000,5000,50000,100000;
 	setarray '@refitemid,6241,6240,6240,6240,6240;
 
 
@@ -323,10 +325,6 @@ function	script	SagisameRefine3	{
 		close;
 	}
 
-	// Ş—¿‰ñû
-	set Zeny, Zeny - ('@refnum * '@refprice['@wlv]);
-	delitem '@refitemid['@wlv], '@refnum;
-
 	// ”Zk‰Û‹àƒAƒCƒeƒ€¸˜Bƒe[ƒuƒ‹
 	switch('@wlv) {
 		case 0: setarray '@parcent,100,100,100,100, 90, 60, 60, 30, 30, 10; break;
@@ -341,11 +339,17 @@ function	script	SagisameRefine3	{
 
 	while( '@counter < '@refnum ){
 	       set '@counter,'@counter + 1;
+
+		// Ş—¿‰ñû
+		set Zeny, Zeny - '@refprice['@wlv];
+		delitem '@refitemid['@wlv], 1;
+
 	       if('@parcent[getequiprefinerycnt('@i)] > rand(100)) {
 			emotion getarg(1);
 			successrefitem '@i;
 		} else {
 			emotion getarg(2);
+			downrefitem '@i,1;
 			next;
 			mes "["+getarg(0)+"]";
 			mes "¸”s‚µ‚¿‚á‚Á‚½B";
