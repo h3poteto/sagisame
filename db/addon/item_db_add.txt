@@ -1611,7 +1611,7 @@
 2594,Unknown_Item,風呂敷マント,4,,,100,,0,,1,1000333311,2,4,,1,,1,{},{}
 2595,Unknown_Item,ソンブルマント,4,,,700,,20,,1,1000333311,2,4,,65,,1,{},{}
 2596,Unknown_Item,シャレールマント,4,,,700,,20,,1,1000333311,2,4,,65,,1,{},{}
-2597,Unknown_Item,真紅のポンチョ,4,,,0,,10,,1,1000333311,2,4,,50,,1,{},{}
+2597,Unknown_Item,真紅のポンチョ,4,,,0,,10,,1,1000333311,2,4,,50,,1,{},{ bonus bMdef,5; bonus2 bAddCriticalDamage,3; if(getequipid(7)==2616 || getequipid(8)==2616) { bonus bCritical,10; bonus2 bAddCriticalDamage,5; if(getequiprefinerycnt(5)>=5) {bonus2 bAddCriticalDamage,3; } if(getequiprefinerycnt(5)>=7) {bonus2 bAddCriticalDamage,4; } } }
 2598,Unknown_Item,ラモールマント,4,,,700,,20,,1,1000333311,2,4,,65,,1,{},{}
 2599,Goibne's_Shoulder_Arms_,ゴヴニュの肩飾り,4,30000,,700,,11:2,,1,991944702,2,4,,54,,1,{},{ bonus bVit,1; bonus bLongAtkDef,10; }
 
