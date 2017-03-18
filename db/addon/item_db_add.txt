@@ -1599,7 +1599,7 @@
 2580,White_Wing_Manteau,白羽のマント,4,20,,200,,15,,,2048,2,4,,100,,1,{},{ bonus bAgi,2; bonus bFlee,10; bonus3 bAutoActiveWeapon,2580,10,7000; if(checkactiveitem()) { misceffect 224,""; bonus bFlee,20; } }
 2581,Black_Wing_Manteau,黒羽のマント,4,20,,200,,15,,,2048,2,4,,100,,1,{},{ bonus bInt,2; if(getequiprefinerycnt(5) >= 7) bonus bFlee2,getequiprefinerycnt(5)-6; }
 2582,Salvage_Cape,サルベージケープ,4,20,,400,,1,,,512,,4,,130,,1,{},{ skill 531,1; bonus bUseSPrate,100; bonus bSPPenaltyUnrig,1200; }
-2583,Unknown_Item,聖なるケープ,4,,,100,,5,,1,1000333311,2,4,,50,,1,{},{}
+2583,Unknown_Item,聖なるケープ,4,,,100,,5,,1,1000333311,2,4,,50,,1,{},{ bonus bMdef,5; bonus2 bSubRace,Rct_Undead,5; bonus2 bSubRace,Rct_Demon,5; }
 2584,Unknown_Item,彷徨う者の羽織,4,,,500,,8,,1,1000333311,2,4,,0,,1,{},{}
 
 2588,Ragamuffin_Cape_,ぼろマント,4,56000,,500,,4:10,,1,991944702,2,4,,0,0,1,{},{}
