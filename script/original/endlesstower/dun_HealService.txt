@@ -1,3 +1,13 @@
+// EndlessTower 50F
+2@tower.gat,390,18,5	script	鷺雨ヒールサービス	67,2,2,{
+	callfunc "funcDunHealService";
+	end;
+}
+// EndlessTower 75F
+3@tower.gat,390,18,5	script	鷺雨ヒールサービス	67,2,2,{
+	callfunc "funcDunHealService";
+	end;
+}
 // EndlessTower 96F
 4@tower.gat,50,18,5	script	鷺雨ヒールサービス	67,2,2,{
 	callfunc "funcDunHealService";

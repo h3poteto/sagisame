@@ -43,6 +43,16 @@ kafra_09 (赤ロング)		861
 --------------------------------------------------
 callfunc "highkapura","カットイン名","セーブマップ",座標X,座標Y;
 --------------------------------------------------*/
+// EndlessTower 50F
+2@tower.gat,388,18,5	script	出張カプラ職員::1	112,{
+	callfunc "dun_highkapura","kafra_06";
+	end;
+}
+// EndlessTower 75F
+3@tower.gat,388,18,5	script	出張カプラ職員::1	112,{
+	callfunc "dun_highkapura","kafra_06";
+	end;
+}
 // EndlessTower 96F
 4@tower.gat,47,18,5	script	出張カプラ職員::1	112,{
 	callfunc "dun_highkapura","kafra_06";
